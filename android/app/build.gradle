@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.meetwhere"
+        applicationId "com.cz2006meetwhere"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

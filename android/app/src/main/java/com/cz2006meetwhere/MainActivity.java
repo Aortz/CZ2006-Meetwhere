@@ -1,4 +1,4 @@
-package com.meetwhere;
+package com.cz2006meetwhere;
 
 import android.os.Build;
 import android.os.Bundle;
