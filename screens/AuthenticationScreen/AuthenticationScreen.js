@@ -4,7 +4,7 @@ import React from "react";
 const AuthenticationScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>AuthenticationScreen</Text>
+      <Text>AuthenticationScreen, Please Authenticate</Text>
     </View>
   );
 };

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "733228351508",
+    "project_id": "meetwhere-30911",
+    "storage_bucket": "meetwhere-30911.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733228351508:android:81da9a53925d2400a4a701",
+        "android_client_info": {
+          "package_name": "com.example.meetwhere"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "733228351508-ugvmogvb2fhkpe56nm1sij01fu2iuqij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbCLeiDrFyuaumxv0-U9Pvieb1aAl9j1g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "733228351508-ugvmogvb2fhkpe56nm1sij01fu2iuqij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

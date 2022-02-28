@@ -2,17 +2,19 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AuthenticationScreen from "./screens/AuthenticationScreen/AuthenticationScreen";
+import Login from "./screens/AuthenticationScreen/LoginScreen";
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen/HistoryScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
+
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Authentication"
-          component={AuthenticationScreen}
+          name="Login"
+          component={Login}
           options={{
             headerShown: false,
           }}
