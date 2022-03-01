@@ -19,11 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4324b06-9354-4e49-8db1-32024b60719e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/AuthenticationScreen/AuthenticationScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/AuthenticationScreen/AuthenticationScreen.js" afterDir="false" />
-    </list>
+    <list default="true" id="e4324b06-9354-4e49-8db1-32024b60719e" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -125,14 +121,14 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="414" y="170" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1646029367512">
+    <state x="414" y="170" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1646029372593">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="414" y="170" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1646029367512" />
-    <state x="92" y="92" width="1736" height="848" key="AVDManager" timestamp="1646029367865">
+    <state x="414" y="170" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1032@0.0.1920.1032" timestamp="1646029372593" />
+    <state x="92" y="92" width="1736" height="848" key="AVDManager" timestamp="1646052636754">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
-    <state x="92" y="92" width="1736" height="848" key="AVDManager/0.0.1920.1032@0.0.1920.1032" timestamp="1646029367865" />
+    <state x="92" y="92" width="1736" height="848" key="AVDManager/0.0.1920.1032@0.0.1920.1032" timestamp="1646052636754" />
     <state x="740" y="270" key="FileChooserDialogImpl" timestamp="1646029245028">
       <screen x="0" y="0" width="1920" height="1032" />
     </state>

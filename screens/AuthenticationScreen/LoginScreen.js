@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, ActivityIndicator, Pressable, Image, KeyboardAvoidingView } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import firebase from '../database/firebase';
+import Firebase from '../database/firebase';
 
 export default class Login extends Component {
   
@@ -26,7 +26,7 @@ export default class Login extends Component {
       this.setState({
         isLoading: true,
       })
-      firebase
+      Firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then((res) => {
