@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from "react";
 import { StyleSheet, Text, View,Image,TouchableOpacity } from "react-native";
 import { borderColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
@@ -78,5 +77,3 @@ const styles = StyleSheet.create({
     justifyContent:'center'
   },
 });
-=======
->>>>>>> Authentication
