@@ -33,14 +33,14 @@ export default class Signup extends Component {
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then((res) => {
-        uid = res.user.localId
-        data = {
-          email: this.state.email,
-          fullName: this.state.displayName,
-        };
-
-
-        console.log('User registered successfully!')
+        // uid = res.user.localId
+        // data = {
+        //   email: this.state.email,
+        //   fullName: this.state.displayName,
+        // };
+        // usersRef = Firebase.firestore().collection('Users')
+        // usersRef.doc(uid).set(data)
+        // console.log('User registered successfully!')
         this.setState({
           isLoading: false,
           displayName: '',
@@ -48,8 +48,6 @@ export default class Signup extends Component {
           password: ''
         })
         this.props.navigation.navigate('Login')
-        usersRef = Firebase.firestore().collection('Users')
-        usersRef.doc(uid).set(data)
       })
       .catch(error => this.setState({ errorMessage: error.message }))      
     }
