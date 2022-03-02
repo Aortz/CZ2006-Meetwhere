@@ -19,7 +19,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4324b06-9354-4e49-8db1-32024b60719e" name="Default Changelist" comment="" />
+    <list default="true" id="e4324b06-9354-4e49-8db1-32024b60719e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/AuthenticationScreen/Forms.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/AuthenticationScreen/LoginScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/AuthenticationScreen/LoginScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/AuthenticationScreen/SignupScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/AuthenticationScreen/SignupScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/database/firebase.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/database/firebase.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,7 +55,6 @@
       <option name="DEPLOY_AS_INSTANT" value="false" />
       <option name="ARTIFACT_NAME" value="" />
       <option name="PM_INSTALL_OPTIONS" value="" />
-      <option name="ALL_USERS" value="true" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
@@ -83,16 +90,11 @@
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
-        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
-        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
       </Profilers>
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="" />
-      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
-      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2" />
     </configuration>
   </component>
@@ -114,7 +116,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
@@ -133,5 +137,13 @@
       <screen x="0" y="0" width="1920" height="1032" />
     </state>
     <state x="740" y="270" key="FileChooserDialogImpl/0.0.1920.1032@0.0.1920.1032" timestamp="1646029245028" />
+    <state x="100" y="100" width="1336" height="616" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1646193372182">
+      <screen x="0" y="0" width="1536" height="816" />
+    </state>
+    <state x="100" y="100" width="1336" height="616" key="com.android.tools.idea.avdmanager.AvdListDialog/0.0.1536.816@0.0.1536.816" timestamp="1646193372182" />
+    <state x="465" y="232" key="com.intellij.ide.util.TipDialog" timestamp="1646188998490">
+      <screen x="0" y="0" width="1536" height="816" />
+    </state>
+    <state x="465" y="232" key="com.intellij.ide.util.TipDialog/0.0.1536.816@0.0.1536.816" timestamp="1646188998490" />
   </component>
 </project>
