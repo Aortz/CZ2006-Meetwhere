@@ -27,6 +27,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "apiKey": "AIzaSyCMTTesduVPDfm9GdHL7Xoa_GI3ZMJfRpk",
+      "authDomain": "meetwhere-30911.firebaseapp.com",
+      "projectId": "meetwhere-30911",
+      "storageBucket": "meetwhere-30911.appspot.com",
+      "messagingSenderId": "733228351508",
+      "appId": "1:733228351508:web:13608dd83ffeec87a4a701",
+      "measurementId": "G-1KQ111L747"
     }
   }
 }

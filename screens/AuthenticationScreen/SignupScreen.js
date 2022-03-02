@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Pressable, Image, Alert, ActivityIndicator } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Firebase from '../database/firebase';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 export default class Signup extends Component {
   
@@ -23,11 +25,11 @@ export default class Signup extends Component {
   registerUser = () => {
     if(this.state.email === '' && this.state.password === '') {
       Alert.alert('Enter details to signup!')
-    } else {
+    }
+    else {
       this.setState({
         isLoading: true,
       })
-      console.log(firebase.auth());
       Firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -54,12 +56,11 @@ export default class Signup extends Component {
           <ActivityIndicator size="large" color="#9E9E9E"/>
         </View>
       )
-    }    
+    }
     return (
         <KeyboardAwareScrollView 
           contentContainerStyle={styles.container}
           resetScrollToCoords={{ x: 0, y: 0 }}
-          contentContainerStyle={styles.container}
           scrollEnabled={true}
         >
           <Image 

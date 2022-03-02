@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, ActivityIndicator, Pressable, Image, KeyboardAvoidingView } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Firebase from '../database/firebase';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 export default class Login extends Component {
   
@@ -37,7 +39,7 @@ export default class Login extends Component {
           email: '', 
           password: ''
         })
-        this.props.navigation.navigate('Dashboard')
+        this.props.navigation.navigate('Home')
       })
       .catch(error => this.setState({ errorMessage: error.message }))
     }
@@ -54,7 +56,6 @@ export default class Login extends Component {
       <KeyboardAwareScrollView 
         contentContainerStyle={styles.container}
         resetScrollToCoords={{ x: 0, y: 0 }}
-        contentContainerStyle={styles.container}
         scrollEnabled={true}
       >
         <Image 
