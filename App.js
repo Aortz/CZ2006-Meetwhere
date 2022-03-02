@@ -5,13 +5,21 @@ import Signup from "./screens/AuthenticationScreen/SignupScreen";
 import Login from "./screens/AuthenticationScreen/LoginScreen";
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen/HistoryScreen";
+<<<<<<< HEAD
 import InputLocationScreen from "./screens/InputLocationScreen/InputLocationScreen";
 import MidpointScreen from "./screens/MidpointScreen/MidpointScreen";
 import RandomLocationScreen from "./screens/RandomLocationScreen/RandomLocationScreen";
 import SuggestedLocationScreen from "./screens/SuggestedLocationScreen/SuggestedLocationScreen";
+=======
+import SuggestedLocationsScreen from "./screens/GetSuggestedLocationsScreen/SuggestedLocationsScreen";
+import Firebase from './screens/database/firebase';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+>>>>>>> Authentication
 
 const Stack = createNativeStackNavigator();
 export default function App() {
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -24,12 +32,16 @@ export default function App() {
         />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Home" component={HomeScreen} />
+<<<<<<< HEAD
         <Stack.Screen
           name="Login"
           component={Login}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Signup" component={Signup} />
+=======
+        <Stack.Screen name="Suggested Locations" component={SuggestedLocationsScreen} />
+>>>>>>> Authentication
         <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen
           name="InputLocation"

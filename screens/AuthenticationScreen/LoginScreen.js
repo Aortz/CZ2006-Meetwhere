@@ -13,7 +13,7 @@ export default class Login extends Component {
     this.state = { 
       email: '', 
       password: '',
-      isLoading: false
+      isLoading: false,
     }
   }
   updateInputVal = (val, prop) => {
@@ -37,11 +37,14 @@ export default class Login extends Component {
         this.setState({
           isLoading: false,
           email: '', 
-          password: ''
+          password: '',
         })
         this.props.navigation.navigate('Home')
       })
-      .catch(error => this.setState({ errorMessage: error.message }))
+      .catch(error => 
+        this.setState({ errorMessage: error.message })
+        
+      )
     }
   }
   render() {
@@ -51,7 +54,7 @@ export default class Login extends Component {
           <ActivityIndicator size="large" color="#9E9E9E"/>
         </View>
       )
-    }    
+    }
     return (
       <KeyboardAwareScrollView 
         contentContainerStyle={styles.container}
@@ -105,7 +108,7 @@ export default class Login extends Component {
           >
             <Text style={styles.loginText}>Sign Up</Text>
           </Pressable>
-        </View>                             
+        </View>
       </KeyboardAwareScrollView>
     );
   }

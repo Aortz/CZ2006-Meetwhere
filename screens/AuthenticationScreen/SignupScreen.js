@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Pressable, Image, Alert, ActivityIndicator } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Firebase from '../database/firebase';
-import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
 export default class Signup extends Component {
@@ -25,19 +24,23 @@ export default class Signup extends Component {
   registerUser = () => {
     if(this.state.email === '' && this.state.password === '') {
       Alert.alert('Enter details to signup!')
-    }
-    else {
+    } else {
       this.setState({
         isLoading: true,
       })
+      
       Firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then((res) => {
-        res.user.updateProfile({
-          displayName: this.state.displayName
-        })
-        console.log('User registered successfully!')
+        // uid = res.user.localId
+        // data = {
+        //   email: this.state.email,
+        //   fullName: this.state.displayName,
+        // };
+        // usersRef = Firebase.firestore().collection('Users')
+        // usersRef.doc(uid).set(data)
+        // console.log('User registered successfully!')
         this.setState({
           isLoading: false,
           displayName: '',
@@ -53,10 +56,10 @@ export default class Signup extends Component {
     if(this.state.isLoading){
       return(
         <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E"/>
+          <ActivityIndicator size="large" color="#000000"/>
         </View>
       )
-    }
+    }    
     return (
         <KeyboardAwareScrollView 
           contentContainerStyle={styles.container}
@@ -66,7 +69,8 @@ export default class Signup extends Component {
           <Image 
             style={styles.icon}
             source={require('./AuthenticationAssets/meetwhere-icon.png')} 
-          />  
+          />
+          <Text style={styles.headerText}>Registration Details</Text>  
           <View style={styles.rectangle}>
             <TextInput
                 style={styles.inputStyle}
@@ -118,28 +122,38 @@ const styles = StyleSheet.create({
         minHeight: 1000,
         backgroundColor: '#fff'
     },
+    headerText: {
+        width: '100%',
+        marginBottom: 15,
+        paddingBottom: 15,
+        alignSelf: "left",
+        // borderColor: "#ccc",
+        // borderBottomWidth: 1,
+        bottom: 260,
+        fontSize: 24,
+    },
     icon:{
         height: 95,
         width: 325,
-        bottom: 300,
+        bottom: 150,
     },
-    // rectangle: {
-    //     height: 129,
-    //     width: 299,
-    //     // left: 33,
-    //     top: 327,
-    //     elevation: 8,
-    //     shadowColor: 'black',
-    //     shadowOpacity: 0.3,
-    //     shadowOffset: {
-    //       width: 2,
-    //       height: 2
-    //     },
-    //     shadowRadius: 5, // <- Radius of the shadow
-    //     borderRadius: 5,
-    //     padding: 16,
-    //     margin: 8,
-    // },
+    rectangle: {
+        height: 160,
+        width: 299,
+        // left: 33,
+        bottom: 30,
+        elevation: 8,
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        shadowOffset: {
+          width: 2,
+          height: 2
+        },
+        shadowRadius: 5, // <- Radius of the shadow
+        borderRadius: 5,
+        padding: 16,
+        margin: 8,
+    },
     inputStyle: {
         width: '100%',
         marginBottom: 15,
@@ -161,7 +175,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: 48,
         width: 303,
-        bottom: 210,
+        // bottom: 210,
         backgroundColor: "#20E3C0"
     },
     loginText: {
