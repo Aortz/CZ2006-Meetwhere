@@ -40,11 +40,6 @@ export default function App() {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="RandomLocation" component={RandomLocationScreen} />
-        <Stack.Screen
-          name="SuggestedLocation"
-          component={SuggestedLocationsScreen}
-        />
       </Stack.Navigator>
     </NavigationContainer>
   );
