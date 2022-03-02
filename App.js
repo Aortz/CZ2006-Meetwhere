@@ -5,13 +5,21 @@ import Signup from "./screens/AuthenticationScreen/SignupScreen";
 import Login from "./screens/AuthenticationScreen/LoginScreen";
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen/HistoryScreen";
+import InputLocationScreen from "./screens/InputLocationScreen/InputLocationScreen";
+import MidpointScreen from "./screens/MidpointScreen/MidpointScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
-
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="InputLocation"
+          component={InputLocationScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="Login"
           component={Login}
@@ -22,6 +30,13 @@ export default function App() {
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="History" component={HistoryScreen} />
+        <Stack.Screen
+          name="Midpoint"
+          component={MidpointScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
