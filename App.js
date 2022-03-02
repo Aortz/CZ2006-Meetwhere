@@ -7,8 +7,6 @@ import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen/HistoryScreen";
 import InputLocationScreen from "./screens/InputLocationScreen/InputLocationScreen";
 import MidpointScreen from "./screens/MidpointScreen/MidpointScreen";
-import RandomLocationScreen from "./screens/GetRandomLocationScreen/RandomLocationScreen";
-import SuggestedLocationsScreen from "./screens/GetSuggestedLocationsScreen/SuggestedLocationsScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {

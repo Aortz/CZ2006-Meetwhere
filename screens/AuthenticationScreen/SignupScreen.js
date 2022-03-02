@@ -143,7 +143,8 @@ const styles = StyleSheet.create({
   icon: {
     height: 95,
     width: 325,
-    bottom: 150,
+    display: "flex",
+    alignItems: "flex-start"
   },
   rectangle: {
     height: 160,
