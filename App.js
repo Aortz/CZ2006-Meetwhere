@@ -7,8 +7,8 @@ import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen/HistoryScreen";
 import InputLocationScreen from "./screens/InputLocationScreen/InputLocationScreen";
 import MidpointScreen from "./screens/MidpointScreen/MidpointScreen";
-import RandomLocationScreen from "./screens/RandomLocationScreen/RandomLocationScreen";
-import SuggestedLocationScreen from "./screens/SuggestedLocationScreen/SuggestedLocationScreen";
+import RandomLocationScreen from "./screens/GetRandomLocationScreen/RandomLocationScreen";
+import SuggestedLocationsScreen from "./screens/GetSuggestedLocationsScreen/SuggestedLocationsScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -24,11 +24,7 @@ export default function App() {
         />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
+
         <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen
           name="InputLocation"
@@ -47,7 +43,7 @@ export default function App() {
         <Stack.Screen name="RandomLocation" component={RandomLocationScreen} />
         <Stack.Screen
           name="SuggestedLocation"
-          component={SuggestedLocationScreen}
+          component={SuggestedLocationsScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
