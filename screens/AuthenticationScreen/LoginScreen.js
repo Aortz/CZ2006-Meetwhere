@@ -56,7 +56,6 @@ export default class Login extends Component {
       <KeyboardAwareScrollView 
         contentContainerStyle={styles.container}
         resetScrollToCoords={{ x: 0, y: 0 }}
-        contentContainerStyle={styles.container}
         scrollEnabled={true}
       >
         <Image 

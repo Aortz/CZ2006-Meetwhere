@@ -61,7 +61,6 @@ export default class Signup extends Component {
         <KeyboardAwareScrollView 
           contentContainerStyle={styles.container}
           resetScrollToCoords={{ x: 0, y: 0 }}
-          contentContainerStyle={styles.container}
           scrollEnabled={true}
         >
           <Image 
