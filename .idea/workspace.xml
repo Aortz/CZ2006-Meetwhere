@@ -20,13 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4324b06-9354-4e49-8db1-32024b60719e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/screens/GetSuggestedLocationsScreen/SuggestedLocationsScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/AuthenticationScreen/Forms.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/AuthenticationScreen/LoginScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/AuthenticationScreen/LoginScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/AuthenticationScreen/SignupScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/AuthenticationScreen/SignupScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/database/firebase.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/database/firebase.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/GetRandomLocationScreen/RandomLocationScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/GetRandomLocationScreen/RandomLocationScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/GetSuggestedLocationsScreen/SuggestedLocarionsScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/HistoryScreen/HistoryScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/HistoryScreen/HistoryScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/HomeScreen/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/HomeScreen/HomeScreen.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,11 +38,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="25j8Om0HzytMzSPonvlKJrk0ubM" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
@@ -123,6 +128,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="414" y="170" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1646029372593">
