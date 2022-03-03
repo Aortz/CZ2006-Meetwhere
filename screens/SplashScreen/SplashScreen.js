@@ -4,12 +4,14 @@ import { StyleSheet, Text, View, TextInput, Alert, ActivityIndicator, Pressable,
 
 export default class SplashScreen extends Component {
     render() {
+        return(
         <View style={styles.container}>
             <Image
                 style={styles.icon}
                 source={require('../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png')}
             />
-        </View>
+            <ActivityIndicator/>
+        </View>)
     }
 }
 const styles = StyleSheet.create({
@@ -19,7 +21,7 @@ const styles = StyleSheet.create({
       flexDirection: "column",
       justifyContent: "center",
       padding: 35,
-      minHeight: 1000,
+      minHeight: 700,
       backgroundColor: '#fff'
     },
     icon:{
