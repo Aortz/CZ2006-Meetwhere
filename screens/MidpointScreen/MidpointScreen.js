@@ -2,13 +2,27 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
 import { Slider, Icon } from "react-native-elements";
+import Secondaryuser from "./Secondaryuser";
+import Filter from "./Filter";
 
 const MidpointScreen = (props) => {
   const [midPoint, setMidPoint] = useState(null);
-  const [radius, setRadius] = useState(1000);
+  const [overallFilter, setOverallFilter] = useState({
+    radius: 1000,
+    secondaryUser: null,
+  });
+  const [showFilter, setShowFilter] = useState(false);
+  const [showSecUserInput, setShowSecUserInput] = useState(false);
+  const [showRadius, setShowRadius] = useState(true);
+
+  const { userOption } = props;
 
   useEffect(() => {
-    console.log(props.userOption);
+    if (userOption === "Get Random") {
+      setShowSecUserInput(true);
+    } else {
+      setShowFilter(true);
+    }
   }, []);
 
   // useEffect(() => {
@@ -45,48 +59,76 @@ const MidpointScreen = (props) => {
         <Circle
           key={lat + long}
           center={{ latitude: lat, longitude: long }}
-          radius={radius}
+          radius={overallFilter.radius}
           strokeWidth={1}
           strokeColor={"#1a66ff"}
           fillColor={"rgba(230,238,255,0.5)"}
         />
       </MapView>
 
-      <View style={styles.slider}>
-        <View style={styles.textView}>
-          <Text style={styles.radiusText}>{`Radius: ${radius}m`}</Text>
-        </View>
+      {showRadius && (
+        <View style={styles.slider}>
+          <View style={styles.textView}>
+            <Text
+              style={styles.radiusText}
+            >{`Radius: ${overallFilter.radius}m`}</Text>
+          </View>
 
-        <Slider
-          minimumValue={0}
-          maximumValue={5000}
-          value={radius}
-          onValueChange={(value) => setRadius(value)}
-          step={1}
-          allowTouchTrack
-          style={{ width: "80%" }}
-          trackStyle={{ height: 5 }}
-          thumbStyle={{
-            height: 10,
-            width: 10,
-            backgroundColor: "red",
-          }}
-          thumbProps={{
-            children: (
-              <Icon
-                name="circle-thin"
-                type="font-awesome"
-                size={10}
-                reverse
-                containerStyle={{ bottom: 15, right: 20 }}
-                color="grey"
-              />
-            ),
-          }}
-          maximumTrackTintColor={"white"}
-          minimumTrackTintColor={"red"}
+          <Slider
+            minimumValue={0}
+            maximumValue={5000}
+            value={overallFilter.radius}
+            onValueChange={(value) =>
+              setOverallFilter({ ...overallFilter, radius: value })
+            }
+            step={1}
+            allowTouchTrack
+            style={{ width: "80%" }}
+            trackStyle={{ height: 5 }}
+            thumbStyle={{
+              height: 10,
+              width: 10,
+              backgroundColor: "red",
+            }}
+            thumbProps={{
+              children: (
+                <Icon
+                  name="circle-thin"
+                  type="font-awesome"
+                  size={10}
+                  reverse
+                  containerStyle={{ bottom: 15, right: 20 }}
+                  color="grey"
+                />
+              ),
+            }}
+            maximumTrackTintColor={"white"}
+            minimumTrackTintColor={"red"}
+          />
+        </View>
+      )}
+
+      {showSecUserInput && (
+        <Secondaryuser
+          overallFilter={overallFilter}
+          setOverallFilter={setOverallFilter}
+          setShowFilter={setShowFilter}
+          setShowSecUserInput={setShowSecUserInput}
+          navigation={props.navigation}
+          setShowRadius={setShowRadius}
         />
-      </View>
+      )}
+
+      {showFilter && (
+        <Filter
+          setShowFilter={setShowFilter}
+          setShowSecUserInput={setShowSecUserInput}
+          overallFilter={overallFilter}
+          setOverallFilter={setOverallFilter}
+          userOption={userOption}
+          navigation={props.navigation}
+        />
+      )}
     </View>
   );
 };
@@ -104,6 +146,7 @@ const styles = StyleSheet.create({
   },
   radiusText: {
     fontWeight: "bold",
+    fontSize: 15,
   },
   textView: {
     backgroundColor: "white",

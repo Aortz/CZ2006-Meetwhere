@@ -9,7 +9,10 @@ const HomeScreen = ({ navigation, setUserOption }) => {
         <View style={styles.iconsview}>
           <TouchableOpacity
             style={styles.touchableStyle}
-            onPress={() => navigation.navigate("InputLocation")}
+            onPress={() => {
+              setUserOption("Get Random");
+              navigation.navigate("InputLocation");
+            }}
           >
             <Image
               source={require("../../assets/random_location.png")}
@@ -19,7 +22,10 @@ const HomeScreen = ({ navigation, setUserOption }) => {
 
           <TouchableOpacity
             style={styles.touchableStyle}
-            onPress={() => navigation.navigate("InputLocation")}
+            onPress={() => {
+              setUserOption("Get List");
+              navigation.navigate("InputLocation");
+            }}
           >
             <Image
               source={require("../../assets/suggested_list.png")}
@@ -37,7 +43,7 @@ const HomeScreen = ({ navigation, setUserOption }) => {
             />
           </TouchableOpacity>
         </View>
-        </View>
+      </View>
     </View>
   );
 };
@@ -52,12 +58,10 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: "#fff",
     alignItems: "center",
-
   },
   icon: {
     height: 80,
     width: 80,
-  
   },
   icons: {
     flexDirection: "column",
@@ -70,12 +74,11 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: "bold",
     color: "black",
-    
   },
   iconsview: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height:"100%",
+    height: "100%",
     width: "100%",
     alignContent: "center",
   },

@@ -14,9 +14,9 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [userOption, setUserOption] = useState("Get Random");
-  const [loading, setLoading] = React.useState(false);
-  const [user, setUser] = React.useState(null);
-  const [initialRoute, setInitalRoute] = React.useState("Login");
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  const [initialRoute, setInitalRoute] = useState("Login");
 
   const onAuthStateChanged = (user) => {
     setUser(user);
@@ -38,7 +38,6 @@ export default function App() {
         <Stack.Screen name="Home">
           {(props) => <HomeScreen setUserOption={setUserOption} {...props} />}
         </Stack.Screen>
-
         <Stack.Screen
           name="Login"
           component={Login}
@@ -46,7 +45,6 @@ export default function App() {
             headerShown: false,
           }}
         />
-
         <Stack.Screen
           name="Midpoint"
           options={{
@@ -62,7 +60,6 @@ export default function App() {
             headerShown: false,
           }}
         />
-
         <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen
           name="InputLocation"
