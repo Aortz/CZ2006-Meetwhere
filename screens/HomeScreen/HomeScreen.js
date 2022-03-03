@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-const HomeScreen = ({ navigation, setUserOption }) => {
+const HomeScreen = ({ route, navigation, setUserOption }) => {
+  const { itemId, otherParam } = route.params;
   return (
     <View style={styles.container}>
       <View style={styles.icons}>
-        <Text style={styles.header}>Welcome to MeetWhere!</Text>
+        <Text style={styles.header}>Welcome to {route.params}!</Text>
         <View style={styles.iconsview}>
           <TouchableOpacity
             style={styles.touchableStyle}
