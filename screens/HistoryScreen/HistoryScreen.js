@@ -1,75 +1,159 @@
 // components/login.js
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, KeyboardAvoidingView } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
-import Firebase from '../database/firebase';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import { StyleSheet, Text, View, Image, FlatList,SafeAreaView,ScrollView } from 'react-native';
 
-export default class HistoryScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      HeadTable: ['User History'],
-      DataTable: [
-        ['User History is Empty'],
-      ]
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
+const HistoryScreen = (userDetails) => {
+    const DataTable = userDetails.userDetails.history
+    const table = [{name: "Chinatown", timeOfVisit: "13042021"}, {name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"}
+    ,{name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"},]
+    const checkHistory = (table) => {
+      if(table.length === 0){
+        return<View style={styles.textContainer}>
+          <Text style={styles.textStyle}>
+            You have not visited any place yet.
+          </Text>
+          <Text style={styles.textStyle}>
+            Start Visiting!
+          </Text>
+        </View> 
+      }
+      return <FlatList
+          // nestedScrollEnabled = {true}
+          scrollEnabled = {true}
+          data={table}
+          
+          renderItem={({item}) => 
+          
+            <View style={styles.textBox}>
+              <Image 
+                  style={styles.icon}
+                  source={require("../../assets/favicon.png")}/>
+              <View>
+                <Text style={styles.locationTextStyle}>
+                  Visited: {item.name}
+                </Text>
+                <Text style={styles.locationTextStyle}>Time Of Visit: {item.timeOfVisit}</Text>
+              </View>
+            </View>
+          }
+          keyExtractor={(item, index) => index.toString()}
+      />
+      
     }
-  }
-  render() {
-    const state = this.state;
+
     return (
-      <View style={styles.container}>
-        <Table borderStyle={styles.border}>
-            <Row data={state.HeadTable} style={styles.HeadStyle} textStyle={styles.headerText}/>
-            <Rows data={state.DataTable} textStyle={styles.TableText}/>
-            <Image
-                style={styles.icon}
-                source={require('../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png')}
-            />
-        </Table>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.border}>
+          <Text style={styles.HeadStyle}>
+            {userDetails.userDetails.fullName}'s User History
+          </Text>
+          <View style={styles.insideBorder}>
+            {checkHistory(table)}
+          </View>
+          
+        </View>
+        <Image
+            style={styles.banner}
+            source={require('../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png')}
+        />
+      </SafeAreaView>
     );
-  };
 };
+
+export default HistoryScreen;
 
 const styles = StyleSheet.create({
   container: {
       flex: 1,
       display: "flex",
       flexDirection: "column",
-      justifyContent: "center",
+      // justifyContent: "center",
       padding: 20,
-      minHeight: 1000,
+      // minHeight: 700,
       backgroundColor: '#fff'
       },
   border: {
-      flex: 1,
+      flex:0.9,
       display: "flex",
-      justifyContent: "center",
+      alignItems: "flex-start",
+      flexDirection: "column",
+      justifyContent: "flex-start",
       borderColor: "black",
       borderWidth: 2,
     },
-  HeadStyle: { 
-      height: 50,
-      bottom: 200,
-      alignContent: "center",
-      borderRadius: 1,
-      backgroundColor: '#ffe0f0'
+    insideBorder: {
+      flex: 1,
+      display: "flex",
+      alignItems: "flex-start",
+      flexDirection: "column",
+      justifyContent: "flex-start",
+      borderColor: "black",
+    },
+  HeadStyle: {
+      
+      textAlign: "center", 
+      alignSelf: "stretch",
+      borderBottomWidth: 1,
+      fontWeight: "bold",
+      fontSize:24,
+      padding:10,
+      // backgroundColor: '#ffe0f0'
   },
-  headerText: {
-    fontFamily: "Stencil Std",
-    fontSize: 30
+  textContainer:{
+    flex: 1,
+    padding:45,
+    paddingVertical:200,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 200,
   },
-  TableText: { 
-    margin: 10,
-    fontFamily: "Apple Chancery",
-    fontSize: 24
+  textBox:{
+    flex: 1,
+    paddingHorizontal:30,
+    paddingVertical:10,
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    // alignSelf: "stretch",
+    alignItems: "center",
+    justifyContent: "center"
   },
-  icon:{
-    height: 95,
-    width: 325,
-    top: 200,
+  textStyle: {
+    flex: 1,
+      fontSize: 14,
+      fontStyle: "italic",
+      alignSelf: "center",
+      fontFamily: "serif",
+      color: "#7B7B7B"
+  },
+  icon: {
+    // justifyContent: "flex-start",
+    // height: 50%,
+    // width: 40,
+    
+    marginRight:20,
+    borderRadius: 100 / 2,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "black"
+  },
+  locationTextStyle: {
+    fontSize: 20,
+    textAlign: "center", 
+    alignSelf: "stretch",
+    fontFamily: "serif",
+    color: "#000000"
+  },
+  banner:{
+    borderTopWidth: 5,
+    // flex: ,
+    height: 80,
+    width: 210,
+    marginLeft: 75,
+    // marginTop:170,
+    position: 'absolute',
+    bottom:0
   },
 });

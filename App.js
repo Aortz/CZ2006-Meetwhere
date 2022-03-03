@@ -16,6 +16,7 @@ export default function App() {
   const [userOption, setUserOption] = useState("Get Random");
   const [loading, setLoading] = React.useState(false);
   const [user, setUser] = React.useState(null);
+  const [userDetails, setUserDetails] = useState(null)
   const [initialRoute, setInitalRoute] = React.useState("Login");
 
   const onAuthStateChanged = (user) => {
@@ -36,16 +37,17 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen name="Home">
-          {(props) => <HomeScreen setUserOption={setUserOption} {...props} />}
+          {(props) => <HomeScreen setUserOption={setUserOption} userDetails={userDetails} {...props} />}
         </Stack.Screen>
 
         <Stack.Screen
           name="Login"
-          component={Login}
           options={{
             headerShown: false,
           }}
-        />
+        >
+          {(props) => <Login setUserDetails={setUserDetails} {...props} />}
+        </Stack.Screen>
 
         <Stack.Screen
           name="Midpoint"
@@ -63,7 +65,10 @@ export default function App() {
           }}
         />
 
-        <Stack.Screen name="History" component={HistoryScreen} />
+        <Stack.Screen name="History">
+          {(props) => <HistoryScreen userDetails={userDetails} {...props} />}
+        </Stack.Screen>
+
         <Stack.Screen
           name="InputLocation"
           component={InputLocationScreen}
