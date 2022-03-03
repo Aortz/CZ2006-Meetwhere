@@ -14,12 +14,16 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import { collection, getDoc} from "firebase/firestore";
 import { Firebase, db } from "../database/firebase";
+import Loader from "./Loader";
+// import { CirclesLoader, PulseLoader, TextLoader, DotsLoader } from 'react-native-indicator';
 
-export default Login = ({ navigation }) => {
+export default Login = ({ navigation, setUserDetails }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const userLogin = () => {
+    setLoading(true);
     Firebase.auth()
       .signInWithEmailAndPassword(email, password)
       .then((res) => {
@@ -33,13 +37,14 @@ export default Login = ({ navigation }) => {
               Alert.alert("User does not exist anymore.");
             } else {
               const user = firestoreDoc.data();
-              navigation.replace("Home", { user });
-              console.log(user);
+              setLoading(false);
+              navigation.replace("Home");
+              setUserDetails(user);
               console.log("User logged in successfully!");
             }
           });
       })
-      .catch((error) => Alert.alert(error.message));
+      .catch((error) => Alert.alert(error.message), setLoading(false));
   };
   return (
     <KeyboardAwareScrollView
@@ -47,6 +52,7 @@ export default Login = ({ navigation }) => {
       resetScrollToCoords={{ x: 0, y: 0 }}
       scrollEnabled={true}
     >
+      <Loader loading={loading} />
       <Image
         style={styles.icon}
         source={require("./AuthenticationAssets/meetwhere-icon.png")}
@@ -107,9 +113,9 @@ const styles = StyleSheet.create({
   },
   icon: {
     height: 95,
-    width: 325,
+    width: 310,
     marginBottom: 50,
-    marginRight: 10,
+    marginRight: 30,
   },
   rectangle: {
     width: 299,
