@@ -1,118 +1,100 @@
 // components/login.js
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert, ActivityIndicator, Pressable, Image, KeyboardAvoidingView } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import Firebase from '../database/firebase';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Alert,
+  ActivityIndicator,
+  Pressable,
+  Image,
+  KeyboardAvoidingView,
+} from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+// import { collection, getDoc} from "firebase/firestore";
+import { Firebase, db } from "../database/firebase";
 
-export default class Login extends Component {
-  
-  constructor() {
-    super();
-    this.state = { 
-      email: '', 
-      password: '',
-      isLoading: false,
-    }
-  }
-  updateInputVal = (val, prop) => {
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
-  }
-  userLogin = () => {
-    if(this.state.email === '' && this.state.password === '') {
-      Alert.alert('Enter details to sign in!')
-    } else {
-      this.setState({
-        isLoading: true,
-      })
-      Firebase
-      .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
+export default Login = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const userLogin = () => {
+    Firebase.auth()
+      .signInWithEmailAndPassword(email, password)
       .then((res) => {
-        console.log(res)
-        console.log('User logged in successfully!')
-        this.setState({
-          isLoading: false,
-          email: '', 
-          password: '',
-        })
-        this.props.navigation.navigate('Home')
+        const uid = res.user.uid;
+        const userRef = Firebase.firestore().collection("Users");
+        userRef
+          .doc(uid)
+          .get()
+          .then((firestoreDoc) => {
+            if (!firestoreDoc.exists) {
+              Alert.alert("User does not exist anymore.");
+            } else {
+              const user = firestoreDoc.data();
+              navigation.replace("Home", { user });
+              console.log(user);
+              console.log("User logged in successfully!");
+            }
+          });
       })
-      .catch(error => 
-        this.setState({ errorMessage: error.message })
-        
-      )
-    }
-  }
-  render() {
-    if(this.state.isLoading){
-      return(
-        <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E"/>
-        </View>
-      )
-    }
-    return (
-      <KeyboardAwareScrollView 
-        contentContainerStyle={styles.container}
-        resetScrollToCoords={{ x: 0, y: 0 }}
-        scrollEnabled={true}
-      >
-        <Image 
-          style={styles.icon}
-          source={require('./AuthenticationAssets/meetwhere-icon.png')} 
-        />  
-        <View style={styles.rectangle}>
-          <TextInput
-            style={styles.inputStyle}
-            placeholder="Email"
-            value={this.state.email}
-            onChangeText={(val) => this.updateInputVal(val, 'email')}
-          />
-          <TextInput
-            style={styles.inputStyle}
-            placeholder="Password"
-            value={this.state.password}
-            onChangeText={(val) => this.updateInputVal(val, 'password')}
-            maxLength={15}
-            secureTextEntry={true}
-          />
-        </View>   
-        
-        <View>
-          <Pressable
-            style={styles.loginButton} 
-            title="Login"
-            onPress={() => this.userLogin()}
-          >
-            <Text style={styles.loginText}>Login</Text>
-          </Pressable>
-        </View> 
-        <View style={styles.signupText}>
-          <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
-          <Text 
-            style={styles.text}
-          >
-            Don't have account?
-          </Text>
-          <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
-        </View>  
-        <View>
-          <Pressable
-            style={styles.signupButton} 
-            title="Sign Up"
-            onPress={() => this.props.navigation.navigate('Signup')}
-          >
-            <Text style={styles.loginText}>Sign Up</Text>
-          </Pressable>
-        </View>
-      </KeyboardAwareScrollView>
-    );
-  }
-}
+      .catch((error) => Alert.alert(error.message));
+  };
+  return (
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      scrollEnabled={true}
+    >
+      <Image
+        style={styles.icon}
+        source={require("./AuthenticationAssets/meetwhere-icon.png")}
+      />
+      <View style={styles.rectangle}>
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="Email"
+          value={email}
+          onChangeText={(email) => setEmail(email)}
+        />
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="Password"
+          value={password}
+          onChangeText={(password) => setPassword(password)}
+          maxLength={15}
+          secureTextEntry={true}
+        />
+      </View>
+
+      <View>
+        <Pressable
+          style={styles.loginButton}
+          title="Login"
+          onPress={() => userLogin()}
+        >
+          <Text style={styles.loginText}>Login</Text>
+        </Pressable>
+      </View>
+      <View style={styles.signupText}>
+        <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
+        <Text style={styles.text}>Don't have account?</Text>
+        <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
+      </View>
+      <View>
+        <Pressable
+          style={styles.signupButton}
+          title="Sign Up"
+          onPress={() => navigation.navigate("Signup")}
+        >
+          <Text style={styles.loginText}>Sign Up</Text>
+        </Pressable>
+      </View>
+    </KeyboardAwareScrollView>
+  );
+};
+// }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -120,57 +102,66 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     padding: 35,
-    minHeight: 1000,
-    backgroundColor: '#fff'
+    minHeight: 700,
+    backgroundColor: "#fff",
   },
-  icon:{
+  icon: {
     height: 95,
     width: 325,
-    bottom: 200,
+    marginBottom: 50,
+    marginRight: 10,
+  },
+  rectangle: {
+    width: 299,
+    display: "flex",
+    justifyContent: "flex-start",
+    elevation: 1,
+    borderRadius: 3,
+    padding: 13,
+    marginVertical: 12,
   },
   inputStyle: {
-    width: '100%',
-    marginBottom: 15,
-    paddingBottom: 15,
+    width: "100%",
+    marginVertical: 10,
+    paddingBottom: 10,
     alignSelf: "center",
     borderColor: "#ccc",
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   loginButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    // position: "absolute",
-    top: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    // top: 10,
     height: 48,
     width: 303,
-    backgroundColor: "#FF545E"
+    backgroundColor: "#FF545E",
   },
   loginText: {
     fontSize: 16,
     lineHeight: 21,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     letterSpacing: 0.25,
-    color: 'white',
+    color: "white",
   },
   signupText: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     // left: 80,
     top: 100,
     height: 37,
   },
   text: {
-    textAlign: 'center',
+    textAlign: "center",
     marginLeft: 10,
     marginRight: 10,
   },
   signupButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     top: 110,
     height: 48,
     width: 303,
-    backgroundColor: "#20E3C0"
+    backgroundColor: "#20E3C0",
   },
   preloader: {
     left: 0,
@@ -178,26 +169,8 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     // position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff'
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
   },
-  rectangle: {
-    height: 129,
-    width: 299,
-    left: 33,
-    top: 327,
-    position: "absolute",
-    elevation: 8,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: {
-      width: 2,
-      height: 2
-    },
-    shadowRadius: 5, // <- Radius of the shadow
-    borderRadius: 5,
-    padding: 16,
-    margin: 8,
-    }
 });

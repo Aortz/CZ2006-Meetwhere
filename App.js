@@ -7,15 +7,38 @@ import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen/HistoryScreen";
 import InputLocationScreen from "./screens/InputLocationScreen/InputLocationScreen";
 import MidpointScreen from "./screens/MidpointScreen/MidpointScreen";
+import SplashScreen from "./screens/SplashScreen/SplashScreen";
+import { Firebase } from "./screens/database/firebase";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [userOption, setUserOption] = useState("Get Random");
+  const [loading, setLoading] = React.useState(false);
+  const [user, setUser] = React.useState(null);
+  const [initialRoute, setInitalRoute] = React.useState("Login");
+
+  const onAuthStateChanged = (user) => {
+    setUser(user);
+    if (loading) setLoading(false);
+    if (user) {
+      setInitalRoute("Home");
+    }
+  };
+  React.useEffect(() => {
+    const subscriber = Firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (loading) return <SplashScreen />;
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName={initialRoute}>
+        <Stack.Screen name="Home">
+          {(props) => <HomeScreen setUserOption={setUserOption} {...props} />}
+        </Stack.Screen>
+
         <Stack.Screen
           name="Login"
           component={Login}
@@ -23,6 +46,7 @@ export default function App() {
             headerShown: false,
           }}
         />
+
         <Stack.Screen
           name="Midpoint"
           options={{
@@ -31,10 +55,13 @@ export default function App() {
         >
           {(props) => <MidpointScreen userOption={userOption} {...props} />}
         </Stack.Screen>
-        <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="Home">
-          {(props) => <HomeScreen setUserOption={setUserOption} {...props} />}
-        </Stack.Screen>
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={{
+            headerShown: false,
+          }}
+        />
 
         <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen
