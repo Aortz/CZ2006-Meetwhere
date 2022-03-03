@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Signup from "./screens/AuthenticationScreen/SignupScreen";
@@ -9,7 +9,10 @@ import InputLocationScreen from "./screens/InputLocationScreen/InputLocationScre
 import MidpointScreen from "./screens/MidpointScreen/MidpointScreen";
 
 const Stack = createNativeStackNavigator();
+
 export default function App() {
+  const [userOption, setUserOption] = useState("Get Random");
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -20,20 +23,23 @@ export default function App() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="Midpoint"
+          options={{
+            headerShown: false,
+          }}
+        >
+          {(props) => <MidpointScreen userOption={userOption} {...props} />}
+        </Stack.Screen>
         <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Home">
+          {(props) => <HomeScreen setUserOption={setUserOption} {...props} />}
+        </Stack.Screen>
 
         <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen
           name="InputLocation"
           component={InputLocationScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="Midpoint"
-          component={MidpointScreen}
           options={{
             headerShown: false,
           }}
