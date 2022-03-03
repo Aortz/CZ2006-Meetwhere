@@ -20,9 +20,20 @@ export default function App() {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-
+        <Stack.Screen 
+          name="Signup" 
+          component={Signup} 
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen}
+          options={{
+            headerShown: false,
+          }} 
+        />
         <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen
           name="InputLocation"

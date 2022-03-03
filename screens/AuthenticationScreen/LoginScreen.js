@@ -2,9 +2,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, ActivityIndicator, Pressable, Image, KeyboardAvoidingView } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import Firebase from '../database/firebase';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import {Firebase} from '../database/firebase';
+
 
 export default class Login extends Component {
   
@@ -41,9 +40,9 @@ export default class Login extends Component {
         })
         this.props.navigation.navigate('Home')
       })
-      .catch(error => 
-        this.setState({ errorMessage: error.message })
-        
+      .catch((error) => 
+        Alert.alert(error.message),
+        // this.props.navigation.navigate('Login')
       )
     }
   }
@@ -120,18 +119,28 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     padding: 35,
-    minHeight: 1000,
+    minHeight: 700,
     backgroundColor: '#fff'
   },
   icon:{
     height: 95,
     width: 325,
-    bottom: 200,
+    marginBottom: 50,
+    marginRight: 10,
   },
+  rectangle: {
+    width: 299,
+    display: "flex",
+    justifyContent: "flex-start",
+    elevation: 1,
+    borderRadius: 3,
+    padding: 13,
+    marginVertical: 12,
+    },
   inputStyle: {
     width: '100%',
-    marginBottom: 15,
-    paddingBottom: 15,
+    marginVertical: 10,
+    paddingBottom: 10,
     alignSelf: "center",
     borderColor: "#ccc",
     borderBottomWidth: 1
@@ -139,8 +148,7 @@ const styles = StyleSheet.create({
   loginButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    // position: "absolute",
-    top: 10,
+    // top: 10,
     height: 48,
     width: 303,
     backgroundColor: "#FF545E"
@@ -182,22 +190,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fff'
   },
-  rectangle: {
-    height: 129,
-    width: 299,
-    left: 33,
-    top: 327,
-    position: "absolute",
-    elevation: 8,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: {
-      width: 2,
-      height: 2
-    },
-    shadowRadius: 5, // <- Radius of the shadow
-    borderRadius: 5,
-    padding: 16,
-    margin: 8,
-    }
+
 });
