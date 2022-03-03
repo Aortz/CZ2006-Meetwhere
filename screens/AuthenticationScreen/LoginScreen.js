@@ -1,59 +1,41 @@
 // components/login.js
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, ActivityIndicator, Pressable, Image, KeyboardAvoidingView } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Firebase} from '../database/firebase';
+// import { collection, getDoc} from "firebase/firestore"; 
+import {Firebase, db} from '../database/firebase';
 
 
-export default class Login extends Component {
+export default Login =({ navigation }) => {
   
-  constructor() {
-    super();
-    this.state = { 
-      email: '', 
-      password: '',
-      isLoading: false,
-    }
-  }
-  updateInputVal = (val, prop) => {
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
-  }
-  userLogin = () => {
-    if(this.state.email === '' && this.state.password === '') {
-      Alert.alert('Enter details to sign in!')
-    } else {
-      this.setState({
-        isLoading: true,
-      })
-      Firebase
+  const [email, setEmail] = useState('')
+  const [password,setPassword] = useState('')
+
+  const userLogin = () => {
+    Firebase
       .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .signInWithEmailAndPassword(email, password)
       .then((res) => {
-        console.log(res)
-        console.log('User logged in successfully!')
-        this.setState({
-          isLoading: false,
-          email: '', 
-          password: '',
-        })
-        this.props.navigation.navigate('Home')
+        const uid = res.user.uid
+        const userRef = Firebase.firestore().collection('Users')
+        userRef.doc(uid).get().then((firestoreDoc)=>{
+          if (!firestoreDoc.exists) {
+            Alert.alert("User does not exist anymore.")
+          } else{
+            const user = firestoreDoc.data()
+            navigation.navigate('Home', {user})
+            console.log(user)
+            console.log('User logged in successfully!')
+            }
+          }          
+        )
+        
       })
       .catch((error) => 
         Alert.alert(error.message),
-        // this.props.navigation.navigate('Login')
       )
-    }
+    
   }
-  render() {
-    if(this.state.isLoading){
-      return(
-        <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E"/>
-        </View>
-      )
-    }
     return (
       <KeyboardAwareScrollView 
         contentContainerStyle={styles.container}
@@ -68,14 +50,14 @@ export default class Login extends Component {
           <TextInput
             style={styles.inputStyle}
             placeholder="Email"
-            value={this.state.email}
-            onChangeText={(val) => this.updateInputVal(val, 'email')}
+            value={email}
+            onChangeText={(email) => setEmail(email)}
           />
           <TextInput
             style={styles.inputStyle}
             placeholder="Password"
-            value={this.state.password}
-            onChangeText={(val) => this.updateInputVal(val, 'password')}
+            value={password}
+            onChangeText={(password) => setPassword(password)}
             maxLength={15}
             secureTextEntry={true}
           />
@@ -85,7 +67,7 @@ export default class Login extends Component {
           <Pressable
             style={styles.loginButton} 
             title="Login"
-            onPress={() => this.userLogin()}
+            onPress={() => userLogin()}
           >
             <Text style={styles.loginText}>Login</Text>
           </Pressable>
@@ -103,7 +85,7 @@ export default class Login extends Component {
           <Pressable
             style={styles.signupButton} 
             title="Sign Up"
-            onPress={() => this.props.navigation.navigate('Signup')}
+            onPress={() => navigation.navigate('Signup')}
           >
             <Text style={styles.loginText}>Sign Up</Text>
           </Pressable>
@@ -111,7 +93,7 @@ export default class Login extends Component {
       </KeyboardAwareScrollView>
     );
   }
-}
+// }
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,5 +1,5 @@
 // components/signup.js
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,76 +15,44 @@ import { collection, addDoc } from "firebase/firestore";
 import {Firebase, db} from "../database/firebase";
 
 
-export default class Signup extends Component {
-  constructor() {
-    super();
-    this.state = {
-      displayName: "",
-      email: "",
-      password: "",
-      isLoading: false,
-    };
-  }
-  updateInputVal = (val, prop) => {
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
-  };
-  registerUser = () => {
-    if (this.state.email === "" && this.state.password === "") {
-      Alert.alert("Enter details to signup!");
-    } else {
-      this.setState({
-        isLoading: true,
-      });
+export default Signup = ({navigation}) => {
+  const [email, setEmail] = useState('')
+  const [password,setPassword] = useState('')
+  const [displayName, setDisplayName] = useState('')
+  const registerUser = () => {
+    // if (this.state.email === "" && this.state.password === "") {
+    //   Alert.alert("Enter details to signup!");
+    // } else {
+    //   this.setState({
+    //     isLoading: true,
+    //   });
 
-      Firebase.auth()
-        .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      Firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
         .then((res) => {
           const uid = res.user.uid
           const data = {
-            email: this.state.email,
-            fullName: this.state.displayName,
+            id: uid,
+            email: email,
+            fullName: displayName,
+            history:[],
           };
-          const usersRef = addDoc(collection(db, "Users"), data);
+          const usersRef = db.collection('Users')
+          usersRef
+            .doc(uid)
+            .set(data)
+            .then(() => {
+              navigation.navigate("Login");
+            })
+            .catch((error) => {
+                alert(error)
+            });
           console.log('User registered successfully!')
-          this.setState({
-            isLoading: false,
-            displayName: "",
-            email: "",
-            password: "",
-          });
-          this.props.navigation.navigate("Login");
         })
         .catch((error) => Alert.alert(error.message));
     }
-  };
-  // componentWillMount() {
-  //   // Add listener here
-  //     this.unsubscribe = Firebase.auth().onAuthStateChanged(user => {
-  //       if (!user) {
-  //           this.props.navigation.navigate("Login");
-  //       }
-  //       else{
-  //         console.log("Logged In")
-  //       }
-  //     });
-  // }
-
-  // componentWillUnmount() {
-  //     // Don't forget to unsubscribe when the component unmounts
-  //     this.unsubscribe();
-  // }
-
-
-  render() {
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#000000" />
-        </View>
-      );
-    }
+  
     return (
       <KeyboardAwareScrollView
         contentContainerStyle={styles.container}
@@ -100,20 +68,20 @@ export default class Signup extends Component {
           <TextInput
             style={styles.inputStyle}
             placeholder="Name"
-            value={this.state.displayName}
-            onChangeText={(val) => this.updateInputVal(val, "displayName")}
+            value={displayName}
+            onChangeText={(displayName) => setDisplayName(displayName)}
           />
           <TextInput
             style={styles.inputStyle}
             placeholder="Email"
-            value={this.state.email}
-            onChangeText={(val) => this.updateInputVal(val, "email")}
+            value={email}
+            onChangeText={(email) => setEmail(email)}
           />
           <TextInput
             style={styles.inputStyle}
             placeholder="Password"
-            value={this.state.password}
-            onChangeText={(val) => this.updateInputVal(val, "password")}
+            value={password}
+            onChangeText={(password) => setPassword(password)}
             maxLength={15}
             secureTextEntry={true}
           />
@@ -123,21 +91,21 @@ export default class Signup extends Component {
           <Pressable
             style={styles.signupButton}
             title="Sign Up"
-            onPress={() => this.registerUser()}
+            onPress={() => registerUser()}
           >
             <Text style={styles.signupText}>Sign Up</Text>
           </Pressable>
         </View>
         <Text
           style={styles.loginText}
-          onPress={() => this.props.navigation.navigate("Login")}
+          onPress={() => navigation.navigate("Login")}
         >
           Already Registered? Click here to login
         </Text>
       </KeyboardAwareScrollView>
     );
   }
-}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
