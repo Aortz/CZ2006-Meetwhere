@@ -14,7 +14,7 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import { collection, getDoc} from "firebase/firestore";
 import { Firebase, db } from "../database/firebase";
-import Loader from "./Loader"
+import Loader from "./Loader";
 // import { CirclesLoader, PulseLoader, TextLoader, DotsLoader } from 'react-native-indicator';
 
 export default Login = ({ navigation, setUserDetails }) => {
@@ -23,7 +23,7 @@ export default Login = ({ navigation, setUserDetails }) => {
   const [loading, setLoading] = useState(false);
 
   const userLogin = () => {
-    setLoading(true)
+    setLoading(true);
     Firebase.auth()
       .signInWithEmailAndPassword(email, password)
       .then((res) => {
@@ -39,7 +39,7 @@ export default Login = ({ navigation, setUserDetails }) => {
               const user = firestoreDoc.data();
               setLoading(false);
               navigation.replace("Home");
-              setUserDetails(user)
+              setUserDetails(user);
               console.log("User logged in successfully!");
             }
           });
@@ -47,7 +47,6 @@ export default Login = ({ navigation, setUserDetails }) => {
       .catch((error) => Alert.alert(error.message));
   };
   return (
-    
     <KeyboardAwareScrollView
       contentContainerStyle={styles.container}
       resetScrollToCoords={{ x: 0, y: 0 }}

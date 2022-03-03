@@ -1,18 +1,28 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity,Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 
-const HomeScreen = ({ navigation, setUserOption,userDetails }) => {
-  if (userDetails === null){
-    return null
+const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
+  if (userDetails === null) {
+    return null;
   }
   return (
     <View style={styles.container}>
       <View style={styles.icons}>
-        <Text style={styles.header}>Welcome {userDetails.fullName}!</Text>
+        <Text style={styles.header}>Welcome {userDetails.userName}!</Text>
         <View style={styles.iconsview}>
           <TouchableOpacity
             style={styles.touchableStyle}
-            onPress={() => navigation.navigate("InputLocation")}
+            onPress={() => {
+              setUserOption("Get Random");
+              navigation.navigate("InputLocation");
+            }}
           >
             <Image
               source={require("../../assets/random_location.png")}
@@ -22,7 +32,10 @@ const HomeScreen = ({ navigation, setUserOption,userDetails }) => {
 
           <TouchableOpacity
             style={styles.touchableStyle}
-            onPress={() => navigation.navigate("InputLocation")}
+            onPress={() => {
+              setUserOption("Get List");
+              navigation.navigate("InputLocation");
+            }}
           >
             <Image
               source={require("../../assets/suggested_list.png")}
@@ -47,8 +60,7 @@ const HomeScreen = ({ navigation, setUserOption,userDetails }) => {
         >
           <Text style={styles.signOutText}>Sign Out</Text>
         </Pressable>
-        
-        </View>
+      </View>
     </View>
   );
 };
@@ -63,12 +75,10 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: "#fff",
     alignItems: "center",
-
   },
   icon: {
     height: 80,
     width: 80,
-  
   },
   icons: {
     flexDirection: "column",
@@ -81,12 +91,11 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: "bold",
     color: "black",
-    
   },
   iconsview: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height:"60%",
+    height: "60%",
     width: "60%",
     alignContent: "center",
   },
