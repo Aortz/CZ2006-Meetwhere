@@ -1,14 +1,17 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, setUserOption }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Welcome to MeetWhere!</Text>
       <View style={styles.iconsview}>
         <TouchableOpacity
           style={styles.touchableStyle}
-          onPress={() => navigation.navigate("InputLocation")}
+          onPress={() => {
+            setUserOption("Get Random");
+            navigation.navigate("InputLocation");
+          }}
         >
           <Image
             source={require("../../assets/random_location.png")}
@@ -18,7 +21,10 @@ const HomeScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.touchableStyle}
-          onPress={() => navigation.navigate("InputLocation")}
+          onPress={() => {
+            setUserOption("Get List");
+            navigation.navigate("InputLocation");
+          }}
         >
           <Image
             source={require("../../assets/suggested_list.png")}
