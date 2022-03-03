@@ -59,6 +59,10 @@ const FilterSwiper = () => {
           </View>
         </View>
 
+        <View style={styles.slide}>
+          <Text style={styles.title}>Price</Text>
+        </View>
+
         {checkBoxes["Food"] && (
           <View style={styles.slide}>
             <Text style={styles.title}>Type of Food</Text>
@@ -192,10 +196,6 @@ const FilterSwiper = () => {
             </View>
           </View>
         )}
-
-        <View style={styles.slide}>
-          <Text style={styles.title}>Price</Text>
-        </View>
       </Swiper>
     </>
   );

@@ -19,6 +19,7 @@ export default Signup = ({navigation}) => {
   const [email, setEmail] = useState('')
   const [password,setPassword] = useState('')
   const [displayName, setDisplayName] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const registerUser = () => {
     // if (this.state.email === "" && this.state.password === "") {
     //   Alert.alert("Enter details to signup!");
@@ -35,7 +36,7 @@ export default Signup = ({navigation}) => {
           const data = {
             id: uid,
             email: email,
-            fullName: displayName,
+            userName: displayName,
             history:[],
           };
           const usersRef = db.collection('Users')

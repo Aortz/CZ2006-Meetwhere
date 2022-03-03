@@ -1,11 +1,21 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 
-const HomeScreen = ({ navigation, setUserOption }) => {
+const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
+  if (userDetails === null) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <View style={styles.icons}>
-        <Text style={styles.header}>Welcome to MeetWhere!</Text>
+        <Text style={styles.header}>Welcome {userDetails.userName}!</Text>
         <View style={styles.iconsview}>
           <TouchableOpacity
             style={styles.touchableStyle}
@@ -43,6 +53,13 @@ const HomeScreen = ({ navigation, setUserOption }) => {
             />
           </TouchableOpacity>
         </View>
+        <Pressable
+          style={styles.signOutButton}
+          title="Sign Out"
+          onPress={() => navigation.navigate("Login")}
+        >
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -65,7 +82,7 @@ const styles = StyleSheet.create({
   },
   icons: {
     flexDirection: "column",
-    height: 800,
+    height: 700,
     borderWidth: 2,
     width: "95%",
   },
@@ -78,12 +95,29 @@ const styles = StyleSheet.create({
   iconsview: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height: "100%",
-    width: "100%",
+    height: "60%",
+    width: "60%",
     alignContent: "center",
   },
   touchableStyle: {
     height: "90%",
     justifyContent: "center",
+  },
+  signOutText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "white",
+  },
+  signOutButton: {
+    marginVertical: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 10,
+    height: 48,
+    width: 303,
+    // bottom: 210,
+    backgroundColor: "#20E3C0",
   },
 });

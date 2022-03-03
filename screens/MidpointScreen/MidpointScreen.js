@@ -44,6 +44,7 @@ const MidpointScreen = (props) => {
         region={{
           // latitude: midPoint.latitude,
           // longitude: midPoint.longitude,
+          //-0.02
           latitude: lat,
           longitude: long,
           latitudeDelta: 0.0922,

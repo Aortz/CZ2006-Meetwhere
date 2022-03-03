@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Signup from "./screens/AuthenticationScreen/SignupScreen";
@@ -16,6 +16,7 @@ export default function App() {
   const [userOption, setUserOption] = useState("Get Random");
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const [initialRoute, setInitalRoute] = useState("Login");
 
   const onAuthStateChanged = (user) => {
@@ -25,7 +26,7 @@ export default function App() {
       setInitalRoute("Home");
     }
   };
-  React.useEffect(() => {
+  useEffect(() => {
     const subscriber = Firebase.auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
@@ -36,15 +37,23 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen name="Home">
-          {(props) => <HomeScreen setUserOption={setUserOption} {...props} />}
+          {(props) => (
+            <HomeScreen
+              setUserOption={setUserOption}
+              userDetails={userDetails}
+              {...props}
+            />
+          )}
         </Stack.Screen>
         <Stack.Screen
           name="Login"
-          component={Login}
           options={{
             headerShown: false,
           }}
-        />
+        >
+          {(props) => <Login setUserDetails={setUserDetails} {...props} />}
+        </Stack.Screen>
+
         <Stack.Screen
           name="Midpoint"
           options={{
@@ -60,7 +69,11 @@ export default function App() {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="History" component={HistoryScreen} />
+
+        <Stack.Screen name="History">
+          {(props) => <HistoryScreen userDetails={userDetails} {...props} />}
+        </Stack.Screen>
+
         <Stack.Screen
           name="InputLocation"
           component={InputLocationScreen}
