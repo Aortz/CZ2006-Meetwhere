@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TextInput,
+  TouchableOpacity,
   Alert,
   ActivityIndicator,
   Pressable,
@@ -21,30 +22,78 @@ export default Login = ({ navigation, setUserDetails }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
 
+  const checkEmailPasswordInput = (email,password) => {    
+    //error handling for email
+    let emailValid = false;
+    if(email.length == 0){
+      setEmailError("Email is required");
+    }        
+    else if(email.length < 6){
+      setEmailError("Email should be minimum 6 characters");
+    }      
+    else if(email.indexOf(' ') >= 0){        
+      setEmailError('Email cannot contain spaces');                          
+    }
+    else{
+      setEmailError("")
+      emailValid = true
+    }
+    //error handling for password
+    let passwordValid = false;
+    if(password.length == 0){
+      setPasswordError("Password is required");
+    }        
+    else if(password.length < 6){
+        setPasswordError("Password should be minimum 6 characters");
+    }      
+    else if(password.indexOf(' ') >= 0){        
+        setPasswordError('Password cannot contain spaces');                          
+    }
+    else{
+      setPasswordError("")
+      passwordValid = true
+    }
+    if(emailValid && passwordValid){
+      return true;
+    }
+    return false;
+  }
+  
   const userLogin = () => {
-    setLoading(true);
-    Firebase.auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((res) => {
-        const uid = res.user.uid;
-        const userRef = Firebase.firestore().collection("Users");
-        userRef
-          .doc(uid)
-          .get()
-          .then((firestoreDoc) => {
-            if (!firestoreDoc.exists) {
-              Alert.alert("User does not exist anymore.");
-            } else {
-              const user = firestoreDoc.data();
-              setLoading(false);
-              navigation.replace("Home");
-              setUserDetails(user);
-              console.log("User logged in successfully!");
-            }
-          });
-      })
-      .catch((error) => Alert.alert(error.message), setLoading(false));
+    setLoading(true)
+    let validInput = checkEmailPasswordInput(email, password)  
+    if(validInput){
+      Firebase.auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((res) => {
+          const uid = res.user.uid;
+          const userRef = Firebase.firestore().collection("Users");
+          userRef
+            .doc(uid)
+            .get()
+            .then((firestoreDoc) => {
+              if (!firestoreDoc.exists) {
+                Alert.alert("User does not exist anymore.");
+              } else {
+                const user = firestoreDoc.data();
+                setLoading(false);
+                navigation.replace("Home");
+                setUserDetails(user)
+                console.log("User logged in successfully!");
+              }
+            });
+        })
+        .catch((error) =>
+          Alert.alert(error.message),
+          setTimeout(() => {setLoading(false)}, 2000)
+          // setLoading(false) 
+        )}
+    else{
+      setLoading(false)
+    }
   };
   return (
     <KeyboardAwareScrollView
@@ -63,7 +112,9 @@ export default Login = ({ navigation, setUserDetails }) => {
           placeholder="Email"
           value={email}
           onChangeText={(email) => setEmail(email)}
+          
         />
+        {emailError.length > 0 &&<Text style={styles.errorText}>{emailError}</Text>}
         <TextInput
           style={styles.inputStyle}
           placeholder="Password"
@@ -72,30 +123,30 @@ export default Login = ({ navigation, setUserDetails }) => {
           maxLength={15}
           secureTextEntry={true}
         />
+        {passwordError.length > 0 &&<Text style={styles.errorText}>{passwordError}</Text>}
       </View>
 
-      <View>
-        <Pressable
-          style={styles.loginButton}
-          title="Login"
-          onPress={() => userLogin()}
-        >
-          <Text style={styles.loginText}>Login</Text>
-        </Pressable>
-      </View>
+      <TouchableOpacity
+        style={styles.loginButton}
+        title="Login"
+        onPress={() => userLogin()}
+      >
+        <Text style={styles.loginText}>Login</Text>
+      </TouchableOpacity>
+
       <View style={styles.signupText}>
         <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
         <Text style={styles.text}>Don't have account?</Text>
         <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
       </View>
       <View>
-        <Pressable
+        <TouchableOpacity
           style={styles.signupButton}
           title="Sign Up"
           onPress={() => navigation.navigate("Signup")}
         >
           <Text style={styles.loginText}>Sign Up</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </KeyboardAwareScrollView>
   );
@@ -155,6 +206,9 @@ const styles = StyleSheet.create({
     // left: 80,
     top: 100,
     height: 37,
+  },
+  errorText: {
+    color: "#FF545E",
   },
   text: {
     textAlign: "center",
