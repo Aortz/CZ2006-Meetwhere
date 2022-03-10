@@ -15,7 +15,7 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import { collection, getDoc} from "firebase/firestore";
 import { Firebase, db } from "../database/firebase";
-import Loader from "./Loader"
+import Loader from "./Loader";
 // import { CirclesLoader, PulseLoader, TextLoader, DotsLoader } from 'react-native-indicator';
 
 export default Login = ({ navigation, setUserDetails }) => {
@@ -87,14 +87,15 @@ export default Login = ({ navigation, setUserDetails }) => {
             });
         })
         .catch((error) =>
-          Alert.alert(error.message), 
+          Alert.alert(error.message),
+          setTimeout(() => {setLoading(false)}, 2000)
+          // setLoading(false) 
         )}
     else{
       setLoading(false)
     }
   };
   return (
-    
     <KeyboardAwareScrollView
       contentContainerStyle={styles.container}
       resetScrollToCoords={{ x: 0, y: 0 }}
@@ -125,15 +126,14 @@ export default Login = ({ navigation, setUserDetails }) => {
         {passwordError.length > 0 &&<Text style={styles.errorText}>{passwordError}</Text>}
       </View>
 
-      <View>
-        <TouchableOpacity
-          style={styles.loginButton}
-          title="Login"
-          onPress={() => userLogin()}
-        >
-          <Text style={styles.loginText}>Login</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.loginButton}
+        title="Login"
+        onPress={() => userLogin()}
+      >
+        <Text style={styles.loginText}>Login</Text>
+      </TouchableOpacity>
+
       <View style={styles.signupText}>
         <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
         <Text style={styles.text}>Don't have account?</Text>

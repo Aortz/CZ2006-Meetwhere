@@ -125,7 +125,7 @@ export default Signup = ({navigation}) => {
           )
           .catch((error) => 
             Alert.alert(error.message),
-            // setLoading(false)
+            setTimeout(() => {setLoading(false)}, 2000)
           );
         }
         else{

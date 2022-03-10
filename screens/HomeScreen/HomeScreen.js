@@ -1,31 +1,60 @@
-import { QuerySnapshot } from "firebase/firestore";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity,Pressable } from "react-native";
 import { Firebase, db } from "../database/firebase";
+import { QuerySnapshot } from "firebase/firestore";
+
+
+  
+
+
 
 const HomeScreen = ({ navigation, setUserOption,userDetails }) => {
-  if (userDetails === null){
-    return null
-  }
-  // const docRef = db.collection("Attractions")
-  // let array= []
-  // docRef.onSnapshot((querySnapshot)=>{
-  //   querySnapshot.map(doc => {
-  //     const id = doc.id
-  //     // console.log("1",id)
-  //     array.push(id)
-  //     // console.log(array['id'])
-  // });
+  // const [popular,setPopular] = useState(null);  
+  // useEffect(()=>{
+  //   var array = []; 
+  //   const attractRef = Firebase.firestore().collection("Attractions").get().then(QuerySnapshot=>{
+  //     QuerySnapshot.forEach(doc =>{
+  //       array.push(doc.data());
+  //     });
+  //   });
+  //   setPopular(array[Math.floor(Math.random()*array.length)]);
+  // },[]);
+
+  // const [popular,setPopular] = useState(null); 
+  // useEffect(()=>{
+  //   const attractRef = Firebase.firestore().collection("Attractions").doc("Absolute Cycle").get()
+  //   .then(document=>{
+  //     //console.log(document.data().images[0]);
+  //     setPopular(document.data().images[0]);
+  //   })
+
   // })
-  // console.log(array[0])
+
+  const popular = ['https://pbs.twimg.com/profile_images/486929358120964097/gNLINY67_400x400.png','https://pbs.twimg.com/profile_images/486929358120964097/gNLINY67_400x400.png']
+
+  
+        
+        
+  if(userDetails===null){
+    return null; 
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.icons}>
+  
         <Text style={styles.header}>Welcome {userDetails.userName}!</Text>
+        {popular && popular.map((image) => {
+          return <View style={{height: 100}}>
+          <Image source={{uri: image}} style={styles.icon}/>
+        </View>
+        })}
         <View style={styles.iconsview}>
           <TouchableOpacity
             style={styles.touchableStyle}
-            onPress={() => navigation.navigate("InputLocation")}
+            onPress={() => {
+              setUserOption("Get Random");
+              navigation.navigate("InputLocation");
+            }}
           >
             <Image
               source={require("../../assets/random_location.png")}
@@ -35,7 +64,10 @@ const HomeScreen = ({ navigation, setUserOption,userDetails }) => {
 
           <TouchableOpacity
             style={styles.touchableStyle}
-            onPress={() => navigation.navigate("InputLocation")}
+            onPress={() => {
+              setUserOption("Get List");
+              navigation.navigate("InputLocation");
+            }}
           >
             <Image
               source={require("../../assets/suggested_list.png")}
@@ -60,8 +92,6 @@ const HomeScreen = ({ navigation, setUserOption,userDetails }) => {
         >
           <Text style={styles.signOutText}>Sign Out</Text>
         </Pressable>
-        
-        </View>
     </View>
   );
 };
@@ -76,16 +106,14 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: "#fff",
     alignItems: "center",
-
   },
   icon: {
     height: 80,
     width: 80,
-  
   },
   icons: {
     flexDirection: "column",
-    height: 700,
+    height: 580,
     borderWidth: 2,
     width: "95%",
   },
@@ -94,17 +122,17 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: "bold",
     color: "black",
-    
   },
   iconsview: {
     flexDirection: "row",
     justifyContent: "space-between",
-    height:"60%",
+    height: "60%",
     width: "60%",
     alignContent: "center",
   },
   touchableStyle: {
-    height: "90%",
+    borderWidth: 5,
+    height: "20%",
     justifyContent: "center",
   },
   signOutText: {
