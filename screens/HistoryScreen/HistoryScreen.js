@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff'
       },
   border: {
-      flex:0.9,
+      flex:1,
       display: "flex",
       alignItems: "flex-start",
       flexDirection: "column",
@@ -151,9 +151,10 @@ const styles = StyleSheet.create({
     // flex: ,
     height: 80,
     width: 210,
-    marginLeft: 75,
+    // marginLeft: 75,
+    alignSelf: "center",
     // marginTop:170,
-    position: 'absolute',
-    bottom:0
+    // position: 'absolute',
+    // bottom:0
   },
 });

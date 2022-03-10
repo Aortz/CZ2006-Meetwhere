@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation, setUserOption,userDetails }) => {
   //     // console.log(array['id'])
   // });
   // })
-  console.log(array[0])
+  // console.log(array[0])
   return (
     <View style={styles.container}>
       <View style={styles.icons}>
