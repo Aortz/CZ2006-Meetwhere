@@ -47,7 +47,7 @@ const HistoryScreen = (userDetails) => {
       <SafeAreaView style={styles.container}>
         <View style={styles.border}>
           <Text style={styles.HeadStyle}>
-            {userDetails.userDetails.fullName}'s User History
+            {userDetails.userDetails.userName}'s User History
           </Text>
           <View style={styles.insideBorder}>
             {checkHistory(table)}

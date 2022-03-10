@@ -1,14 +1,27 @@
+import { QuerySnapshot } from "firebase/firestore";
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity,Pressable } from "react-native";
+import { Firebase, db } from "../database/firebase";
 
 const HomeScreen = ({ navigation, setUserOption,userDetails }) => {
   if (userDetails === null){
     return null
   }
+  // const docRef = db.collection("Attractions")
+  // let array= []
+  // docRef.onSnapshot((querySnapshot)=>{
+  //   querySnapshot.map(doc => {
+  //     const id = doc.id
+  //     // console.log("1",id)
+  //     array.push(id)
+  //     // console.log(array['id'])
+  // });
+  // })
+  console.log(array[0])
   return (
     <View style={styles.container}>
       <View style={styles.icons}>
-        <Text style={styles.header}>Welcome {userDetails.fullName}!</Text>
+        <Text style={styles.header}>Welcome {userDetails.userName}!</Text>
         <View style={styles.iconsview}>
           <TouchableOpacity
             style={styles.touchableStyle}
