@@ -9,6 +9,7 @@ import InputLocationScreen from "./screens/InputLocationScreen/InputLocationScre
 import MidpointScreen from "./screens/MidpointScreen/MidpointScreen";
 import SplashScreen from "./screens/SplashScreen/SplashScreen";
 import { Firebase } from "./screens/database/firebase";
+import LocationDetailsScreen from "./screens/LocationDetailsScreen/LocationDetailsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [initialRoute, setInitalRoute] = useState("Login");
+  const [totalLocationList, setTotalLocationList] = useState(null);
 
   const onAuthStateChanged = (user) => {
     setUser(user);
@@ -60,7 +62,14 @@ export default function App() {
             headerShown: false,
           }}
         >
-          {(props) => <MidpointScreen userOption={userOption} {...props} />}
+          {(props) => (
+            <MidpointScreen
+              userOption={userOption}
+              userDetails={userDetails}
+              setTotalLocationList={setTotalLocationList}
+              {...props}
+            />
+          )}
         </Stack.Screen>
         <Stack.Screen
           name="Signup"
@@ -81,6 +90,22 @@ export default function App() {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen
+          name="LocationDetails"
+          options={{
+            headerShown: false,
+          }}
+        >
+          {(props) => (
+            <LocationDetailsScreen
+              userDetails={userDetails}
+              totalLocationList={totalLocationList}
+              setTotalLocationList={setTotalLocationList}
+              {...props}
+            />
+          )}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

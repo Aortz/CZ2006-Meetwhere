@@ -15,7 +15,6 @@ const Secondaryuser = (props) => {
     setShowFilter,
     setShowSecUserInput,
     navigation,
-    setShowRadius,
   } = props;
   const [username, setUserName] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -51,7 +50,6 @@ const Secondaryuser = (props) => {
         setOverallFilter({ ...overallFilter, secondaryUser: userObj });
         setShowFilter(true);
         setShowSecUserInput(false);
-        setShowRadius(false);
         setErrorMessage(null);
       });
     } catch (error) {
@@ -86,7 +84,6 @@ const Secondaryuser = (props) => {
           onPress={() => {
             setShowFilter(true);
             setShowSecUserInput(false);
-            setShowRadius(false);
           }}
         >
           <Text style={styles.buttonSkip}>Skip</Text>
