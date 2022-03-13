@@ -133,6 +133,7 @@ const MidpointScreen = (props) => {
           setShowFilter={setShowFilter}
           setShowSecUserInput={setShowSecUserInput}
           navigation={props.navigation}
+          userDetails={userDetails}
         />
       )}
 

@@ -8,9 +8,12 @@ const ChooseSecondAddress = (props) => {
     secondLocation,
     setSecondLocation,
     handleSubmitBothLocations,
+    firstLocation,
   } = props;
 
   const ref = useRef();
+
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (secondLocation !== null) {
@@ -28,7 +31,13 @@ const ChooseSecondAddress = (props) => {
       return null;
     }
 
+    if (firstLocation.description === secondLocation.description) {
+      setError("Both locations cannot be the same!");
+      return;
+    }
+
     handleSubmitBothLocations();
+    setError(null);
   };
 
   return (
@@ -39,6 +48,7 @@ const ChooseSecondAddress = (props) => {
 
       <View style={styles.inputView}>
         <Text style={styles.inputTitle}>{`Postal Code 2`}</Text>
+        {error && <Text style={styles.error}>{error}</Text>}
         <View style={{ height: "100%" }}>
           <GooglePlacesAutocomplete
             ref={ref}
@@ -133,6 +143,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 15,
     fontWeight: "bold",
+  },
+  error: {
+    color: "red",
   },
 });
 

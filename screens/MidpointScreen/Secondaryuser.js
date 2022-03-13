@@ -15,6 +15,7 @@ const Secondaryuser = (props) => {
     setShowFilter,
     setShowSecUserInput,
     navigation,
+    userDetails,
   } = props;
   const [username, setUserName] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -31,6 +32,10 @@ const Secondaryuser = (props) => {
     const trimmedUserName = username.trim();
     if (trimmedUserName.length === 0) {
       setErrorMessage("Please input valid username");
+      return;
+    }
+    if (userDetails.userName === trimmedUserName) {
+      setErrorMessage("Please input another user's username");
       return;
     }
     const userRef = db.collection("Users");

@@ -84,6 +84,7 @@ const InputLocationScreen = ({ navigation }) => {
           secondLocation={secondLocation}
           setSecondLocation={setSecondLocation}
           handleSubmitBothLocations={handleSubmitBothLocations}
+          firstLocation={firstLocation}
         />
       )}
     </View>
