@@ -10,12 +10,20 @@ const MidpointScreen = (props) => {
   const [overallFilter, setOverallFilter] = useState({
     radius: 1000,
     secondaryUser: null,
+    foodType: [],
+    attractionType: [],
+    barClubType: [],
+    maxPrice: 0,
+    midPoint: {
+      latitude: 1.3048,
+      longitude: 103.8318,
+    },
   });
   const [showFilter, setShowFilter] = useState(false);
   const [showSecUserInput, setShowSecUserInput] = useState(false);
   const [showRadius, setShowRadius] = useState(true);
 
-  const { userOption } = props;
+  const { userOption, navigation, userDetails } = props;
 
   useEffect(() => {
     if (userOption === "Get Random") {
@@ -25,16 +33,17 @@ const MidpointScreen = (props) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   setMidPoint(props.route.params.midpoint);
-  // }, []);
+  useEffect(() => {
+    setMidPoint(props.route.params.midpoint);
+    setOverallFilter((prevState) => ({
+      ...prevState,
+      midPoint: props.route.params.midpoint,
+    }));
+  }, []);
 
-  // if (midPoint === null) {
-  //   return null;
-  // }
-
-  const lat = 1.3521;
-  const long = 103.8198;
+  if (midPoint === null) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -45,21 +54,24 @@ const MidpointScreen = (props) => {
           // latitude: midPoint.latitude,
           // longitude: midPoint.longitude,
           //-0.02
-          latitude: lat,
-          longitude: long,
+          latitude: midPoint.latitude,
+          longitude: midPoint.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
       >
         <Marker
           coordinate={{
-            latitude: lat,
-            longitude: long,
+            latitude: midPoint.latitude,
+            longitude: midPoint.longitude,
           }}
         />
         <Circle
-          key={lat + long}
-          center={{ latitude: lat, longitude: long }}
+          key={midPoint.latitude + midPoint.longitude}
+          center={{
+            latitude: midPoint.latitude,
+            longitude: midPoint.longitude,
+          }}
           radius={overallFilter.radius}
           strokeWidth={1}
           strokeColor={"#1a66ff"}
@@ -127,7 +139,9 @@ const MidpointScreen = (props) => {
           overallFilter={overallFilter}
           setOverallFilter={setOverallFilter}
           userOption={userOption}
-          navigation={props.navigation}
+          navigation={navigation}
+          userDetails={userDetails}
+          setShowRadius={setShowRadius}
         />
       )}
     </View>

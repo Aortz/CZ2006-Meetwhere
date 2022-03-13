@@ -9,6 +9,7 @@ import InputLocationScreen from "./screens/InputLocationScreen/InputLocationScre
 import MidpointScreen from "./screens/MidpointScreen/MidpointScreen";
 import SplashScreen from "./screens/SplashScreen/SplashScreen";
 import { Firebase } from "./screens/database/firebase";
+import LocationDetailsScreen from "./screens/LocationDetailsScreen/LocationDetailsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -60,7 +61,13 @@ export default function App() {
             headerShown: false,
           }}
         >
-          {(props) => <MidpointScreen userOption={userOption} {...props} />}
+          {(props) => (
+            <MidpointScreen
+              userOption={userOption}
+              userDetails={userDetails}
+              {...props}
+            />
+          )}
         </Stack.Screen>
         <Stack.Screen
           name="Signup"
@@ -77,6 +84,13 @@ export default function App() {
         <Stack.Screen
           name="InputLocation"
           component={InputLocationScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="LocationDetails"
+          component={LocationDetailsScreen}
           options={{
             headerShown: false,
           }}
