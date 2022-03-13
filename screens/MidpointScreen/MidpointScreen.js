@@ -4,6 +4,7 @@ import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
 import { Slider, Icon } from "react-native-elements";
 import Secondaryuser from "./Secondaryuser";
 import Filter from "./Filter";
+import SplashScreen from "../SplashScreen/SplashScreen";
 
 const MidpointScreen = (props) => {
   const [midPoint, setMidPoint] = useState(null);
@@ -21,9 +22,9 @@ const MidpointScreen = (props) => {
   });
   const [showFilter, setShowFilter] = useState(false);
   const [showSecUserInput, setShowSecUserInput] = useState(false);
-  const [showRadius, setShowRadius] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const { userOption, navigation, userDetails } = props;
+  const { userOption, navigation, userDetails, setTotalLocationList } = props;
 
   useEffect(() => {
     if (userOption === "Get Random") {
@@ -45,6 +46,10 @@ const MidpointScreen = (props) => {
     return null;
   }
 
+  if (loading) {
+    return <SplashScreen />;
+  }
+
   return (
     <View style={styles.container}>
       <MapView
@@ -54,7 +59,7 @@ const MidpointScreen = (props) => {
           // latitude: midPoint.latitude,
           // longitude: midPoint.longitude,
           //-0.02
-          latitude: midPoint.latitude,
+          latitude: midPoint.latitude - 0.015,
           longitude: midPoint.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
@@ -79,7 +84,7 @@ const MidpointScreen = (props) => {
         />
       </MapView>
 
-      {showRadius && (
+      {showFilter && (
         <View style={styles.slider}>
           <View style={styles.textView}>
             <Text
@@ -128,7 +133,6 @@ const MidpointScreen = (props) => {
           setShowFilter={setShowFilter}
           setShowSecUserInput={setShowSecUserInput}
           navigation={props.navigation}
-          setShowRadius={setShowRadius}
         />
       )}
 
@@ -141,7 +145,8 @@ const MidpointScreen = (props) => {
           userOption={userOption}
           navigation={navigation}
           userDetails={userDetails}
-          setShowRadius={setShowRadius}
+          setTotalLocationList={setTotalLocationList}
+          setLoading={setLoading}
         />
       )}
     </View>

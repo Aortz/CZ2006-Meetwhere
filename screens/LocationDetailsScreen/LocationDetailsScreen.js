@@ -2,6 +2,8 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
 const LocationDetailsScreen = (props) => {
+  const { totalLocationList, setTotalLocationList } = props;
+
   if (props.route.params.location === null) {
     return (
       <View style={styles.container}>

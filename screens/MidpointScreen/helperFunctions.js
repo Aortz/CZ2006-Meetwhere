@@ -112,7 +112,7 @@ export const getRandomLocation = async (filters, current_user) => {
       .where("location.geohash", ">=", range.lower)
       .where("location.geohash", "<=", range.upper);
 
-    const result = await attractionQuery.limit(20).get();
+    const result = await attractionQuery.get();
 
     for (const doc of result.docs) {
       allLocations.push(doc.data());
@@ -129,7 +129,7 @@ export const getRandomLocation = async (filters, current_user) => {
       .where("location.geohash", ">=", range.lower)
       .where("location.geohash", "<=", range.upper);
 
-    const result1 = await barClubQuery.limit(20).get();
+    const result1 = await barClubQuery.get();
 
     for (const doc of result1.docs) {
       allLocations.push(doc.data());
@@ -146,7 +146,7 @@ export const getRandomLocation = async (filters, current_user) => {
       .where("location.geohash", ">=", range.lower)
       .where("location.geohash", "<=", range.upper);
 
-    const result2 = await foodQuery.limit(20).get();
+    const result2 = await foodQuery.get();
 
     for (const doc of result2.docs) {
       allLocations.push(doc.data());
@@ -177,11 +177,5 @@ export const getRandomLocation = async (filters, current_user) => {
     }
   }
 
-  if (allLocations.length === 0) {
-    console.log("none");
-    return null;
-  }
-
-  const randomIndex = Math.floor(Math.random() * allLocations.length);
-  return allLocations[randomIndex];
+  return allLocations;
 };

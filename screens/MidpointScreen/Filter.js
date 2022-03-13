@@ -4,10 +4,14 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
+  Animated,
 } from "react-native";
 import React, { useState } from "react";
 import { convertFilters, getRandomLocation } from "./helperFunctions";
 import { CheckBox, Icon, Slider } from "react-native-elements";
+
+const { width, height } = Dimensions.get("screen");
 
 const Filter = (props) => {
   const {
@@ -18,7 +22,8 @@ const Filter = (props) => {
     overallFilter,
     setOverallFilter,
     userDetails,
-    setShowRadius,
+    setTotalLocationList,
+    setLoading,
   } = props;
 
   const [checkBoxes, setCheckBoxes] = useState({
@@ -39,19 +44,53 @@ const Filter = (props) => {
   });
 
   const handleFinishFilters = async () => {
+    setLoading(true);
     const temp_filters = overallFilter;
     const temp_checkBox = checkBoxes;
 
     const new_filters = convertFilters(temp_filters, temp_checkBox);
-    console.log(new_filters);
+
     setOverallFilter(new_filters);
 
-    if (userOption == "Get Random") {
-      const locationDetails = await getRandomLocation(
-        overallFilter,
-        userDetails
-      );
-      navigation.navigate("LocationDetails", { location: locationDetails });
+    const locationsList = await getRandomLocation(overallFilter, userDetails);
+
+    if (userOption === "Get Random") {
+      let randomLocation = null;
+      if (locationsList.length != 0) {
+        const randomIndex = Math.floor(Math.random() * locationsList.length);
+        randomLocation = locationsList[randomIndex];
+        locationsList.splice(randomIndex, 1);
+      }
+
+      setTotalLocationList(locationsList);
+
+      navigation.navigate("LocationDetails", { location: randomLocation });
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    } else {
+      let locations = [];
+      if (locationsList.length <= 5) {
+        locations = locationsList;
+      } else {
+        for (let i = 0; i < 5; i++) {
+          const randomIndex = Math.floor(Math.random() * locationsList.length);
+          const randomLoc = locationsList[randomIndex];
+          locations.push(randomLoc);
+          locationsList.splice(randomIndex, 1);
+        }
+      }
+
+      setTotalLocationList(locationsList);
+
+      console.log(locations.length);
+
+      // navigate to screen with locations array
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
     }
   };
 
@@ -59,22 +98,19 @@ const Filter = (props) => {
     if (userOption === "Get Random") {
       setShowFilter(false);
       setShowSecUserInput(true);
-      setShowRadius(true);
     } else {
       navigation.goBack();
     }
   };
+
   return (
-    <View style={styles.filterContainer}>
+    <View style={[styles.filterContainer]}>
       <View style={styles.topLayer}>
         <TouchableOpacity onPress={handleGoBack} style={styles.button}>
           <Text>Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Filter</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleFinishFilters()}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleFinishFilters}>
           <Text>Finish</Text>
         </TouchableOpacity>
       </View>
@@ -256,42 +292,6 @@ const Filter = (props) => {
             </View>
           </>
         )}
-
-        {/* <Text style={styles.titleFilter}>Price Range</Text>
-        <View style={styles.priceSlider}>
-          <Text>{`Max Price: $${checkBoxes["maxPrice"]}`}</Text>
-          <Slider
-            minimumValue={0}
-            maximumValue={100}
-            value={checkBoxes["maxPrice"]}
-            onValueChange={(value) => {
-              setCheckBoxes({ ...checkBoxes, maxPrice: value });
-            }}
-            step={1}
-            allowTouchTrack
-            style={{ width: "80%" }}
-            trackStyle={{ height: 5 }}
-            thumbStyle={{
-              height: 10,
-              width: 10,
-              backgroundColor: "red",
-            }}
-            thumbProps={{
-              children: (
-                <Icon
-                  name="circle-thin"
-                  type="font-awesome"
-                  size={10}
-                  reverse
-                  containerStyle={{ bottom: 15, right: 20 }}
-                  color="grey"
-                />
-              ),
-            }}
-            maximumTrackTintColor={"white"}
-            minimumTrackTintColor={"red"}
-          />
-        </View> */}
       </ScrollView>
     </View>
   );
@@ -302,7 +302,7 @@ export default Filter;
 const styles = StyleSheet.create({
   filterContainer: {
     backgroundColor: "white",
-    height: "55%",
+    height: height / 2.2,
     // alignItems: "center",
     paddingHorizontal: 30,
     borderTopLeftRadius: 30,
@@ -343,5 +343,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
+  },
+  grabber: {
+    width: 60,
+    borderTopWidth: 5,
+    borderTopColor: "#aaa",
   },
 });
