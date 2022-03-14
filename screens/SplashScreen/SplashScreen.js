@@ -1,31 +1,40 @@
 // components/login.js
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert, ActivityIndicator, Pressable, Image, KeyboardAvoidingView } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, ActivityIndicator, Image } from "react-native";
 
-export default class SplashScreen extends Component {
-    render() {
-        return(
-        <View style={styles.container}>
-            <Image
-                style={styles.icon}
-                source={require('../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png')}
-            />
-            <ActivityIndicator/>
-        </View>)
-    }
-}
+const SplashScreen = (props) => {
+  const { message } = props;
+
+  return (
+    <View style={styles.container}>
+      <Image
+        style={styles.icon}
+        source={require("../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png")}
+      />
+      <ActivityIndicator />
+      {message && <Text style={styles.text}>{message}</Text>}
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      padding: 35,
-      minHeight: 700,
-      backgroundColor: '#fff'
-    },
-    icon:{
-      height: 95,
-      width: 325,
-    },
-})
+  container: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    // padding: 35,
+    // minHeight: 700,
+    backgroundColor: "#fff",
+    alignItems: "center",
+  },
+  icon: {
+    height: 95,
+    width: 325,
+  },
+  text: {
+    fontSize: 15,
+  },
+});
+
+export default SplashScreen;

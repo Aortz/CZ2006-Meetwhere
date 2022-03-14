@@ -89,7 +89,7 @@ const getGeohashRange = (latitude, longitude, distance) => {
   };
 };
 
-export const getRandomLocation = async (filters, current_user) => {
+export const getLocations = async (filters, current_user) => {
   const range = getGeohashRange(
     filters.midPoint.latitude,
     filters.midPoint.longitude,

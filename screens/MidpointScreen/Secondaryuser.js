@@ -41,8 +41,6 @@ const Secondaryuser = (props) => {
     const userRef = db.collection("Users");
     const query = userRef.where("userName", "==", trimmedUserName);
 
-    // Check if secondary username not same as current username
-
     try {
       const documents = await query.get();
       if (documents.empty) {
