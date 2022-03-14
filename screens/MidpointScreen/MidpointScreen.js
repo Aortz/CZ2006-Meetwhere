@@ -20,6 +20,22 @@ const MidpointScreen = (props) => {
       longitude: 103.8318,
     },
   });
+  const [checkBoxes, setCheckBoxes] = useState({
+    Food: false,
+    Attractions: false,
+    "Bars & Clubs": false,
+    Cafe: false,
+    "Hawker Centres": false,
+    Restaurants: false,
+    Adventure: false,
+    Arts: false,
+    "History & Culture": false,
+    "Nature & Wildlife": false,
+    "Leisure & Recreation": false,
+    Bars: false,
+    Clubs: false,
+    maxPrice: 0,
+  });
   const [showFilter, setShowFilter] = useState(false);
   const [showSecUserInput, setShowSecUserInput] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,7 +63,7 @@ const MidpointScreen = (props) => {
   }
 
   if (loading) {
-    return <SplashScreen />;
+    return <SplashScreen message={"Finding places for you..."} />;
   }
 
   return (
@@ -148,6 +164,8 @@ const MidpointScreen = (props) => {
           userDetails={userDetails}
           setTotalLocationList={setTotalLocationList}
           setLoading={setLoading}
+          checkBoxes={checkBoxes}
+          setCheckBoxes={setCheckBoxes}
         />
       )}
     </View>

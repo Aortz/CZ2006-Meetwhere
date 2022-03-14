@@ -10,6 +10,7 @@ import MidpointScreen from "./screens/MidpointScreen/MidpointScreen";
 import SplashScreen from "./screens/SplashScreen/SplashScreen";
 import { Firebase } from "./screens/database/firebase";
 import LocationDetailsScreen from "./screens/LocationDetailsScreen/LocationDetailsScreen";
+import NoResultsScreen from "./screens/NoResultsScreen/NoResultsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,7 +34,7 @@ export default function App() {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  if (loading) return <SplashScreen />;
+  if (loading) return <SplashScreen message={null} />;
 
   return (
     <NavigationContainer>
@@ -105,6 +106,14 @@ export default function App() {
               {...props}
             />
           )}
+        </Stack.Screen>
+        <Stack.Screen
+          name="NoResults"
+          options={{
+            headerShown: false,
+          }}
+        >
+          {(props) => <NoResultsScreen {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

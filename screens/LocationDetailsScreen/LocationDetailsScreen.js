@@ -3,13 +3,10 @@ import React from "react";
 
 const LocationDetailsScreen = (props) => {
   const { totalLocationList, setTotalLocationList } = props;
+  const locationDetail = props.route.params.location;
 
-  if (props.route.params.location === null) {
-    return (
-      <View style={styles.container}>
-        <Text> No Locations Found</Text>
-      </View>
-    );
+  if (locationDetail === null) {
+    return null;
   }
   return (
     <View style={styles.container}>

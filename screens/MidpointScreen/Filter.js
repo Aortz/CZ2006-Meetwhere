@@ -5,11 +5,10 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
-  Animated,
 } from "react-native";
-import React, { useState } from "react";
-import { convertFilters, getRandomLocation } from "./helperFunctions";
-import { CheckBox, Icon, Slider } from "react-native-elements";
+import React from "react";
+import { convertFilters, getLocations } from "./helperFunctions";
+import { CheckBox } from "react-native-elements";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -24,24 +23,9 @@ const Filter = (props) => {
     userDetails,
     setTotalLocationList,
     setLoading,
+    checkBoxes,
+    setCheckBoxes,
   } = props;
-
-  const [checkBoxes, setCheckBoxes] = useState({
-    Food: false,
-    Attractions: false,
-    "Bars & Clubs": false,
-    Cafe: false,
-    "Hawker Centres": false,
-    Restaurants: false,
-    Adventure: false,
-    Arts: false,
-    "History & Culture": false,
-    "Nature & Wildlife": false,
-    "Leisure & Recreation": false,
-    Bars: false,
-    Clubs: false,
-    maxPrice: 0,
-  });
 
   const handleFinishFilters = async () => {
     setLoading(true);
@@ -52,7 +36,7 @@ const Filter = (props) => {
 
     setOverallFilter(new_filters);
 
-    const locationsList = await getRandomLocation(overallFilter, userDetails);
+    const locationsList = await getLocations(overallFilter, userDetails);
 
     if (userOption === "Get Random") {
       let randomLocation = null;
@@ -64,7 +48,11 @@ const Filter = (props) => {
 
       setTotalLocationList(locationsList);
 
-      navigation.navigate("LocationDetails", { location: randomLocation });
+      if (randomLocation === null) {
+        navigation.navigate("NoResults");
+      } else {
+        navigation.navigate("LocationDetails", { location: randomLocation });
+      }
 
       setTimeout(() => {
         setLoading(false);
@@ -84,9 +72,11 @@ const Filter = (props) => {
 
       setTotalLocationList(locationsList);
 
-      console.log(locations.length);
-
-      // navigate to screen with locations array
+      if (locations.length === 0) {
+        navigation.navigate("NoResults");
+      } else {
+        // navigate to screen with locations array
+      }
 
       setTimeout(() => {
         setLoading(false);
