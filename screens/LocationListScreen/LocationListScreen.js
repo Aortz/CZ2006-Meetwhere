@@ -1,19 +1,22 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions, ActivityIndicator } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
+
 import React, { useState } from "react";
+
+const { width, height } = Dimensions.get("screen");
 
 const LocationListScreen = (props) => {
   const { route, totalLocationList, setTotalLocationList } = props;
-  const locationList = route.params.locationList;
+  const locationList = route.params.locationList
+  const overallFilter = route.params.overallFilter
   const [locationDetails, setLocationDetails] = useState(false)
-  const midPoint= {
-    latitude: 1.3048,
-    longitude: 103.8318,
-  }
+  const midPoint= overallFilter.midPoint;
   console.log("Length of array:", locationList.length);
+  console.log(locationList[0]);
   const displayArray = (locationlist) =>{
     var locationCount = 0
     var topFive = []
+    console.log(locationList[0].images[0])
     while(locationCount < locationlist.length){
         topFive.push(
         <Marker
@@ -45,11 +48,10 @@ const LocationListScreen = (props) => {
         style={StyleSheet.absoluteFillObject}
         provider={PROVIDER_GOOGLE}
         region={{
-          // latitude: midPoint.latitude,
-          // longitude: midPoint.longitude,
-          //-0.02
           latitude: midPoint.latitude - 0.015,
           longitude: midPoint.longitude,
+          // latitude: locationList[0].location.latitude,
+          // longitude: locationList[0].location.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -57,21 +59,21 @@ const LocationListScreen = (props) => {
         {displayArray(locationList)}
         
       </MapView>
-      {locationDetails && (
-        <SetLocationDetail
-          setShowFilter={setShowFilter}
-          setShowSecUserInput={setShowSecUserInput}
-          overallFilter={overallFilter}
-          setOverallFilter={setOverallFilter}
-          userOption={userOption}
-          navigation={navigation}
-          userDetails={userDetails}
-          setTotalLocationList={setTotalLocationList}
-          setLoading={setLoading}
-          checkBoxes={checkBoxes}
-          setCheckBoxes={setCheckBoxes}
+      <View style={[styles.filterContainer]}>
+        <Image 
+            style={styles.icon}
+            source={locationList[0].images[0]}
+            PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
         />
-      )}
+        <View>
+          <Text style={styles.locationTextStyle}>
+            Location: {locationList[0].name}
+          </Text>
+          <Text style={styles.locationTextStyle}>
+            Ratings: {locationList[0].rating}
+          </Text>
+        </View>
+      </View>
       
       
     </View>
@@ -95,5 +97,30 @@ const styles = StyleSheet.create({
   },
   textView: {
     backgroundColor: "white",
+  },
+  filterContainer: {
+    flex: 0.5,
+    backgroundColor: "white",
+    height: height / 2.2,
+    // alignItems: "center",
+    paddingHorizontal: 30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderWidth: 1,
+    borderColor: "#707070",
+  },
+  icon:{
+    borderRadius: 5,
+    // resizeMode: 'stretch',
+    alignSelf: 'center',
+    width: '100%', 
+    height: "85%",
+    aspectRatio: 1
+  },
+  locationTextStyle: {
+    fontSize: 14,
+    textAlign: "center", 
+    alignSelf: "stretch",
+    color: "#000000"
   },
 });
