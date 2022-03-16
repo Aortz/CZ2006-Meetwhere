@@ -113,7 +113,7 @@ export default Secondaryuser;
 const styles = StyleSheet.create({
   secondaryUser: {
     backgroundColor: "white",
-    height: "33%",
+    height: 190,
     alignItems: "center",
     padding: 10,
     paddingHorizontal: 30,
