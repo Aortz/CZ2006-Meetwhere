@@ -75,8 +75,8 @@ const MidpointScreen = (props) => {
           // latitude: midPoint.latitude,
           // longitude: midPoint.longitude,
           //-0.02
-          latitude: midPoint.latitude - 0.015,
-          longitude: midPoint.longitude,
+          latitude: midPoint.latitude - 0.02,
+          longitude: midPoint.longitude + 0.003,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -87,17 +87,19 @@ const MidpointScreen = (props) => {
             longitude: midPoint.longitude,
           }}
         />
-        <Circle
-          key={midPoint.latitude + midPoint.longitude}
-          center={{
-            latitude: midPoint.latitude,
-            longitude: midPoint.longitude,
-          }}
-          radius={overallFilter.radius}
-          strokeWidth={1}
-          strokeColor={"#1a66ff"}
-          fillColor={"rgba(230,238,255,0.5)"}
-        />
+        {showFilter && (
+          <Circle
+            key={midPoint.latitude + midPoint.longitude}
+            center={{
+              latitude: midPoint.latitude,
+              longitude: midPoint.longitude,
+            }}
+            radius={overallFilter.radius}
+            strokeWidth={1}
+            strokeColor={"#1a66ff"}
+            fillColor={"rgba(230,238,255,0.5)"}
+          />
+        )}
       </MapView>
 
       {showFilter && (
