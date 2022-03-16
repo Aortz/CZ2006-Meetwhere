@@ -15,7 +15,7 @@ const Secondaryuser = (props) => {
     setShowFilter,
     setShowSecUserInput,
     navigation,
-    setShowRadius,
+    userDetails,
   } = props;
   const [username, setUserName] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -34,10 +34,12 @@ const Secondaryuser = (props) => {
       setErrorMessage("Please input valid username");
       return;
     }
+    if (userDetails.userName === trimmedUserName) {
+      setErrorMessage("Please input another user's username");
+      return;
+    }
     const userRef = db.collection("Users");
     const query = userRef.where("userName", "==", trimmedUserName);
-
-    // Check if secondary username not same as current username
 
     try {
       const documents = await query.get();
@@ -51,7 +53,6 @@ const Secondaryuser = (props) => {
         setOverallFilter({ ...overallFilter, secondaryUser: userObj });
         setShowFilter(true);
         setShowSecUserInput(false);
-        setShowRadius(false);
         setErrorMessage(null);
       });
     } catch (error) {
@@ -86,7 +87,6 @@ const Secondaryuser = (props) => {
           onPress={() => {
             setShowFilter(true);
             setShowSecUserInput(false);
-            setShowRadius(false);
           }}
         >
           <Text style={styles.buttonSkip}>Skip</Text>

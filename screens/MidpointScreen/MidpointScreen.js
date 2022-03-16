@@ -4,18 +4,43 @@ import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
 import { Slider, Icon } from "react-native-elements";
 import Secondaryuser from "./Secondaryuser";
 import Filter from "./Filter";
+import SplashScreen from "../SplashScreen/SplashScreen";
 
 const MidpointScreen = (props) => {
   const [midPoint, setMidPoint] = useState(null);
   const [overallFilter, setOverallFilter] = useState({
     radius: 1000,
     secondaryUser: null,
+    foodType: [],
+    attractionType: [],
+    barClubType: [],
+    maxPrice: 0,
+    midPoint: {
+      latitude: 1.3048,
+      longitude: 103.8318,
+    },
+  });
+  const [checkBoxes, setCheckBoxes] = useState({
+    Food: false,
+    Attractions: false,
+    "Bars & Clubs": false,
+    Cafe: false,
+    "Hawker Centres": false,
+    Restaurants: false,
+    Adventure: false,
+    Arts: false,
+    "History & Culture": false,
+    "Nature & Wildlife": false,
+    "Leisure & Recreation": false,
+    Bars: false,
+    Clubs: false,
+    maxPrice: 0,
   });
   const [showFilter, setShowFilter] = useState(false);
   const [showSecUserInput, setShowSecUserInput] = useState(false);
-  const [showRadius, setShowRadius] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const { userOption } = props;
+  const { userOption, navigation, userDetails, setTotalLocationList } = props;
 
   useEffect(() => {
     if (userOption === "Get Random") {
@@ -25,16 +50,21 @@ const MidpointScreen = (props) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   setMidPoint(props.route.params.midpoint);
-  // }, []);
+  useEffect(() => {
+    setMidPoint(props.route.params.midpoint);
+    setOverallFilter((prevState) => ({
+      ...prevState,
+      midPoint: props.route.params.midpoint,
+    }));
+  }, []);
 
-  // if (midPoint === null) {
-  //   return null;
-  // }
+  if (midPoint === null) {
+    return null;
+  }
 
-  const lat = 1.3521;
-  const long = 103.8198;
+  if (loading) {
+    return <SplashScreen message={"Finding places for you..."} />;
+  }
 
   return (
     <View style={styles.container}>
@@ -45,21 +75,24 @@ const MidpointScreen = (props) => {
           // latitude: midPoint.latitude,
           // longitude: midPoint.longitude,
           //-0.02
-          latitude: lat,
-          longitude: long,
+          latitude: midPoint.latitude - 0.015,
+          longitude: midPoint.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
       >
         <Marker
           coordinate={{
-            latitude: lat,
-            longitude: long,
+            latitude: midPoint.latitude,
+            longitude: midPoint.longitude,
           }}
         />
         <Circle
-          key={lat + long}
-          center={{ latitude: lat, longitude: long }}
+          key={midPoint.latitude + midPoint.longitude}
+          center={{
+            latitude: midPoint.latitude,
+            longitude: midPoint.longitude,
+          }}
           radius={overallFilter.radius}
           strokeWidth={1}
           strokeColor={"#1a66ff"}
@@ -67,7 +100,7 @@ const MidpointScreen = (props) => {
         />
       </MapView>
 
-      {showRadius && (
+      {showFilter && (
         <View style={styles.slider}>
           <View style={styles.textView}>
             <Text
@@ -116,7 +149,7 @@ const MidpointScreen = (props) => {
           setShowFilter={setShowFilter}
           setShowSecUserInput={setShowSecUserInput}
           navigation={props.navigation}
-          setShowRadius={setShowRadius}
+          userDetails={userDetails}
         />
       )}
 
@@ -127,7 +160,12 @@ const MidpointScreen = (props) => {
           overallFilter={overallFilter}
           setOverallFilter={setOverallFilter}
           userOption={userOption}
-          navigation={props.navigation}
+          navigation={navigation}
+          userDetails={userDetails}
+          setTotalLocationList={setTotalLocationList}
+          setLoading={setLoading}
+          checkBoxes={checkBoxes}
+          setCheckBoxes={setCheckBoxes}
         />
       )}
     </View>

@@ -64,8 +64,10 @@ const InputLocationScreen = ({ navigation }) => {
         style={StyleSheet.absoluteFillObject}
         provider={PROVIDER_GOOGLE}
         region={{
-          latitude: 1.3521,
-          longitude: 103.8198,
+          latitude: 1.3048,
+          longitude: 103.8318,
+          // latitude: currentCoords.latitude,
+          // longitude: currentCoords.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -84,6 +86,7 @@ const InputLocationScreen = ({ navigation }) => {
           secondLocation={secondLocation}
           setSecondLocation={setSecondLocation}
           handleSubmitBothLocations={handleSubmitBothLocations}
+          firstLocation={firstLocation}
         />
       )}
     </View>
