@@ -36,7 +36,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
-        <Stack.Screen name="Home">
+        <Stack.Screen name="Home" options={{headerShown:false}}>
           {(props) => (
             <HomeScreen
               setUserOption={setUserOption}
