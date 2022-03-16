@@ -11,6 +11,7 @@ import SplashScreen from "./screens/SplashScreen/SplashScreen";
 import { Firebase } from "./screens/database/firebase";
 import LocationDetailsScreen from "./screens/LocationDetailsScreen/LocationDetailsScreen";
 import NoResultsScreen from "./screens/NoResultsScreen/NoResultsScreen";
+import LocationListScreen from "./screens/LocationListScreen/LocationListScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -114,6 +115,14 @@ export default function App() {
           }}
         >
           {(props) => <NoResultsScreen {...props} />}
+        </Stack.Screen>
+        <Stack.Screen
+          name="LocationList"
+          options={{
+            headerShown: false,
+          }}
+        >
+          {(props) => <LocationListScreen {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

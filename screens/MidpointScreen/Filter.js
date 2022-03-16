@@ -75,7 +75,7 @@ const Filter = (props) => {
       if (locations.length === 0) {
         navigation.navigate("NoResults");
       } else {
-        // navigate to screen with locations array
+        navigation.navigate("LocationList", { locationList: locations });
       }
 
       setTimeout(() => {
