@@ -61,6 +61,7 @@ const LocationListScreen = (props) => {
     midPoint = {latitude: locationList[0].location.latitude, longitude: locationList[0].location.latitude}
   }
 
+
   return (
     <View style={styles.container}>
       <Text>Location List screen</Text>

@@ -17,6 +17,7 @@
     "expo-location": "^14.0.2",
     "expo-status-bar": "~1.2.0",
     "firebase": "^9.6.7",
+    "geofire-common": "^5.2.0",
     "ngeohash": "^0.6.3",
     "react": "17.0.1",
     "react-dom": "17.0.1",
