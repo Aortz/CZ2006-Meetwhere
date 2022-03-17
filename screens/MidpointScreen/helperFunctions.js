@@ -74,7 +74,6 @@ const getGeohashRange = (latitude, longitude, distance) => {
   const lat = 0.000009009; // degrees latitude per m
   const lon = 0.00001129766; // degrees longitude per m
 
-  distance = distance / 2
 
   const lowerLat = latitude - lat * distance;
   const lowerLon = longitude - lon * distance;
@@ -98,7 +97,7 @@ export const getLocations = async (filters, current_user) => {
     filters["radius"]
   );
 
-  const allLocations = [];
+  let allLocations = [];
 
   let attractionQuery;
   if (filters["attractionType"].length !== 0) {
@@ -154,6 +153,8 @@ export const getLocations = async (filters, current_user) => {
       allLocations.push(doc.data());
     }
   }
+  var allLocationsSet = new Set(allLocations)
+  allLocations = Array.from(allLocationsSet)
 
   // Check secondary user history
   if (filters["secondaryUser"] !== null) {
@@ -179,39 +180,5 @@ export const getLocations = async (filters, current_user) => {
     }
   }
 
-  const newLocations = [];
-
-  for (let i = 0; i < allLocations.length; i++) {
-    const loc1 = allLocations[i];
-    const dist = getDistanceinMetres(
-      loc1.location.latitude,
-      loc1.location.longitude,
-      filters.midPoint.latitude,
-      filters.midPoint.longitude
-    );
-    if (dist <= filters["radius"]) {
-      newLocations.push(loc1);
-    }
-  }
-
-  return newLocations;
-};
-
-const getDistanceinMetres = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Radius of the earth in km
-  const dLat = deg2rad(lat2 - lat1); // deg2rad below
-  const dLon = deg2rad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const d = R * c; // Distance in km
-  return d * 1000;
-};
-
-const deg2rad = (deg) => {
-  return deg * (Math.PI / 180);
+  return allLocations;
 };
