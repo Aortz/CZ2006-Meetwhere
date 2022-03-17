@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View, Dimensions, ActivityIndicator, ScrollView, SafeAreaView } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
-import { Card,Divider } from "react-native-elements";
+import { Card,Divider, CheckBox } from "react-native-elements";
 
 import React, { useState } from "react";
 
@@ -8,19 +8,24 @@ const { width, height } = Dimensions.get("screen");
 
 const LocationListScreen = (props) => {
   const { route, totalLocationList, setTotalLocationList } = props;
-  const locationList = route.params.locationList
+  let locationList = route.params.locationList
   const overallFilter = route.params.overallFilter
   const [locationDetails, setLocationDetails] = useState(0)
-  // console.log(overallFilter)
+  const [isSelected, setSelection] = useState(false);
   const midPoint = overallFilter.midPoint;
   
-  console.log("Length of array:", locationList.length);
-  // console.log(locationList[0]);
-
-  const pickRandom = (array) => {
-    const random = Math.floor(Math.random() * array.length);
-    return array[random]
+  
+  //remove duplicates from list
+  const removeDuplicate = (array) => {
+    array = array.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.place === value.place && t.name === value.name
+    )))
+    return array
   }
+
+  locationList  = removeDuplicate(locationList)
+  // console.log(locationList.length)
 
   const displayArray = (locationlist) =>{
     let locationCount = 0
@@ -28,6 +33,7 @@ const LocationListScreen = (props) => {
     
     while(locationCount < locationlist.length){
         let locationCountString = locationCount.toString()
+        // console.log(locationList[locationCount].name);
         topFive.push(
         <Marker
           identifier={locationCountString}
@@ -35,26 +41,64 @@ const LocationListScreen = (props) => {
             latitude: locationlist[locationCount].location.latitude,
             longitude: locationlist[locationCount].location.longitude,
           }}
-          onPress={(event) => (setLocationDetails(parseInt(event.nativeEvent.id)), console.log("I've pressed", locationDetails))}
+          onPress={(event) => (setLocationDetails(parseInt(event.nativeEvent.id)))}
         />,
-        <Circle
-          key={locationlist[locationCount].location.latitude + locationlist[locationCount].location.longitude}
-          center={{
-            latitude: locationlist[locationCount].location.latitude,
-            longitude: locationlist[locationCount].location.longitude,
-          }}
-          radius={100}
-          strokeWidth={1}
-          strokeColor={"#1a66ff"}
-          fillColor={"rgba(230,238,255,0.5)"}
-        />
         )
         locationCount += 1
       }
+      
       let topFiveSet = new Set(topFive)
       topFive = Array.from(topFiveSet)
       // const map1 = topFive.map((marker,index) => (index % 2 == 0)?{marker.onPress={}}) 
     return topFive;
+  }
+
+  const reviewHandler = (array) => {
+    const random = Math.floor(Math.random() * array.length);
+    if(array.length > 0){
+      return (
+      <View>
+        <Text style={styles.locationTextStyle}>
+          Reviews
+        </Text>
+        <Text style={styles.locationTextStyle}>
+          Text: {array[random].text}
+        </Text>
+        <Text style={styles.locationTextStyle}>
+          Author: {array[random].authorName}
+        </Text>
+      </View>
+      )  
+    }
+  }
+
+  // const imageHandler = (imageArray) => {
+  //   if(imageArray.length = 0){
+  //     return(
+  //       <Card.Image 
+  //         style={styles.imageStyle}
+  //         source={require("../../assets/noImageAvailable.jpg")}
+  //         PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
+  //       />)      
+  //   }
+  //   else{
+  //     return(
+  //       <Card.Image 
+  //         style={styles.imageStyle}
+  //         source={{uri:pickRandom(imageArray)}}
+  //         PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
+  //       />)
+  //   }
+  // }
+
+  const pickRandomImage = (array) => {
+    if(array.length == 0){
+      return "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
+    }
+    else{
+      const random = Math.floor(Math.random() * array.length);
+      return array[random]
+    }
   }
 
   if(midPoint == null){
@@ -99,82 +143,52 @@ const LocationListScreen = (props) => {
         
       </MapView>
 
-      {locationDetails == 0 && 
-      <View>
-      <SafeAreaView>
-          <Card >
-            <Card.Image 
-                style={styles.imageStyle}
-                source={{uri:pickRandom(locationList[locationDetails].images)}}
-                PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
-            />
-            <Card.Divider style={styles.divider}/>
-            <View>
-              <ScrollView>
-                  <Text >
-                    <Image style={styles.icon} source={require("../../assets/clock.png")}/>
-                    Name: {locationList[locationDetails].name}
-                  </Text>          
-                  <Text style={styles.locationTextStyle}>
-                    Ratings: {locationList[locationDetails].rating}
-                  </Text>
-                  {/* <Text>
-                    <Image style={styles.icon} source={require("../../assets/clock.png")}/>
-                    <Text style={styles.locationTextStyle}>
-                      Opening Hours: {locationList[locationDetails].businessHour[0].openTime}
-                    </Text>
-                    <Text style={styles.locationTextStyle}>
-                      Closing Hours: {locationList[locationDetails].businessHour[0].closeTime}
-                    </Text>
-                  </Text> */}
-              </ScrollView>
-              </View>
-              <Card.Divider style={styles.divider}/>
-              <Text style={styles.locationTextStyle}>
-                    Amenities: {[locationList[locationDetails].amenities, locationList[locationDetails].cuisine]}
-                  </Text>
-            </Card>
-        </SafeAreaView>
-      </View>
-      }
-
-      {locationDetails != 0 &&
+      {locationDetails >= 0 &&
       
       <View style={[styles.filterContainer]}>
-        {console.log(locationList[locationDetails])}
+        {/* {console.log(locationList[locationDetails])} */}
         <SafeAreaView>
           <Card >
-            <Card.Image 
-                style={styles.imageStyle}
-                source={{uri:pickRandom(locationList[locationDetails].images)}}
-                PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
-            />
-            <Card.Divider style={styles.divider}/>
-            <View>
-              <ScrollView>
-                  <Text >
-                    <Image style={styles.icon} source={require("../../assets/clock.png")}/>
-                    Name: {locationList[locationDetails].name}
-                  </Text>          
-                  <Text style={styles.locationTextStyle}>
-                    Ratings: {locationList[locationDetails].rating}
-                  </Text>
-                  {/* <Text>
-                    <Image style={styles.icon} source={require("../../assets/clock.png")}/>
-                    <Text style={styles.locationTextStyle}>
-                      Opening Hours: {locationList[locationDetails].businessHour[0].openTime}
-                    </Text>
-                    <Text style={styles.locationTextStyle}>
-                      Closing Hours: {locationList[locationDetails].businessHour[0].closeTime}
-                    </Text>
-                  </Text> */}
-              </ScrollView>
+            <ScrollView>
+              <Card.Image 
+                  style={styles.imageStyle}
+                  source={{uri:pickRandomImage(locationList[locationDetails].images)}}
+                  PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
+              />
+              <Card.Divider style={styles.divider}/>
+              <View>        
+                <Text style={styles.locationTextStyle}>
+                  <Image style={styles.icon} source={require("../../assets/place.png")}/>
+                  Name: {locationList[locationDetails].name}
+                </Text>          
+                <Text style={styles.locationTextStyle}>
+                <Image style={styles.icon} source={require("../../assets/ratings.png")}/>
+                  Ratings: {locationList[locationDetails].rating}
+                </Text>
+                <Text style={styles.locationTextStyle}>
+                <Image style={styles.icon} source={require("../../assets/category.png")}/>
+                  Type: {[locationList[locationDetails].type]}
+                </Text>
+                
               </View>
               <Card.Divider style={styles.divider}/>
               <Text style={styles.locationTextStyle}>
-                    Amenities: {[locationList[locationDetails].amenities, locationList[locationDetails].cuisine]}
-                  </Text>
-            </Card>
+                Description: {[locationList[locationDetails].description]}
+              </Text>
+              <Card.Divider style={styles.divider}/>
+              {reviewHandler(locationList[locationDetails].reviews)}
+              <Card.Divider style={styles.divider}/>
+              <View style={styles.checkboxContainer}>
+                <CheckBox
+                  title="Are you visiting?"
+                  style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
+                  checked={isSelected}
+                  onPress={() => setSelection(!isSelected)}
+                  checkedTitle="Added to your History"
+                />
+              </View>
+            </ScrollView>
+          </Card>
         </SafeAreaView>
       </View>
       }
@@ -243,11 +257,16 @@ const styles = StyleSheet.create({
     // justifyContent: "flex-start",
     height: 20,
     width: 20,
-    
-    // marginRight:20,
-    // borderRadius: 100 / 2,
-    // overflow: "hidden",
-    // borderWidth: 1,
-    // borderColor: "black"
+    marginHorizontal: 5
   },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignSelf: "center",
+    color:"red"
+    // marginBottom: 20,
+  },
+  checkbox: {
+    alignSelf: "center",
+  },
+
 });

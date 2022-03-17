@@ -169,8 +169,8 @@ export const getLocations = async (filters, current_user) => {
       }
     }
   }
-  var allLocationsSet = new Set(allLocations)
-  allLocations = Array.from(allLocationsSet)
+  // var allLocationsSet = new Set(allLocations)
+  // allLocations = Array.from(allLocationsSet)
 
   const allLocationsSet = new Set(allLocations);
   allLocations = Array.from(allLocationsSet);
