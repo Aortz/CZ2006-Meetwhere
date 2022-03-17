@@ -75,6 +75,7 @@ const getGeohashRange = (latitude, longitude, distance) => {
   const lat = 0.000009009; // degrees latitude per m
   const lon = 0.00001129766; // degrees longitude per m
 
+
   const lowerLat = latitude - lat * distance;
   const lowerLon = longitude - lon * distance;
 
@@ -168,6 +169,8 @@ export const getLocations = async (filters, current_user) => {
       }
     }
   }
+  // var allLocationsSet = new Set(allLocations)
+  // allLocations = Array.from(allLocationsSet)
 
   const allLocationsSet = new Set(allLocations);
   allLocations = Array.from(allLocationsSet);

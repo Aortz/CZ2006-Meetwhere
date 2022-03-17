@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity,Pressable } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity,Pressable, ActivityIndicator } from "react-native";
 import { Firebase, db } from "../database/firebase";
 import { QuerySnapshot } from "firebase/firestore";
 import { ScrollView } from "react-native";
@@ -93,7 +93,7 @@ const HomeScreen = ({ navigation, setUserOption,userDetails }) => {
     console.log(array_photos);
     setRandomized(array_of_array);
     setLoading(false);
-  }, 1500);
+  }, 3000);
 
 
   };
@@ -172,6 +172,7 @@ return (
                 <Card.Image
                   style={styles.imageSize}
                   source={{uri:randomized[0][0]}}
+                  PlaceholderContent={<ActivityIndicator color={'#FFFFFF'}/>}
                 />
               </Card>}
 
@@ -181,6 +182,7 @@ return (
                 <Card.Image
                   style={styles.imageSize}
                   source={{uri:randomized[0][1]}}
+                  PlaceholderContent={<ActivityIndicator color={'#FFFFFF'}/>}
                 />
               </Card>}
 
@@ -190,6 +192,7 @@ return (
                 <Card.Image
                   style={styles.imageSize}
                   source={{uri:randomized[0][2]}}
+                  PlaceholderContent={<ActivityIndicator color={'#FFFFFF'}/>}
                 />
               </Card>}
 
@@ -199,6 +202,7 @@ return (
                 <Card.Image
                   style={styles.imageSize}
                   source={{uri:randomized[0][3]}}
+                  PlaceholderContent={<ActivityIndicator color={'#FFFFFF'}/>}
                 />
               </Card>}
               
@@ -208,6 +212,7 @@ return (
                 <Card.Image
                   style={styles.imageSize}
                   source={{uri:randomized[0][4]}}
+                  PlaceholderContent={<ActivityIndicator color={'#FFFFFF'}/>}
                 />
               </Card>}
 
@@ -217,6 +222,7 @@ return (
                 <Card.Image
                   style={styles.imageSize}
                   source={{uri:randomized[0][5]}}
+                  PlaceholderContent={<ActivityIndicator color={'#FFFFFF'}/>}
                 />
               </Card>}
             </ScrollView>
