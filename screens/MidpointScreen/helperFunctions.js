@@ -1,5 +1,6 @@
 import { db } from "../database/firebase";
 import geohash from "ngeohash";
+const geofire = require("geofire-common");
 
 // check if key already inside
 export const convertFilters = (temp_filters, checkBoxes) => {
@@ -90,13 +91,14 @@ const getGeohashRange = (latitude, longitude, distance) => {
 };
 
 export const getLocations = async (filters, current_user) => {
-  const range = getGeohashRange(
-    filters.midPoint.latitude,
-    filters.midPoint.longitude,
-    filters["radius"]
-  );
+  const center = [filters.midPoint.latitude, filters.midPoint.longitude];
+  const radiusInM = filters["radius"];
 
-  const allLocations = [];
+  const bounds = geofire.geohashQueryBounds(center, radiusInM);
+
+  let allLocations = [];
+
+  const promises = [];
 
   let attractionQuery;
   if (filters["attractionType"].length !== 0) {
@@ -108,14 +110,13 @@ export const getLocations = async (filters, current_user) => {
       filters["attractionType"]
     );
 
-    attractionQuery = attractionQuery
-      .where("location.geohash", ">=", range.lower)
-      .where("location.geohash", "<=", range.upper);
+    for (const b of bounds) {
+      const q = attractionQuery
+        .orderBy("location.geohash")
+        .startAt(b[0])
+        .endAt(b[1]);
 
-    const result = await attractionQuery.get();
-
-    for (const doc of result.docs) {
-      allLocations.push(doc.data());
+      promises.push(q.get());
     }
   }
 
@@ -125,14 +126,13 @@ export const getLocations = async (filters, current_user) => {
 
     barClubQuery = barClubQuery.where("type", "in", filters["barClubType"]);
 
-    barClubQuery = barClubQuery
-      .where("location.geohash", ">=", range.lower)
-      .where("location.geohash", "<=", range.upper);
+    for (const b of bounds) {
+      const q1 = barClubQuery
+        .orderBy("location.geohash")
+        .startAt(b[0])
+        .endAt(b[1]);
 
-    const result1 = await barClubQuery.get();
-
-    for (const doc of result1.docs) {
-      allLocations.push(doc.data());
+      promises.push(q1.get());
     }
   }
 
@@ -142,16 +142,35 @@ export const getLocations = async (filters, current_user) => {
 
     foodQuery = foodQuery.where("type", "in", filters["foodType"]);
 
-    foodQuery = foodQuery
-      .where("location.geohash", ">=", range.lower)
-      .where("location.geohash", "<=", range.upper);
+    for (const b of bounds) {
+      const q2 = foodQuery
+        .orderBy("location.geohash")
+        .startAt(b[0])
+        .endAt(b[1]);
 
-    const result2 = await foodQuery.get();
-
-    for (const doc of result2.docs) {
-      allLocations.push(doc.data());
+      promises.push(q2.get());
     }
   }
+
+  const snapshots = await Promise.all(promises);
+
+  for (const snap of snapshots) {
+    for (const doc of snap.docs) {
+      const lat = doc.get("location.latitude");
+      const lng = doc.get("location.longitude");
+
+      // We have to filter out a few false positives due to GeoHash
+      // accuracy, but most will match
+      const distanceInKm = geofire.distanceBetween([lat, lng], center);
+      const distanceInM = distanceInKm * 1000;
+      if (distanceInM <= radiusInM) {
+        allLocations.push(doc.data());
+      }
+    }
+  }
+
+  const allLocationsSet = new Set(allLocations);
+  allLocations = Array.from(allLocationsSet);
 
   // Check secondary user history
   if (filters["secondaryUser"] !== null) {
@@ -177,39 +196,5 @@ export const getLocations = async (filters, current_user) => {
     }
   }
 
-  const newLocations = [];
-
-  for (let i = 0; i < allLocations.length; i++) {
-    const loc1 = allLocations[i];
-    const dist = getDistanceinMetres(
-      loc1.location.latitude,
-      loc1.location.longitude,
-      filters.midPoint.latitude,
-      filters.midPoint.longitude
-    );
-    if (dist <= filters["radius"]) {
-      newLocations.push(loc1);
-    }
-  }
-
-  return newLocations;
-};
-
-const getDistanceinMetres = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Radius of the earth in km
-  const dLat = deg2rad(lat2 - lat1); // deg2rad below
-  const dLon = deg2rad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const d = R * c; // Distance in km
-  return d * 1000;
-};
-
-const deg2rad = (deg) => {
-  return deg * (Math.PI / 180);
+  return allLocations;
 };
