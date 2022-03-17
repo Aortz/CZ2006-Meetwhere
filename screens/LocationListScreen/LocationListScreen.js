@@ -4,7 +4,7 @@ import React from "react";
 const LocationListScreen = (props) => {
   const { route } = props;
   const locationList = route.params.locationList;
-  console.log(locationList);
+
   return (
     <View style={styles.container}>
       <Text>locationlist screen</Text>
