@@ -99,6 +99,18 @@ const LocationListScreen = (props) => {
           <Text style={styles.websiteText}>
             {variable.address.buildingName}
           </Text>
+          <Text style={styles.websiteText}>
+            {variable.address.floorNumber}
+          </Text>
+          <Text style={styles.websiteText}>
+            {variable.address.postalCode}
+          </Text>
+          <Text style={styles.websiteText}>
+            {variable.address.streetName}
+          </Text>
+          <Text style={styles.websiteText}>
+            {variable.address.unitNumber}
+          </Text>
         </View>  
         )
     }
@@ -122,6 +134,7 @@ const LocationListScreen = (props) => {
         </View>  
         )
     }
+    
     return displayArray
   }
 
@@ -162,7 +175,8 @@ const LocationListScreen = (props) => {
             fillColor={"rgba(230,238,255,0.5)"}
           />
         
-        {displayArray(locationList)}
+        {!isSelected && displayArray(locationList)}
+        {isSelected && displayArray(locationList)[locationDetails]}
         
         
       </MapView>
