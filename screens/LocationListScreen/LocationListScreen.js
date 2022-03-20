@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, Dimensions, ActivityIndicator, ScrollView, SafeAreaView } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions, ActivityIndicator, ScrollView, SafeAreaView, TouchableOpacity, Alert } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
 import { Card,Divider, CheckBox } from "react-native-elements";
 
@@ -41,7 +41,7 @@ const LocationListScreen = (props) => {
             latitude: locationlist[locationCount].location.latitude,
             longitude: locationlist[locationCount].location.longitude,
           }}
-          onPress={(event) => (setLocationDetails(parseInt(event.nativeEvent.id)))}
+          onPress={(event) => (setLocationDetails(parseInt(event.nativeEvent.id)), console.log("I pressed", event.nativeEvent.id))}
         />,
         )
         locationCount += 1
@@ -72,25 +72,6 @@ const LocationListScreen = (props) => {
     }
   }
 
-  // const imageHandler = (imageArray) => {
-  //   if(imageArray.length = 0){
-  //     return(
-  //       <Card.Image 
-  //         style={styles.imageStyle}
-  //         source={require("../../assets/noImageAvailable.jpg")}
-  //         PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
-  //       />)      
-  //   }
-  //   else{
-  //     return(
-  //       <Card.Image 
-  //         style={styles.imageStyle}
-  //         source={{uri:pickRandom(imageArray)}}
-  //         PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
-  //       />)
-  //   }
-  // }
-
   const pickRandomImage = (array) => {
     if(array.length == 0){
       return "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
@@ -103,6 +84,25 @@ const LocationListScreen = (props) => {
 
   if(midPoint == null){
     midPoint = {latitude: locationList[0].location.latitude, longitude: locationList[0].location.latitude}
+  }
+
+
+  const buttonHandler = (isBack, array, number) => {
+    if(number > 0 && isBack){
+      return setLocationDetails(number-1)
+    }
+    else if(number == 0 && isBack){
+      return setLocationDetails(array.length - 1)
+    }
+    else if(number < array.length-1 && !isBack){
+      return setLocationDetails(number+1)
+    }
+    else if(number == array.length-1 && !isBack){
+      return setLocationDetails(0)
+    }
+    else {
+      Alert.alert("No such location")
+    }
   }
 
 
@@ -147,8 +147,11 @@ const LocationListScreen = (props) => {
       
       <View style={[styles.filterContainer]}>
         {/* {console.log(locationList[locationDetails])} */}
-        <SafeAreaView>
-          <Card >
+        <SafeAreaView style={styles.viewContainer}>
+          <TouchableOpacity style={styles.buttonStyle} title="Previous" onPress={() => buttonHandler(true, locationList, locationDetails)}>
+            <Image style={styles.arrowicon} source={require("../../assets/back.png")}/>
+          </TouchableOpacity>
+          <Card style={{alignSelf: "center"}}>
             <ScrollView>
               <Card.Image 
                   style={styles.imageStyle}
@@ -189,6 +192,9 @@ const LocationListScreen = (props) => {
               </View>
             </ScrollView>
           </Card>
+          <TouchableOpacity style={styles.buttonStyle} title="Next" onPress={() => buttonHandler(false, locationList, locationDetails)}>
+            <Image style={styles.arrowicon} source={require("../../assets/next.png")}/>
+          </TouchableOpacity>
         </SafeAreaView>
       </View>
       }
@@ -208,6 +214,10 @@ const styles = StyleSheet.create({
   },
   slider: {
     alignItems: "center",
+  },
+  viewContainer: {
+    flex: 1,
+    flexDirection: "row"
   },
   radiusText: {
     fontWeight: "bold",
@@ -236,6 +246,9 @@ const styles = StyleSheet.create({
     // height: "60%",
     // aspectRatio: 1
   },
+  buttonStyle: {
+    alignSelf: "center",
+  },
   locationTextStyle: {
     fontSize: 14,
     textAlign: "center", 
@@ -258,6 +271,11 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     marginHorizontal: 5
+  },
+  arrowicon: {
+    alignSelf: "center",
+    height: 20,
+    width: 15,
   },
   checkboxContainer: {
     flexDirection: "row",
