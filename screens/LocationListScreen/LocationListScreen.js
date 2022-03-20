@@ -1,7 +1,7 @@
-import { Image, StyleSheet, Text, View, Dimensions, ActivityIndicator, ScrollView, SafeAreaView } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions, ActivityIndicator, ScrollView, SafeAreaView, Linking } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
 import { Card,Divider, CheckBox } from "react-native-elements";
-
+import { Firebase, db } from "../database/firebase";
 import React, { useState } from "react";
 
 const { width, height } = Dimensions.get("screen");
@@ -72,24 +72,6 @@ const LocationListScreen = (props) => {
     }
   }
 
-  // const imageHandler = (imageArray) => {
-  //   if(imageArray.length = 0){
-  //     return(
-  //       <Card.Image 
-  //         style={styles.imageStyle}
-  //         source={require("../../assets/noImageAvailable.jpg")}
-  //         PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
-  //       />)      
-  //   }
-  //   else{
-  //     return(
-  //       <Card.Image 
-  //         style={styles.imageStyle}
-  //         source={{uri:pickRandom(imageArray)}}
-  //         PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
-  //       />)
-  //   }
-  // }
 
   const pickRandomImage = (array) => {
     if(array.length == 0){
@@ -99,6 +81,48 @@ const LocationListScreen = (props) => {
       const random = Math.floor(Math.random() * array.length);
       return array[random]
     }
+  }
+
+  //event handler when checkbox is clicked
+  const visitingHandler = () => {
+    setSelection(!isSelected)
+    const userRef = Firebase.firestore().collection("Users");
+    return;
+  }
+
+  const displayHandler = (variable) => {
+    let displayArray = []
+    if (variable.address != ""){
+      displayArray.push(
+        <View>
+          <Card.Divider style={styles.divider}/>
+          <Text style={styles.websiteText}>
+            {variable.address.buildingName}
+          </Text>
+        </View>  
+        )
+    }
+    if (variable.officialWebsite != ""){
+      displayArray.push(
+        <View>
+          <Card.Divider style={styles.divider}/>
+          <Text style={styles.websiteText} onPress={() => Linking.openURL(variable.officialWebsite)}>
+            {[locationList[locationDetails].officialWebsite]}
+          </Text>
+        </View>  
+        )
+    }
+    if (variable.contact.primaryContactNo != ""){
+      displayArray.push(
+        <View>
+          <Card.Divider style={styles.divider}/>
+          <Text style={styles.websiteText}>
+            Primary Contact Number: {variable.contact.primaryContactNo}
+          </Text>
+        </View>  
+        )
+    }
+    return displayArray
   }
 
   if(midPoint == null){
@@ -146,7 +170,7 @@ const LocationListScreen = (props) => {
       {locationDetails >= 0 &&
       
       <View style={[styles.filterContainer]}>
-        {/* {console.log(locationList[locationDetails])} */}
+        {console.log(locationList[locationDetails])}
         <SafeAreaView>
           <Card >
             <ScrollView>
@@ -166,11 +190,16 @@ const LocationListScreen = (props) => {
                   Ratings: {locationList[locationDetails].rating}
                 </Text>
                 <Text style={styles.locationTextStyle}>
-                <Image style={styles.icon} source={require("../../assets/category.png")}/>
+                {/* <Image style={styles.icon} source={require("../../assets/category.png")}/> */}
                   Type: {[locationList[locationDetails].type]}
                 </Text>
                 
               </View>
+              {/* <Card.Divider style={styles.divider}/>
+              <Text style={styles.websiteText} onPress={() => Linking.openURL(locationList[locationDetails].officialWebsite)}>
+                {[locationList[locationDetails].officialWebsite]}
+              </Text> */}
+              {displayHandler(locationList[locationDetails])}
               <Card.Divider style={styles.divider}/>
               <Text style={styles.locationTextStyle}>
                 Description: {[locationList[locationDetails].description]}
@@ -184,6 +213,7 @@ const LocationListScreen = (props) => {
                   style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
                   checked={isSelected}
                   onPress={() => setSelection(!isSelected)}
+                  // onPress={setSelection(!isSelected)}
                   checkedTitle="Added to your History"
                 />
               </View>
@@ -241,6 +271,12 @@ const styles = StyleSheet.create({
     textAlign: "center", 
     alignSelf: "stretch",
     color: "#000000"
+  },
+  websiteText: {
+    fontSize: 14,
+    textAlign: "center", 
+    alignSelf: "stretch",
+    color: "blue"
   },
   divider: {
     paddingVertical: 5
