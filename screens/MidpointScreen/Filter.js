@@ -71,11 +71,16 @@ const Filter = (props) => {
       }
 
       setTotalLocationList(locationsList);
+      var i =0
+      while(i < locations.length){
+        console.log(locations[i].name)
+        i += 1
+      }
 
       if (locations.length === 0) {
         navigation.navigate("NoResults");
       } else {
-        navigation.navigate("LocationList", { locationList: locations });
+        navigation.navigate("LocationList", { locationList: locations, overallFilter: overallFilter });
       }
 
       setTimeout(() => {

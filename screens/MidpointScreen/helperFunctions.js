@@ -1,5 +1,6 @@
 import { db } from "../database/firebase";
 import geohash from "ngeohash";
+const geofire = require("geofire-common");
 
 // check if key already inside
 export const convertFilters = (temp_filters, checkBoxes) => {
@@ -74,6 +75,7 @@ const getGeohashRange = (latitude, longitude, distance) => {
   const lat = 0.000009009; // degrees latitude per m
   const lon = 0.00001129766; // degrees longitude per m
 
+
   const lowerLat = latitude - lat * distance;
   const lowerLon = longitude - lon * distance;
 
@@ -90,13 +92,14 @@ const getGeohashRange = (latitude, longitude, distance) => {
 };
 
 export const getLocations = async (filters, current_user) => {
-  const range = getGeohashRange(
-    filters.midPoint.latitude,
-    filters.midPoint.longitude,
-    filters["radius"]
-  );
+  const center = [filters.midPoint.latitude, filters.midPoint.longitude];
+  const radiusInM = filters["radius"];
 
-  const allLocations = [];
+  const bounds = geofire.geohashQueryBounds(center, radiusInM);
+
+  let allLocations = [];
+
+  const promises = [];
 
   let attractionQuery;
   if (filters["attractionType"].length !== 0) {
@@ -108,14 +111,13 @@ export const getLocations = async (filters, current_user) => {
       filters["attractionType"]
     );
 
-    attractionQuery = attractionQuery
-      .where("location.geohash", ">=", range.lower)
-      .where("location.geohash", "<=", range.upper);
+    for (const b of bounds) {
+      const q = attractionQuery
+        .orderBy("location.geohash")
+        .startAt(b[0])
+        .endAt(b[1]);
 
-    const result = await attractionQuery.get();
-
-    for (const doc of result.docs) {
-      allLocations.push(doc.data());
+      promises.push(q.get());
     }
   }
 
@@ -125,14 +127,13 @@ export const getLocations = async (filters, current_user) => {
 
     barClubQuery = barClubQuery.where("type", "in", filters["barClubType"]);
 
-    barClubQuery = barClubQuery
-      .where("location.geohash", ">=", range.lower)
-      .where("location.geohash", "<=", range.upper);
+    for (const b of bounds) {
+      const q1 = barClubQuery
+        .orderBy("location.geohash")
+        .startAt(b[0])
+        .endAt(b[1]);
 
-    const result1 = await barClubQuery.get();
-
-    for (const doc of result1.docs) {
-      allLocations.push(doc.data());
+      promises.push(q1.get());
     }
   }
 
@@ -142,16 +143,37 @@ export const getLocations = async (filters, current_user) => {
 
     foodQuery = foodQuery.where("type", "in", filters["foodType"]);
 
-    foodQuery = foodQuery
-      .where("location.geohash", ">=", range.lower)
-      .where("location.geohash", "<=", range.upper);
+    for (const b of bounds) {
+      const q2 = foodQuery
+        .orderBy("location.geohash")
+        .startAt(b[0])
+        .endAt(b[1]);
 
-    const result2 = await foodQuery.get();
-
-    for (const doc of result2.docs) {
-      allLocations.push(doc.data());
+      promises.push(q2.get());
     }
   }
+
+  const snapshots = await Promise.all(promises);
+
+  for (const snap of snapshots) {
+    for (const doc of snap.docs) {
+      const lat = doc.get("location.latitude");
+      const lng = doc.get("location.longitude");
+
+      // We have to filter out a few false positives due to GeoHash
+      // accuracy, but most will match
+      const distanceInKm = geofire.distanceBetween([lat, lng], center);
+      const distanceInM = distanceInKm * 1000;
+      if (distanceInM <= radiusInM) {
+        allLocations.push(doc.data());
+      }
+    }
+  }
+  // var allLocationsSet = new Set(allLocations)
+  // allLocations = Array.from(allLocationsSet)
+
+  const allLocationsSet = new Set(allLocations);
+  allLocations = Array.from(allLocationsSet);
 
   // Check secondary user history
   if (filters["secondaryUser"] !== null) {
