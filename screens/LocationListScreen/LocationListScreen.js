@@ -1,6 +1,9 @@
 import { Image, StyleSheet, Text, View, Dimensions, ActivityIndicator, ScrollView, SafeAreaView, TouchableOpacity, Alert } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
 import { Card,Divider, CheckBox } from "react-native-elements";
+import { useEffect } from 'react';
+import { Firebase, db } from "../database/firebase";
+
 
 import React, { useState } from "react";
 
@@ -105,6 +108,33 @@ const LocationListScreen = (props) => {
     }
   }
 
+  function historyHandler() {
+    const userProfile = Firebase.firestore().collection("Users").doc(Firebase.auth().currentUser.uid);
+    // useEffect(() => {
+    //   setSelection(!isSelected)
+    // })
+    setSelection(!isSelected)
+    // setLocationDetails(locationDetails)
+    let userHistory = []
+    userProfile.get().then((doc) => {
+      if (doc.exists) {
+          // console.log("Document data:", doc.data().history);
+          userHistory = doc.data().history
+          let currentDateTime = new Date().toLocaleString()
+          let historyData = new Set([locationList[locationDetails].name, currentDateTime])
+          userHistory.push(...historyData)
+          userProfile.update({
+            history: userHistory
+          })
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      }).catch((error) => {
+          console.log("Error getting document:", error);
+      });
+  }
+
 
   return (
     <View style={styles.container}>
@@ -138,27 +168,19 @@ const LocationListScreen = (props) => {
             fillColor={"rgba(230,238,255,0.5)"}
           />
         
-        {displayArray(locationList)}
-        
-        
+        {!isSelected && displayArray(locationList)}
+        {isSelected && displayArray(locationList)[locationDetails]}
       </MapView>
 
-      {locationDetails >= 0 &&
+      {locationDetails >= 0 && !isSelected &&
       
       <View style={[styles.filterContainer]}>
-        {/* {console.log(locationList[locationDetails])} */}
         <SafeAreaView style={styles.viewContainer}>
           <TouchableOpacity style={styles.buttonStyle} title="Previous" onPress={() => buttonHandler(true, locationList, locationDetails)}>
             <Image style={styles.arrowicon} source={require("../../assets/back.png")}/>
           </TouchableOpacity>
           <Card style={{alignSelf: "center"}}>
-            <ScrollView>
-              <Card.Image 
-                  style={styles.imageStyle}
-                  source={{uri:pickRandomImage(locationList[locationDetails].images)}}
-                  PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
-              />
-              <Card.Divider style={styles.divider}/>
+            <ScrollView>              
               <View>        
                 <Text style={styles.locationTextStyle}>
                   <Image style={styles.icon} source={require("../../assets/place.png")}/>
@@ -181,12 +203,27 @@ const LocationListScreen = (props) => {
               <Card.Divider style={styles.divider}/>
               {reviewHandler(locationList[locationDetails].reviews)}
               <Card.Divider style={styles.divider}/>
+              <View>
+                <ScrollView nestedScrollEnabled={true}>
+                  <Card.Image 
+                      style={styles.imageStyle}
+                      source={{uri:pickRandomImage(locationList[locationDetails].images)}}
+                      PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
+                  />
+                  <Card.Image 
+                      style={styles.imageStyle}
+                      source={{uri:pickRandomImage(locationList[locationDetails].images)}}
+                      PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
+                  />
+                </ScrollView>
+              </View>
+              <Card.Divider style={styles.divider}/>
               <View style={styles.checkboxContainer}>
                 <CheckBox
                   title="Are you visiting?"
                   style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
                   checked={isSelected}
-                  onPress={() => setSelection(!isSelected)}
+                  onPress={() => historyHandler()}
                   checkedTitle="Added to your History"
                 />
               </View>
@@ -197,6 +234,31 @@ const LocationListScreen = (props) => {
           </TouchableOpacity>
         </SafeAreaView>
       </View>
+      }
+      {isSelected &&
+        <View style={[styles.filterContainer2]}>
+          <View style={{backgroundColor: "white"}}>        
+            <Text style={styles.locationTextStyle}>
+              <Image style={styles.icon} source={require("../../assets/place.png")}/>
+              Name: {locationList[locationDetails].name}
+            </Text>          
+            <Text style={styles.locationTextStyle}>
+            <Image style={styles.icon} source={require("../../assets/ratings.png")}/>
+              Ratings: {locationList[locationDetails].rating}
+            </Text>
+            <Text style={styles.locationTextStyle}>
+            <Image style={styles.icon} source={require("../../assets/category.png")}/>
+              Type: {[locationList[locationDetails].type]}
+            </Text>
+            <Text style={styles.urlText}>
+              Click on the red drop pin!
+            </Text>
+            
+          </View>
+          
+          
+          
+        </View>
       }
       
       
@@ -230,10 +292,29 @@ const styles = StyleSheet.create({
     flex: 0.5,
     backgroundColor: "white",
     height: height / 2.2,
-    // alignItems: "center",
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 30,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    borderWidth: 1,
+    borderColor: "#707070",
+  },
+  filterContainer2: {
+    // flex: 0.25,
+    backgroundColor: "white",
+    width: width / 1.5,
+    height: height/4,
+    alignItems: 'center',
+    justifyContent: 'center', 
+    paddingHorizontal: 30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    // borderTopEndRadius: 30,
+    // borderBottomEndRadius: 30,
+    bottom: 20,
     borderWidth: 1,
     borderColor: "#707070",
   },
@@ -253,7 +334,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center", 
     alignSelf: "stretch",
+    paddingVertical: 2,
     color: "#000000"
+  },
+  urlText: {
+    fontSize: 18,
+    textAlign: "center", 
+    alignSelf: "stretch",
+    color: "red"
   },
   divider: {
     paddingVertical: 5
