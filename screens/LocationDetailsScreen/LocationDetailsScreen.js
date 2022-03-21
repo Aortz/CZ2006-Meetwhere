@@ -8,12 +8,38 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import ComplementaryLocations from "./ComplementaryLocations";
 
 const LocationDetailsScreen = (props) => {
   const { totalLocationList, setTotalLocationList, navigation } = props;
+
   const locationDetail = props.route.params.location;
-  console.log(locationDetail);
+  const prevLocation = props.route.params.prevLocation;
+
+  useEffect(() => {
+    setShowComplementary(false);
+  }, [locationDetail]);
+
+  const [showComplementary, setShowComplementary] = useState(false);
+
+  const handleRegenerateLocation = () => {
+    const tempList = totalLocationList;
+    if (tempList.length < 1) {
+      navigation.navigate("NoResults");
+    }
+    const randomIndex = Math.floor(Math.random() * tempList.length);
+    const randomLocation = tempList[randomIndex];
+    tempList.splice(randomIndex, 1);
+    setTotalLocationList(tempList);
+    navigation.navigate("LocationDetails", { location: randomLocation });
+  };
+
+  const handleVisiting = () => {
+    // Code to add location to user history in firebase
+    setShowComplementary(true);
+  };
+
   if (locationDetail === null) {
     return null;
   }
@@ -36,55 +62,75 @@ const LocationDetailsScreen = (props) => {
           }}
         />
       </MapView>
-      <View style={styles.bottomSheet}>
-        <Text style={styles.titletext}>{props.route.params.location.name}</Text>
-      </View>
-      <ScrollView style={styles.detailsScroll}>
-        <Text style={styles.infoText}>
-          Address : {locationDetail.address.streetName}
-        </Text>
-        <Text style={styles.infoText}>
-          Postal Code : {locationDetail.address.postalCode}
-        </Text>
-        <Text style={styles.infoText}>
-          Website : {locationDetail.officialWebsite}
-        </Text>
-        <Text style={styles.infoText}>
-          Opening Hours
-          {/* Monday: {locationDetail.businessHour.openTime} - {locationDetail.businessHour.closeTime} */}
-        </Text>
-        <Text style={styles.infoText}>
-          Amenities : {locationDetail.amenities}
-        </Text>
-        <Text style={styles.infoText}>Rating : {locationDetail.rating}</Text>
-        <Text style={styles.infoText}>
-          Destination Type : {locationDetail.type}
-        </Text>
-        <Text style={styles.gap} />
-        <View style={styles.buttonView}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Home")}
-            style={styles.buttonVisit}
-          >
-            <Image
-              source={require("../../assets/Visit.png")}
-              style={styles.icon}
-            />
-            <Text style={styles.buttonText}>I Am Visiting</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.gap} />
-        <View style={styles.buttonView}>
-          <TouchableOpacity style={styles.buttonRandom}>
-            <Image
-              source={require("../../assets/Random.png")}
-              style={styles.icon2}
-            />
-            <Text style={styles.buttonText}>Find Another Location</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.gap} />
-      </ScrollView>
+      {!showComplementary && (
+        <>
+          <View style={styles.bottomSheet}>
+            <Text style={styles.titletext}>
+              {props.route.params.location.name}
+            </Text>
+          </View>
+          <ScrollView style={styles.detailsScroll}>
+            <Text style={styles.infoText}>
+              Address : {locationDetail.address.streetName}
+            </Text>
+            <Text style={styles.infoText}>
+              Postal Code : {locationDetail.address.postalCode}
+            </Text>
+            <Text style={styles.infoText}>
+              Website : {locationDetail.officialWebsite}
+            </Text>
+            <Text style={styles.infoText}>
+              Opening Hours
+              {/* Monday: {locationDetail.businessHour.openTime} - {locationDetail.businessHour.closeTime} */}
+            </Text>
+            <Text style={styles.infoText}>
+              Amenities : {locationDetail.amenities}
+            </Text>
+            <Text style={styles.infoText}>
+              Rating : {locationDetail.rating}
+            </Text>
+            <Text style={styles.infoText}>
+              Destination Type : {locationDetail.type}
+            </Text>
+            <Text style={styles.gap} />
+            <View style={styles.buttonView}>
+              <TouchableOpacity
+                onPress={handleVisiting}
+                style={styles.buttonVisit}
+              >
+                <Image
+                  source={require("../../assets/Visit.png")}
+                  style={styles.icon}
+                />
+                <Text style={styles.buttonText}>I Am Visiting</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.gap} />
+            {!prevLocation && (
+              <View style={styles.buttonView}>
+                <TouchableOpacity
+                  style={styles.buttonRandom}
+                  onPress={handleRegenerateLocation}
+                >
+                  <Image
+                    source={require("../../assets/Random.png")}
+                    style={styles.icon2}
+                  />
+                  <Text style={styles.buttonText}>Find Another Location</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            <Text style={styles.gap} />
+          </ScrollView>
+        </>
+      )}
+
+      {showComplementary && (
+        <ComplementaryLocations
+          locationDetail={locationDetail}
+          navigation={navigation}
+        />
+      )}
     </View>
   );
 };
