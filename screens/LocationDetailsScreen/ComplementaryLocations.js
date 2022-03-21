@@ -14,7 +14,6 @@ const ComplementaryLocations = (props) => {
   const [compLocations, setCompLocations] = useState([]);
 
   useEffect(() => {
-    console.log(locationDetail);
     setCompLocations([]);
     const getComplementary = async () => {
       const results = await fetchComplementary(locationDetail);
