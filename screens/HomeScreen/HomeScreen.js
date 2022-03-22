@@ -22,14 +22,17 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
   }
 
   const [randomized,setRandomized] = useState(null); 
+  const [randomscreen,setRandomScreen] = useState(null); 
   const [loading,setLoading] = useState(true); 
   const [toprated,setTopRated] = useState(null); 
+  const [topscreen,setTopScreen] = useState(null); 
   
   const fetchData =()=>{
     let array_index =[]; 
     let array_photos =[]; 
     let array_names = []; 
     let array_of_array = []; 
+    let array_random=[]; 
 
     for(let i=0;i<2;i++){ //generate 6 indexes 
       array_index.push(String(randomAttraction()));
@@ -49,6 +52,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
           // console.log(array_photos);
           // console.log(document.data().name);
           array_names.push(String(document.data().name));
+          array_random.push(document.data());
           
         })
       }
@@ -59,6 +63,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
         array_photos.push(String(document.data().images[0]));
         //console.log(document.data().name);
         array_names.push(String(document.data().name));
+        array_random.push(document.data());
         })
       }
       else{
@@ -70,6 +75,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
         array_names.push(String(document.data().name));
         // console.log(array_photos);
         // console.log(array_names);
+        array_random.push(document.data());
         })
       }
     }
@@ -78,11 +84,14 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     let top_rated_names=[];
     let top_rated_rating=[];
     let top_rated_array=[];
+    let top_rated_object=[]; 
+    let top_rated_object_array=[]; 
 
     let top_rated_attract = Firebase.firestore().collection("Attractions").where('rating','>',4.5).orderBy('rating','desc')
     .limit(20)
     .get().then(QuerySnapshot=>{
       QuerySnapshot.forEach(DocumentSnapshot=>{
+        top_rated_object.push(DocumentSnapshot.data());
         top_rated_photos.push(String(DocumentSnapshot.data().images[0]));
         top_rated_names.push(String(DocumentSnapshot.data().name));
         top_rated_rating.push(String(DocumentSnapshot.data().rating));
@@ -92,6 +101,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     .limit(10)
     .get().then(QuerySnapshot=>{
       QuerySnapshot.forEach(DocumentSnapshot=>{
+        top_rated_object.push(DocumentSnapshot.data());
         top_rated_photos.push(String(DocumentSnapshot.data().images[0]));
         top_rated_names.push(String(DocumentSnapshot.data().name));
         top_rated_rating.push(String(DocumentSnapshot.data().rating));
@@ -102,6 +112,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
      .limit(20)
      .get().then(QuerySnapshot=>{
         QuerySnapshot.forEach(DocumentSnapshot=>{
+          top_rated_object.push(DocumentSnapshot.data());
           top_rated_photos.push(String(DocumentSnapshot.data().images[0]));
           top_rated_names.push(String(DocumentSnapshot.data().name));
           top_rated_rating.push(String(DocumentSnapshot.data().rating));
@@ -120,6 +131,8 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     for(let i=0;i<6;i++){
       let num = randomTop(); 
       top_rated_array.push([top_rated_photos[num],top_rated_names[num],top_rated_rating[num]]);
+      top_rated_object_array.push(top_rated_object[num]); 
+      
     }
     // console.log(array_index);
     // console.log(array_names);
@@ -130,9 +143,12 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     console.log(top_rated_array);
     setRandomized(array_of_array);
     setTopRated(top_rated_array);
+    setRandomScreen(array_random); 
+    setTopScreen(top_rated_object_array); 
     setLoading(false);
   }, 2000);
   };
+
   useEffect(() => {
     const run = async () => {
       await fetchData();
@@ -202,61 +218,91 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                 {!loading&&randomized[0][0]!="undefined"&&randomized[1][0].length>90&&<Card style={styles.cardStyle}>
                   <Card.Title>{randomized[1][0]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: randomscreen[0] })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:randomized[0][0]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
                 </Card>}
 
                 {!loading&&randomized[0][1]!="undefined"&&randomized[0][1].length>90&&<Card>
                   <Card.Title>{randomized[1][1]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: randomscreen[1], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:randomized[0][1]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
                 </Card>}
 
                 {!loading&&randomized[0][2]!="undefined"&&randomized[0][2].length>90&&<Card>
                   <Card.Title>{randomized[1][2]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: randomscreen[2], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:randomized[0][2]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
                 </Card>}
 
                 {!loading&&randomized[0][3]!="undefined"&&randomized[0][3].length>90&&<Card>
                   <Card.Title>{randomized[1][3]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: randomscreen[3], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:randomized[0][3]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
                 </Card>}
                 
                 {!loading&&randomized[0][4]!="undefined"&&randomized[0][4].length>90&&<Card>
                   <Card.Title>{randomized[1][4]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: randomscreen[4], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:randomized[0][4]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
                 </Card>}
 
                 {!loading&&randomized[0][5]!="undefined"&&randomized[0][5].length>90&&<Card>
                   <Card.Title>{randomized[1][5]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: randomscreen[5], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:randomized[0][5]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
                 </Card>}
               </ScrollView>
          
@@ -277,61 +323,110 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                 {!loading&&toprated[0][0]!="undefined"&&toprated[0][0].length>90&&<Card style={styles.cardStyle}>
                   <Card.Title>{toprated[0][1]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: topscreen[0], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:toprated[0][0]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
+                  <Text style = {styles.cardText}>
+                    Rating: {toprated[0][2]}/5
+                  </Text>
                 </Card>}
 
                 {!loading&&toprated[1][0]!="undefined"&&toprated[1][0].length>90&&<Card>
                   <Card.Title>{toprated[1][1]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: topscreen[1], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:toprated[1][0]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
+                  <Text style = {styles.cardText}>
+                    Rating: {toprated[1][2]}/5
+                  </Text>
                 </Card>}
 
                 {!loading&&toprated[2][0]!="undefined"&&toprated[2][0].length>90&&<Card>
                   <Card.Title>{toprated[2][1]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: topscreen[2], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:toprated[2][0]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
+                  <Text style = {styles.cardText}>
+                    Rating: {toprated[2][2]}/5
+                  </Text>
                 </Card>}
 
                 {!loading&&toprated[3][0]!="undefined"&&toprated[3][0].length>90&&<Card>
                   <Card.Title>{toprated[3][1]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: topscreen[3], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:toprated[3][0]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
+                  <Text style = {styles.cardText}>
+                    Rating: {toprated[3][2]}/5
+                  </Text>
                 </Card>}
                 
                 {!loading&&toprated[4][0]!="undefined"&&toprated[4][0].length>90&&<Card>
                   <Card.Title>{toprated[4][1]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: topscreen[4], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:toprated[4][0]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
+                  <Text style = {styles.cardText}>
+                    Rating: {toprated[4][2]}/5
+                  </Text>
                 </Card>}
 
                 {!loading&&toprated[5][0]!="undefined"&&toprated[5][0].length>90&&<Card>
                   <Card.Title>{toprated[5][1]}</Card.Title>
                   <Card.Divider />
+                  <TouchableOpacity onPress={()=>
+                    {navigation.navigate("LocationDetails", { location: topscreen[5], prevLocation:{"key":"value"} })
+                    }
+                    }>
                   <Card.Image
                     style={styles.imageSize}
                     source={{uri:toprated[5][0]}}
                     PlaceholderContent={<ActivityIndicator color={"black"}/>}
                   />
+                  </TouchableOpacity>
+                  <Text style = {styles.cardText}>
+                    Rating: {toprated[5][2]}/5
+                  </Text>
+
                 </Card>}
               </ScrollView>
         
@@ -418,5 +513,11 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: "bold",
     color: "black",
+  },
+  cardText: {
+    fontSize: 15,
+    letterSpacing: 0.25,
+    color: "black",
+    textAlign:"center",
   },
 });
