@@ -87,7 +87,7 @@ const Secondaryuser = (props) => {
           onPress={() => {
             setShowFilter(true);
             setShowSecUserInput(false);
-            setShowRadius(false);
+            
           }}style={styles.buttonSkip}
         >
           <Text style={styles.buttonSkip}>Skip</Text>
