@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Linking
 } from "react-native";
 import {Card} from "react-native-elements";
 import React, { useEffect, useState } from "react";
@@ -22,6 +23,7 @@ const LocationDetailsScreen = (props) => {
 
   useEffect(() => {
     setShowComplementary(false);
+    
   }, [locationDetail]);
 
   const [showComplementary, setShowComplementary] = useState(false);
@@ -30,6 +32,7 @@ const LocationDetailsScreen = (props) => {
     const tempList = totalLocationList;
     if (tempList.length < 1) {
       navigation.navigate("NoResults");
+      return
     }
     const randomIndex = Math.floor(Math.random() * tempList.length);
     const randomLocation = tempList[randomIndex];
@@ -42,6 +45,22 @@ const LocationDetailsScreen = (props) => {
     // Code to add location to user history in firebase
     setShowComplementary(true);
   };
+
+  const reviewHandler = (array) => {
+    const random = Math.floor(Math.random() * array.length);
+    if(array.length > 0){
+      return (
+      <View>
+        <Text style={styles.locationTextStyle}>
+          {array[random].text}
+        </Text>
+        <Text style={styles.locationTextStyle}>
+          Author: {array[random].authorName}
+        </Text>
+      </View>
+      )  
+    }
+  }
 
   const pickRandomImage = (array) => {
     if(array.length == 0){
@@ -97,16 +116,26 @@ const LocationDetailsScreen = (props) => {
                       Ratings: {locationDetail.rating}
                   </Text>
                   <Text style={styles.locationTextStyle}>
-                    <Image style={styles.locationIcon} source={require("../../assets/category.png")}/>
-                      Type: {locationDetail.type}
+                    <Image style={styles.locationIcon} source={require("../../assets/tags.png")}/>
+                      Tags: {locationDetail.type}
                   </Text>
                   <Card.Divider style={styles.divider}/>
                   {/* <Text style={styles.infoText}>
                     Postal Code : {locationDetail.address.postalCode}
                   </Text> */}
                   <Text style={styles.infoText}>
-                    Official Website : {locationDetail.officialWebsite}
+                    Official Website
                   </Text>
+                  <Text style={styles.websiteText} 
+                    onPress={() => Linking.openURL('https://'.concat(locationDetail.officialWebsite))}>
+                  {locationDetail.officialWebsite}
+                </Text>
+                <Card.Divider style={styles.divider}/>
+                <Text style={styles.infoText}>
+                  Reviews
+                </Text>
+                {reviewHandler(locationDetail.reviews)}
+                <Card.Divider style={styles.divider}/>
                   <Text style={styles.gap} />
                   <View style={styles.buttonView}>
                     <TouchableOpacity
@@ -203,9 +232,18 @@ const styles = StyleSheet.create({
   },
 
   infoText: {
-    color: "black",
-    fontSize: 17,
-    textAlign: "left",
+    fontSize: 15,
+    textAlign: "center", 
+    alignSelf: "stretch",
+    paddingVertical: 2,
+    color: "#000000",
+    paddingHorizontal: 10
+  },
+
+  websiteText: {
+    color: "blue",
+    textAlign: "center",
+    fontStyle: "italic",
   },
 
   text: {
