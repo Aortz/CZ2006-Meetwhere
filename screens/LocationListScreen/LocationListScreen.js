@@ -341,6 +341,7 @@ const styles = StyleSheet.create({
   divider: {
     paddingVertical: 5
   },
+  
   imageSize:{
     borderRadius: 5,
     resizeMode: 'stretch',
