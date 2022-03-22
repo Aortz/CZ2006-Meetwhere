@@ -100,7 +100,7 @@ const ChooseSecondAddress = (props) => {
 const styles = StyleSheet.create({
   bottomSheet: {
     backgroundColor: "white",
-    height: "50%",
+    height: "70%",
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     padding: 25,
