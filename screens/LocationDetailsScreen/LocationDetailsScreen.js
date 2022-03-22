@@ -101,11 +101,11 @@ const LocationDetailsScreen = (props) => {
                       Type: {locationDetail.type}
                   </Text>
                   <Card.Divider style={styles.divider}/>
-                  <Text style={styles.infoText}>
+                  {/* <Text style={styles.infoText}>
                     Postal Code : {locationDetail.address.postalCode}
-                  </Text>
+                  </Text> */}
                   <Text style={styles.infoText}>
-                    Website : {locationDetail.officialWebsite}
+                    Official Website : {locationDetail.officialWebsite}
                   </Text>
                   <Text style={styles.gap} />
                   <View style={styles.buttonView}>
