@@ -1,8 +1,9 @@
-import { Image, StyleSheet, Text, View, Dimensions, ActivityIndicator, ScrollView, SafeAreaView, TouchableOpacity, Alert } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions, ActivityIndicator, ScrollView, SafeAreaView, TouchableOpacity, Alert, Linking } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
 import { Card,Divider, CheckBox } from "react-native-elements";
 import { useEffect } from 'react';
 import { Firebase, db } from "../database/firebase";
+import ComplementaryLocations from "../LocationDetailsScreen/ComplementaryLocations";
 
 
 import React, { useState } from "react";
@@ -10,12 +11,26 @@ import React, { useState } from "react";
 const { width, height } = Dimensions.get("screen");
 
 const LocationListScreen = (props) => {
-  const { route, totalLocationList, setTotalLocationList } = props;
-  let locationList = route.params.locationList
-  const overallFilter = route.params.overallFilter
+  const { totalLocationList, setTotalLocationList, navigation } = props;
+  let locationList = props.route.params.locationList
+  const overallFilter = props.route.params.overallFilter
   const [locationDetails, setLocationDetails] = useState(0)
-  const [isSelected, setSelection] = useState(false);
+  
   const midPoint = overallFilter.midPoint;
+
+  // const [showComplementary, setShowComplementary] = useState(false);
+  const locationID = props.route.params.location;
+  // const prevLocation = props.route.params.prevLocation;
+
+  useEffect(() => {
+    setSelection(false);
+  }, [locationID]);
+
+  const [isSelected, setSelection] = useState(false);
+  // const handleVisiting = () => {
+  //   // Code to add location to user history in firebase
+  //   setShowComplementary(true);
+  // };
   
   
   //remove duplicates from list
@@ -61,11 +76,11 @@ const LocationListScreen = (props) => {
     if(array.length > 0){
       return (
       <View>
-        <Text style={styles.locationTextStyle}>
+        <Text style={styles.firstDiv}>
           Reviews
         </Text>
         <Text style={styles.locationTextStyle}>
-          Text: {array[random].text}
+          {array[random].text}
         </Text>
         <Text style={styles.locationTextStyle}>
           Author: {array[random].authorName}
@@ -107,13 +122,13 @@ const LocationListScreen = (props) => {
       Alert.alert("No such location")
     }
   }
-
+  
   function historyHandler() {
     const userProfile = Firebase.firestore().collection("Users").doc(Firebase.auth().currentUser.uid);
     // useEffect(() => {
     //   setSelection(!isSelected)
     // })
-    setSelection(!isSelected)
+    setSelection(true)
     // setLocationDetails(locationDetails)
     let userHistory = []
     userProfile.get().then((doc) => {
@@ -173,7 +188,6 @@ const LocationListScreen = (props) => {
       </MapView>
 
       {locationDetails >= 0 && !isSelected &&
-      
       <View style={[styles.filterContainer]}>
         <SafeAreaView style={styles.viewContainer}>
           <TouchableOpacity style={styles.buttonStyle} title="Previous" onPress={() => buttonHandler(true, locationList, locationDetails)}>
@@ -192,28 +206,38 @@ const LocationListScreen = (props) => {
               </View>
               <Card.Divider style={styles.divider}/>              
               <View>        
-                <Text style={styles.locationTextStyle}>
+                <Text style={styles.firstDiv}>
                   <Image style={styles.icon} source={require("../../assets/place.png")}/>
                   Name: {locationList[locationDetails].name}
                 </Text>          
-                <Text style={styles.locationTextStyle}>
+                <Text style={styles.firstDiv}>
                 <Image style={styles.icon} source={require("../../assets/ratings.png")}/>
                   Ratings: {locationList[locationDetails].rating}
                 </Text>
-                <Text style={styles.locationTextStyle}>
-                <Image style={styles.icon} source={require("../../assets/category.png")}/>
-                  Type: {[locationList[locationDetails].type]}
+                <Text style={styles.firstDiv}>
+                <Image style={styles.icon} source={require("../../assets/tags.png")}/>
+                  Tags: {[locationList[locationDetails].type.concat(", ", locationList[locationDetails].categoryDescription)]}
                 </Text>
-                
               </View>
               <Card.Divider style={styles.divider}/>
+              <Text style={styles.secondDiv}>
+                Official Website
+              </Text>
+              <Text style={styles.websiteText} 
+                    onPress={() => Linking.openURL('https://'.concat(locationList[locationDetails].officialWebsite))}>
+                  {locationList[locationDetails].officialWebsite}
+              </Text>
+              <Card.Divider style={styles.divider}/>
+              <Text style={styles.firstDiv}>
+                Description
+              </Text>
               <Text style={styles.locationTextStyle}>
-                Description: {[locationList[locationDetails].description]}
+                {[locationList[locationDetails].description]}
               </Text>
               <Card.Divider style={styles.divider}/>
               {reviewHandler(locationList[locationDetails].reviews)}
               <Card.Divider style={styles.divider}/>
-              <View style={styles.checkboxContainer}>
+              {/* <View style={styles.checkboxContainer}>
                 <CheckBox
                   title="Are you visiting?"
                   style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
@@ -221,7 +245,19 @@ const LocationListScreen = (props) => {
                   onPress={() => historyHandler()}
                   checkedTitle="Added to your History"
                 />
-              </View>
+              </View> */}
+              <View style={styles.buttonView}>
+                <TouchableOpacity
+                  onPress={() => historyHandler()}
+                  style={styles.buttonVisit}
+                >
+                  <Image
+                    source={require("../../assets/Visit.png")}
+                    style={styles.buttonIcon}
+                  />
+                  <Text style={styles.buttonText}>I Am Visiting</Text>
+                </TouchableOpacity>
+            </View>
             </ScrollView>
           </Card>
           <TouchableOpacity style={styles.buttonStyle} title="Next" onPress={() => buttonHandler(false, locationList, locationDetails)}>
@@ -231,29 +267,32 @@ const LocationListScreen = (props) => {
       </View>
       }
       {isSelected &&
-        <View style={[styles.filterContainer2]}>
-          <View style={{backgroundColor: "white"}}>        
-            <Text style={styles.locationTextStyle}>
-              <Image style={styles.icon} source={require("../../assets/place.png")}/>
-              Name: {locationList[locationDetails].name}
-            </Text>          
-            <Text style={styles.locationTextStyle}>
-            <Image style={styles.icon} source={require("../../assets/ratings.png")}/>
-              Ratings: {locationList[locationDetails].rating}
-            </Text>
-            <Text style={styles.locationTextStyle}>
-            <Image style={styles.icon} source={require("../../assets/category.png")}/>
-              Type: {[locationList[locationDetails].type]}
-            </Text>
-            <Text style={styles.urlText}>
-              Click on the red drop pin!
-            </Text>
+        // <View style={[styles.filterContainer2]}>
+        //   <View style={{backgroundColor: "white"}}>        
+        //     <Text style={styles.locationTextStyle}>
+        //       <Image style={styles.icon} source={require("../../assets/place.png")}/>
+        //       Name: {locationList[locationDetails].name}
+        //     </Text>          
+        //     <Text style={styles.locationTextStyle}>
+        //     <Image style={styles.icon} source={require("../../assets/ratings.png")}/>
+        //       Ratings: {locationList[locationDetails].rating}
+        //     </Text>
+        //     <Text style={styles.locationTextStyle}>
+        //     <Image style={styles.icon} source={require("../../assets/category.png")}/>
+        //       Type: {[locationList[locationDetails].type]}
+        //     </Text>
+        //     <Text style={styles.urlText}>
+        //       Click on the red drop pin!
+        //     </Text>
             
-          </View>
+        //   </View>
+        // </View>  
+        <ComplementaryLocations
+          locationDetail={locationList[locationDetails]}
+          navigation={navigation}
+        />  
           
-          
-          
-        </View>
+        
       }
       
       
@@ -313,18 +352,70 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#707070",
   },
+  firstDiv: {
+    fontSize: 15,
+    textAlign: "center", 
+    alignSelf: "stretch",
+    paddingVertical: 2,
+    color: "#000000",
+    fontWeight: "bold",
+    paddingHorizontal: 10
+  },
+  secondDiv: {
+    fontSize: 14,
+    textAlign: "center", 
+    alignSelf: "stretch",
+    paddingVertical: 2,
+    color: "#000000",
+    paddingHorizontal: 10
+  },
   imageStyle:{
     borderRadius: 5,
-    // resizeMode: 'stretch',
+    paddingHorizontal: 10,
     margin: 10,
     alignSelf: 'center',
-    // width: '60%', 
-    // height: "60%",
-    // aspectRatio: 1
   },
   buttonStyle: {
     alignSelf: "center",
   },
+  buttonText: {
+    textAlign: "center",
+    color: "black",
+    fontSize: 18,
+  },
+  websiteText: {
+    color: "blue",
+    textAlign: "center",
+    fontStyle: "italic",
+  },
+  buttonVisit: {
+    width: "100%",
+    // top: "10%",
+    backgroundColor: "#95FF9F",
+    borderRadius: 10,
+    // position:"absolute",
+    // height: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonIcon: {
+    // flexDirection: "row",
+    height: 25,
+    // borderWidth: 2,
+    width: 20,
+    marginHorizontal: 10,
+    // left: -70,
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+  },
+  buttonView: {
+    flexDirection: "row",
+    flex: 1,
+    height: 40,
+    justifyContent: "space-between",
+  },
+
   locationTextStyle: {
     fontSize: 14,
     textAlign: "center", 
@@ -353,7 +444,8 @@ const styles = StyleSheet.create({
     // justifyContent: "flex-start",
     height: 20,
     width: 20,
-    marginHorizontal: 5
+    marginHorizontal: 10,
+    paddingHorizontal: 10
   },
   arrowicon: {
     alignSelf: "center",
