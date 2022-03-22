@@ -1,5 +1,6 @@
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   View,
@@ -7,9 +8,12 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Linking
 } from "react-native";
+import {Card} from "react-native-elements";
 import React, { useEffect, useState } from "react";
 import ComplementaryLocations from "./ComplementaryLocations";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const LocationDetailsScreen = (props) => {
   const { totalLocationList, setTotalLocationList, navigation } = props;
@@ -42,6 +46,32 @@ const LocationDetailsScreen = (props) => {
     setShowComplementary(true);
   };
 
+  const reviewHandler = (array) => {
+    const random = Math.floor(Math.random() * array.length);
+    if(array.length > 0){
+      return (
+      <View>
+        <Text style={styles.locationTextStyle}>
+          {array[random].text}
+        </Text>
+        <Text style={styles.locationTextStyle}>
+          Author: {array[random].authorName}
+        </Text>
+      </View>
+      )  
+    }
+  }
+
+  const pickRandomImage = (array) => {
+    if(array.length == 0){
+      return "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
+    }
+    else{
+      const random = Math.floor(Math.random() * array.length);
+      return array[random]
+    }
+  };
+
   if (locationDetail === null) {
     return null;
   }
@@ -65,66 +95,81 @@ const LocationDetailsScreen = (props) => {
         />
       </MapView>
       {!showComplementary && (
-        <>
           <View style={styles.bottomSheet}>
-            <Text style={styles.titletext}>
-              {props.route.params.location.name}
-            </Text>
-          </View>
-          <ScrollView style={styles.detailsScroll}>
-            <Text style={styles.infoText}>
-              Address : {locationDetail.address.streetName}
-            </Text>
-            <Text style={styles.infoText}>
-              Postal Code : {locationDetail.address.postalCode}
-            </Text>
-            <Text style={styles.infoText}>
-              Website : {locationDetail.officialWebsite}
-            </Text>
-            <Text style={styles.infoText}>
-              Opening Hours
-              {/* Monday: {locationDetail.businessHour.openTime} - {locationDetail.businessHour.closeTime} */}
-            </Text>
-            <Text style={styles.infoText}>
-              Amenities : {locationDetail.amenities}
-            </Text>
-            <Text style={styles.infoText}>
-              Rating : {locationDetail.rating}
-            </Text>
-            <Text style={styles.infoText}>
-              Destination Type : {locationDetail.type}
-            </Text>
-            <Text style={styles.gap} />
-            <View style={styles.buttonView}>
-              <TouchableOpacity
-                onPress={handleVisiting}
-                style={styles.buttonVisit}
-              >
-                <Image
-                  source={require("../../assets/Visit.png")}
-                  style={styles.icon}
-                />
-                <Text style={styles.buttonText}>I Am Visiting</Text>
-              </TouchableOpacity>
+            <SafeAreaView style={styles.detailsScroll}>
+            <ScrollView nestedScrollEnabled={true}>
+              <Card style={{alignSelf:"center"}}>
+                  <View>
+                    <Card.Image 
+                        style={styles.imageStyle}
+                        source={{uri:pickRandomImage(locationDetail.images)}}
+                        PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
+                          />
+                    </View>
+                  <Card.Divider style={styles.divider}/>
+                  <Text style={styles.locationTextStyle}>
+                    <Image style={styles.locationIcon} source={require("../../assets/place.png")}/>
+                      Name: {locationDetail.name}
+                  </Text>
+                  <Text style={styles.locationTextStyle}>
+                    <Image style={styles.locationIcon} source={require("../../assets/ratings.png")}/>
+                      Ratings: {locationDetail.rating}
+                  </Text>
+                  <Text style={styles.locationTextStyle}>
+                    <Image style={styles.locationIcon} source={require("../../assets/tags.png")}/>
+                      Tags: {locationDetail.type}
+                  </Text>
+                  <Card.Divider style={styles.divider}/>
+                  {/* <Text style={styles.infoText}>
+                    Postal Code : {locationDetail.address.postalCode}
+                  </Text> */}
+                  <Text style={styles.infoText}>
+                    Official Website
+                  </Text>
+                  <Text style={styles.websiteText} 
+                    onPress={() => Linking.openURL('https://'.concat(locationDetail.officialWebsite))}>
+                  {locationDetail.officialWebsite}
+                </Text>
+                <Card.Divider style={styles.divider}/>
+                <Text style={styles.infoText}>
+                  Reviews
+                </Text>
+                {reviewHandler(locationDetail.reviews)}
+                <Card.Divider style={styles.divider}/>
+                  <Text style={styles.gap} />
+                  <View style={styles.buttonView}>
+                    <TouchableOpacity
+                      onPress={handleVisiting}
+                      style={styles.buttonVisit}
+                    >
+                      <Image
+                        source={require("../../assets/Visit.png")}
+                        style={styles.icon}
+                      />
+                      <Text style={styles.buttonText}>I Am Visiting</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={styles.gap} />
+                  {!prevLocation && (
+                    <View style={styles.buttonView}>
+                      <TouchableOpacity
+                        style={styles.buttonRandom}
+                        onPress={handleRegenerateLocation}
+                      >
+                        <Image
+                          source={require("../../assets/Random.png")}
+                          style={styles.icon2}
+                        />
+                        <Text style={styles.buttonText}>Find Another Location</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  <Text style={styles.gap} />
+                </Card>
+              </ScrollView>
+              </SafeAreaView>
             </View>
-            <Text style={styles.gap} />
-            {!prevLocation && (
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  style={styles.buttonRandom}
-                  onPress={handleRegenerateLocation}
-                >
-                  <Image
-                    source={require("../../assets/Random.png")}
-                    style={styles.icon2}
-                  />
-                  <Text style={styles.buttonText}>Find Another Location</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            <Text style={styles.gap} />
-          </ScrollView>
-        </>
+          
       )}
 
       {showComplementary && (
@@ -146,26 +191,59 @@ const styles = StyleSheet.create({
   bottomSheet: {
     backgroundColor: "white",
     height: "50%",
+    alignItems: "center",
+    justifyContent: "center",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 25,
-    position: "absolute",
-    bottom: 0,
+    top: "47%",
     width: "100%",
-    flex: 1,
+    flex: 0.5,
   },
 
-  titletext: {
-    color: "black",
-    fontSize: 20,
-    textAlign: "center",
+  divider: {
+    paddingVertical: 5
+  },
+
+  imageSize:{
+    borderRadius: 5,
+    resizeMode: 'stretch',
+    alignSelf: 'center',
+    width: '100%', 
+    height: "100%",
+    aspectRatio: 1
+  },
+
+  locationTextStyle: {
+    fontSize: 16,
+    textAlign: "center", 
+    alignSelf: "stretch",
+    paddingVertical: 2,
+    color: "#000000",
     fontWeight: "bold",
+    paddingHorizontal: 10
+  },
+
+  locationIcon: {
+    //justifyContent: "flex-start",
+    height: 20,
+    width: 20,
+    marginHorizontal: 10
   },
 
   infoText: {
-    color: "black",
-    fontSize: 17,
-    textAlign: "left",
+    fontSize: 15,
+    textAlign: "center", 
+    alignSelf: "stretch",
+    paddingVertical: 2,
+    color: "#000000",
+    paddingHorizontal: 10
+  },
+
+  websiteText: {
+    color: "blue",
+    textAlign: "center",
+    fontStyle: "italic",
   },
 
   text: {
@@ -236,20 +314,21 @@ const styles = StyleSheet.create({
 
   detailsScroll: {
     backgroundColor: "#f0f0f0",
-    height: "35%",
-    width: "90%",
-    // alignItems: "center",
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    position: "absolute",
-    left: "2%",
-    top: "62%",
-    paddingHorizontal: 30,
-    borderWidth: 1,
-    borderColor: "#707070",
-    marginHorizontal: 10,
+    flex: 1,
+    // height: "100%",
+    // width: "90%",
+    // // alignItems: "center",
+    // borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
+    // borderBottomLeftRadius: 10,
+    // borderBottomRightRadius: 10,
+    // position: "absolute",
+    // left: "8%",
+    // top: "10%",
+    // paddingHorizontal: 30,
+    // borderWidth: 1,
+    // borderColor: "#707070",
+    // marginHorizontal: 10,
   },
 });
 
