@@ -19,6 +19,7 @@ const LocationDetailsScreen = (props) => {
 
   useEffect(() => {
     setShowComplementary(false);
+    
   }, [locationDetail]);
 
   const [showComplementary, setShowComplementary] = useState(false);
@@ -27,6 +28,7 @@ const LocationDetailsScreen = (props) => {
     const tempList = totalLocationList;
     if (tempList.length < 1) {
       navigation.navigate("NoResults");
+      return
     }
     const randomIndex = Math.floor(Math.random() * tempList.length);
     const randomLocation = tempList[randomIndex];
