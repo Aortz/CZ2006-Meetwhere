@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
@@ -93,7 +100,7 @@ const ChooseSecondAddress = (props) => {
 const styles = StyleSheet.create({
   bottomSheet: {
     backgroundColor: "white",
-    height: "50%",
+    height: "70%",
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     padding: 25,
@@ -110,7 +117,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 5,
     // borderWidth: 10,
-    height: "50%",
+    height: "55%",
   },
   inputTitle: {
     marginBottom: 5,
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
     width: "30%",
     backgroundColor: "#009900",
     borderRadius: 10,
-    height: "70%",
+    height: 45,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -134,7 +141,7 @@ const styles = StyleSheet.create({
     width: "30%",
     backgroundColor: "#ff1a1a",
     borderRadius: 10,
-    height: "70%",
+    height: 45,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",

@@ -71,11 +71,19 @@ const Filter = (props) => {
       }
 
       setTotalLocationList(locationsList);
+      var i = 0;
+      while (i < locations.length) {
+        console.log(locations[i].name);
+        i += 1;
+      }
 
       if (locations.length === 0) {
         navigation.navigate("NoResults");
       } else {
-        navigation.navigate("LocationList", { locationList: locations });
+        navigation.navigate("LocationList", {
+          locationList: locations,
+          overallFilter: overallFilter,
+        });
       }
 
       setTimeout(() => {
@@ -115,6 +123,11 @@ const Filter = (props) => {
               setCheckBoxes((prevState) => ({
                 ...prevState,
                 Attractions: !prevState["Attractions"],
+                Adventure: false,
+                Arts: false,
+                "History & Culture": false,
+                "Nature & Wildlife": false,
+                "Leisure & Recreation": false,
               }));
             }}
           />
@@ -127,6 +140,9 @@ const Filter = (props) => {
               setCheckBoxes((prevState) => ({
                 ...prevState,
                 Food: !prevState["Food"],
+                Cafe: false,
+                "Hawker Centres": false,
+                Restaurants: false,
               }));
             }}
           />
@@ -140,6 +156,8 @@ const Filter = (props) => {
               setCheckBoxes((prevState) => ({
                 ...prevState,
                 "Bars & Clubs": !prevState["Bars & Clubs"],
+                Bars: false,
+                Clubs: false,
               }));
             }}
           />

@@ -128,6 +128,7 @@ export default Signup = ({ navigation }) => {
       contentContainerStyle={styles.container}
       resetScrollToCoords={{ x: 0, y: 0 }}
       scrollEnabled={true}
+      keyboardShouldPersistTaps="always"
     >
       <Loader loading={loading} />
 
@@ -168,15 +169,14 @@ export default Signup = ({ navigation }) => {
         )}
       </View>
 
-      <View>
-        <TouchableOpacity
-          style={styles.signupButton}
-          title="Sign Up"
-          onPress={() => registerUser()}
-        >
-          <Text style={styles.signupText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.signupButton}
+        title="Sign Up"
+        onPress={() => registerUser()}
+      >
+        <Text style={styles.signupText}>Sign Up</Text>
+      </TouchableOpacity>
+
       <Text
         style={styles.loginText}
         onPress={() => navigation.replace("Login")}
@@ -196,14 +196,10 @@ const styles = StyleSheet.create({
     padding: 20,
     minHeight: 700,
     backgroundColor: "#fff",
+    width: "100%",
+    alignItems: "center",
   },
   headerText: {
-    width: "100%",
-    // marginBottom: 10,
-    // paddingBottom: 15,
-    // alignSelf: "flex-end",
-    // bottom: 260,
-    // fontFamily: "Times New Roman",
     fontSize: 20,
   },
   icon: {
@@ -215,7 +211,7 @@ const styles = StyleSheet.create({
   },
   rectangle: {
     // height: 190,
-    // width: 299,
+    width: 299,
     display: "flex",
     justifyContent: "flex-start",
     elevation: 1,
@@ -229,7 +225,7 @@ const styles = StyleSheet.create({
     // shadowRadius: 3, // <- Radius of the shadow
     borderRadius: 3,
     padding: 14,
-    margin: 8,
+    marginTop: 8,
   },
   inputStyle: {
     width: "100%",

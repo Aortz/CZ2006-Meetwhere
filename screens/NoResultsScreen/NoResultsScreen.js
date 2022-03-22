@@ -14,7 +14,7 @@ const NoResultsScreen = (props) => {
         We could not find any places that match your preferences
       </Text>
       <TouchableOpacity
-        onPress={() => navigation.goBack()}
+        onPress={() => navigation.navigate("Midpoint")}
         style={styles.button}
       >
         <Text style={styles.buttonText}>ADJUST FILTERS</Text>

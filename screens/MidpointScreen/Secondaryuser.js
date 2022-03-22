@@ -87,7 +87,8 @@ const Secondaryuser = (props) => {
           onPress={() => {
             setShowFilter(true);
             setShowSecUserInput(false);
-          }}
+            setShowRadius(false);
+          }}style={styles.buttonSkip}
         >
           <Text style={styles.buttonSkip}>Skip</Text>
         </TouchableOpacity>
@@ -95,13 +96,14 @@ const Secondaryuser = (props) => {
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();
-          }}
+          }
+        }style={styles.buttonBack}
         >
-          <Text style={styles.buttonSkip}>Back</Text>
+          <Text style={styles.buttonBack}>Back</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={validateUser} style={styles.buttonAdd}>
-          <Text style={styles.buttonText}>Add user</Text>
+          <Text style={styles.buttonAdd}>Add user</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -113,7 +115,7 @@ export default Secondaryuser;
 const styles = StyleSheet.create({
   secondaryUser: {
     backgroundColor: "white",
-    height: "33%",
+    height: "30%",
     alignItems: "center",
     padding: 10,
     paddingHorizontal: 30,
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    marginTop: 5,
+    marginTop: 13,
     marginBottom: 5,
     paddingLeft: 8,
     borderWidth: 1,
@@ -136,15 +138,31 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "#DCDCDC",
   },
+
   buttonSkip: {
     textDecorationLine: "underline",
-  },
-  buttonAdd: {
-    backgroundColor: "#009688",
     borderRadius: 10,
-    paddingVertical: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    backgroundColor: "#dcdcdc",
+  },
+
+  buttonAdd: {
+    textDecorationLine: "underline",
+    backgroundColor: "#8fbc8f",
+    borderRadius: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+  },
+  buttonBack: {
+    textDecorationLine: "underline",
+    backgroundColor: "#e9967a",
+    borderRadius: 10,
+    paddingVertical: 7,
     paddingHorizontal: 12,
   },
+
+
   buttonRow: {
     width: "90%",
     flexDirection: "row",
@@ -157,6 +175,7 @@ const styles = StyleSheet.create({
   },
   inputView: {
     width: "90%",
-    marginBottom: 13,
+    marginBottom: 15,
   },
 });
+
