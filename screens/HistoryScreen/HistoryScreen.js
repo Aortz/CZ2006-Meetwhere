@@ -1,65 +1,208 @@
 // components/login.js
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, FlatList,SafeAreaView,ScrollView } from 'react-native';
-
+import { Firebase, db } from "../database/firebase";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-const HistoryScreen = (userDetails) => {
-    const DataTable = userDetails.userDetails.history
-    const table = [{name: "Chinatown", timeOfVisit: "13042021"}, {name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"}
-    ,{name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"},{name: "MacDonalds", timeOfVisit: "13042021"},]
-    const checkHistory = (table) => {
-      if(table.length === 0){
-        return<View style={styles.textContainer}>
-          <Text style={styles.textStyle}>
-            You have not visited any place yet.
-          </Text>
-          <Text style={styles.textStyle}>
-            Start Visiting!
-          </Text>
-        </View> 
-      }
-      return <FlatList
-          // nestedScrollEnabled = {true}
-          scrollEnabled = {true}
-          data={table}
-          
-          renderItem={({item}) => 
-          
-            <View style={styles.textBox}>
-              <Image 
-                  style={styles.icon}
-                  source={require("../../assets/favicon.png")}/>
-              <View>
-                <Text style={styles.locationTextStyle}>
-                  Visited: {item.name}
-                </Text>
-                <Text style={styles.locationTextStyle}>Time Of Visit: {item.timeOfVisit}</Text>
-              </View>
-            </View>
-          }
-          keyExtractor={(item, index) => index.toString()}
-      />
-      
-    }
+// const HistoryScreen = (userDetails) => {  
+//     const DataTable = userDetails.userDetails.history  
+    // let table = []
+    // let newDict = {}
+    // newDict['name'] = 'Ghost'
+    // newDict['timeOfVisit'] = "13 04 1999"
+    // table.push(newDict)
+    // newDict = {}
+    // newDict['name'] = 'Ghost'
+    // newDict['timeOfVisit'] = "13 04 1999"
+    // table.push(newDict)
 
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.border}>
-          <Text style={styles.HeadStyle}>
-            {userDetails.userDetails.userName}'s User History
-          </Text>
-          <View style={styles.insideBorder}>
-            {checkHistory(table)}
-          </View>
+
+//     const fetchHistory = async () => {
+//       let snapshot = await Firebase.firestore().collection("Users").doc(Firebase.auth().currentUser.uid).get();
+//       if(snapshot){
+//         let history = snapshot.data().history
+//         // console.log(history)
+//         let newHistory = convertArrayToDict(history)
+//         console.log(DataTable)
+//         // return checkHistory(table)
+//       }
+//     }
+
+    // const convertArrayToDict = (array) => {
+    //   let i = 0;
+    //   let newArray = []
+    //   let newDict = {}
+    //   let displayArray = []
+    //   if(array.length == 0){
+    //     return array
+    //   }
+    //   while(i<array.length){
+    //     if(i==0){
+    //       newDict["name"] = array[i]
+    //     }
+    //     else if(i%2!=0){
+    //       newDict["timeOfVisit"] = array[i]
+    //     }
+    //     else{
+    //       newArray.push(newDict)
+    //       newDict = {}
+    //       newDict["name"] = array[i]
+    //     }
+    //     i += 1
+    //   }
+    //   return newArray
+    // }
+
+//     const renderItem = ({item}) => 
+//     { console.log(item)        
+//       return <View style={styles.textBox}>
+//         <Image 
+//             style={styles.icon}
+//             source={require("../../assets/favicon.png")}/>
+//         <View>
+//           <Text style={styles.locationTextStyle}>
+//             Visited: {item.name}
+//           </Text>
+//           <Text style={styles.locationTextStyle}>Time Of Visit: {item.timeOfVisit}</Text>
+//         </View>
+//       </View>
+//     }
+    
+//     const checkHistory = (variable) => {
+      
+//       if(variable.length === 0){
+//         return<View style={styles.textContainer}>
+//           <Text style={styles.textStyle}>
+//             You have not visited any place yet.
+//           </Text>
+//           <Text style={styles.textStyle}>
+//             Start Visiting!
+//           </Text>
+//         </View> 
+//       }
+//       return <FlatList
+//           nestedScrollEnabled = {true}
+//           scrollEnabled = {true}
+//           data={variable}
+//           renderItem={renderItem}
+//           // keyExtractor={(item, index) => index.toString()}
+//       />
+      
+//     }
+
+//     return (
+//       <SafeAreaView style={styles.container}>
+//         <View style={styles.border}>
+//           <Text style={styles.HeadStyle}>
+//             {userDetails.userDetails.userName}'s User History
+//           </Text>
+//           <View style={styles.insideBorder}>
+//             {fetchHistory()}
+//           </View>
           
+//         </View>
+//         <Image
+//             style={styles.banner}
+//             source={require('../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png')}
+//         />
+//       </SafeAreaView>
+//     );
+// };
+
+const HistoryScreen = (userDetails) => {
+  const DataTable = userDetails.userDetails.history
+
+  //test example
+  let table = []
+  let newDict = {}
+  newDict['name'] = 'Ghost'
+  newDict['timeOfVisit'] = "13 04 1999"
+  table.push(newDict)
+  newDict = {}
+  newDict['name'] = 'Ghost'
+  newDict['timeOfVisit'] = "13 04 1999"
+  table.push(newDict)
+
+  const convertArrayToDict = (array) => {
+    let i = 0;
+    let newArray = []
+    let newDict = {}
+    let displayArray = []
+    if(array.length == 0){
+      return array
+    }
+    while(i<array.length){
+      if(i==0){
+        newDict["name"] = array[i]
+      }
+      else if(i%2!=0){
+        newDict["timeOfVisit"] = array[i]
+      }
+      else{
+        newArray.push(newDict)
+        newDict = {}
+        newDict["name"] = array[i]
+      }
+      i += 1
+    }
+    return newArray
+  }
+
+  const historyTable = convertArrayToDict(DataTable)
+
+  const checkHistory = (variable) => {
+    if(variable.length === 0){
+      return<View style={styles.textContainer}>
+        <Text style={styles.textStyle}>
+          You have not visited any place yet.
+        </Text>
+        <Text style={styles.textStyle}>
+          Start Visiting!
+        </Text>
+      </View> 
+    }
+    return <FlatList
+        // nestedScrollEnabled = {true}
+        scrollEnabled = {true}
+        data={variable}
+        
+        renderItem={({item}) => 
+        
+          <View style={styles.textBox}>
+            <Image 
+                style={styles.icon}
+                source={require("../../assets/favicon.png")}/>
+            <View>
+              <Text style={styles.locationTextStyle}>
+                Location: {item.name}
+              </Text>
+              {/* <Text style={styles.locationTextStyle}>Visited Time:</Text> */}
+              <Text style={styles.timeText}>{item.timeOfVisit}</Text>
+            </View>
+          </View>
+        }
+        keyExtractor={(item, index) => index.toString()}
+    />
+    
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.border}>
+        <Text style={styles.HeadStyle}>
+          {userDetails.userDetails.userName}'s User History
+        </Text>
+        <View style={styles.insideBorder}>
+          {checkHistory(historyTable)}
         </View>
-        <Image
-            style={styles.banner}
-            source={require('../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png')}
-        />
-      </SafeAreaView>
-    );
+        
+      </View>
+      <Image
+          style={styles.banner}
+          source={require('../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png')}
+      />
+    </SafeAreaView>
+  );
 };
 
 export default HistoryScreen;
@@ -113,7 +256,7 @@ const styles = StyleSheet.create({
   textBox:{
     flex: 1,
     paddingHorizontal:30,
-    paddingVertical:10,
+    paddingVertical:5,
     borderBottomWidth: 1,
     flexDirection: "row",
     // alignSelf: "stretch",
@@ -133,7 +276,7 @@ const styles = StyleSheet.create({
     // height: 50%,
     // width: 40,
     
-    marginRight:20,
+    marginRight:5,
     borderRadius: 100 / 2,
     overflow: "hidden",
     borderWidth: 1,
@@ -144,6 +287,13 @@ const styles = StyleSheet.create({
     textAlign: "center", 
     alignSelf: "stretch",
     fontFamily: "serif",
+    color: "#000000"
+  },
+  timeText: {
+    fontSize: 16,
+    textAlign: "center", 
+    alignSelf: "stretch",
+    fontStyle: "italic",
     color: "#000000"
   },
   banner:{
