@@ -22,5 +22,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const Firebase = firebase.initializeApp(firebaseConfig);
+Firebase.firestore().settings({ experimentalForceLongPolling: true, merge: true })
 const db = Firebase.firestore();
 export { Firebase, db };

@@ -125,21 +125,20 @@ const LocationListScreen = (props) => {
   
   function historyHandler() {
     const userProfile = Firebase.firestore().collection("Users").doc(Firebase.auth().currentUser.uid);
-    // useEffect(() => {
-    //   setSelection(!isSelected)
-    // })
     setSelection(true)
     // setLocationDetails(locationDetails)
     let userHistory = []
     userProfile.get().then((doc) => {
       if (doc.exists) {
-          // console.log("Document data:", doc.data().history);
+          var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
           userHistory = doc.data().history
-          let currentDateTime = new Date().toLocaleString()
+          let currentDateTime = new Date().toLocaleString("en-US", options)
           let historyData = new Set([locationList[locationDetails].name, currentDateTime])
           userHistory.push(...historyData)
           userProfile.update({
             history: userHistory
+          }).then(() => {
+            console.log("Document successfully updated!");
           })
       } else {
           // doc.data() will be undefined in this case
