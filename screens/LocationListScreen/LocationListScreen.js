@@ -11,7 +11,7 @@ import React, { useState } from "react";
 const { width, height } = Dimensions.get("screen");
 
 const LocationListScreen = (props) => {
-  const { totalLocationList, setTotalLocationList, navigation } = props;
+  const { setUserDetails, userDetails, navigation } = props;
   let locationList = props.route.params.locationList
   const overallFilter = props.route.params.overallFilter
   const [locationDetails, setLocationDetails] = useState(0)
@@ -124,21 +124,23 @@ const LocationListScreen = (props) => {
   }
   
   function historyHandler() {
-    const userProfile = Firebase.firestore().collection("Users").doc(Firebase.auth().currentUser.uid);
-    setSelection(true)
+    var userProfile = db.collection("Users").doc(Firebase.auth().currentUser.uid);
     // setLocationDetails(locationDetails)
     let userHistory = []
     userProfile.get().then((doc) => {
       if (doc.exists) {
           var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
           userHistory = doc.data().history
+          console.log(userHistory)
           let currentDateTime = new Date().toLocaleString("en-US", options)
-          let historyData = new Set([locationList[locationDetails].name, currentDateTime])
+          let historyData = new Set([locationList[locationDetails], currentDateTime])
           userHistory.push(...historyData)
           userProfile.update({
             history: userHistory
           }).then(() => {
             console.log("Document successfully updated!");
+            setSelection(true)
+            console.log(userHistory)
           })
       } else {
           // doc.data() will be undefined in this case
@@ -266,35 +268,11 @@ const LocationListScreen = (props) => {
       </View>
       }
       {isSelected &&
-        // <View style={[styles.filterContainer2]}>
-        //   <View style={{backgroundColor: "white"}}>        
-        //     <Text style={styles.locationTextStyle}>
-        //       <Image style={styles.icon} source={require("../../assets/place.png")}/>
-        //       Name: {locationList[locationDetails].name}
-        //     </Text>          
-        //     <Text style={styles.locationTextStyle}>
-        //     <Image style={styles.icon} source={require("../../assets/ratings.png")}/>
-        //       Ratings: {locationList[locationDetails].rating}
-        //     </Text>
-        //     <Text style={styles.locationTextStyle}>
-        //     <Image style={styles.icon} source={require("../../assets/category.png")}/>
-        //       Type: {[locationList[locationDetails].type]}
-        //     </Text>
-        //     <Text style={styles.urlText}>
-        //       Click on the red drop pin!
-        //     </Text>
-            
-        //   </View>
-        // </View>  
         <ComplementaryLocations
           locationDetail={locationList[locationDetails]}
           navigation={navigation}
         />  
-          
-        
       }
-      
-      
     </View>
   );
 };

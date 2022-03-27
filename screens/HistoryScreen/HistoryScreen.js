@@ -4,114 +4,8 @@ import { StyleSheet, Text, View, Image, FlatList,SafeAreaView,ScrollView, Toucha
 import { Firebase, db } from "../database/firebase";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-// const HistoryScreen = (userDetails) => {  
-//     const DataTable = userDetails.userDetails.history  
-    // let table = []
-    // let newDict = {}
-    // newDict['name'] = 'Ghost'
-    // newDict['timeOfVisit'] = "13 04 1999"
-    // table.push(newDict)
-    // newDict = {}
-    // newDict['name'] = 'Ghost'
-    // newDict['timeOfVisit'] = "13 04 1999"
-    // table.push(newDict)
-
-
-//     const fetchHistory = async () => {
-//       let snapshot = await Firebase.firestore().collection("Users").doc(Firebase.auth().currentUser.uid).get();
-//       if(snapshot){
-//         let history = snapshot.data().history
-//         // console.log(history)
-//         let newHistory = convertArrayToDict(history)
-//         console.log(DataTable)
-//         // return checkHistory(table)
-//       }
-//     }
-
-    // const convertArrayToDict = (array) => {
-    //   let i = 0;
-    //   let newArray = []
-    //   let newDict = {}
-    //   let displayArray = []
-    //   if(array.length == 0){
-    //     return array
-    //   }
-    //   while(i<array.length){
-    //     if(i==0){
-    //       newDict["name"] = array[i]
-    //     }
-    //     else if(i%2!=0){
-    //       newDict["timeOfVisit"] = array[i]
-    //     }
-    //     else{
-    //       newArray.push(newDict)
-    //       newDict = {}
-    //       newDict["name"] = array[i]
-    //     }
-    //     i += 1
-    //   }
-    //   return newArray
-    // }
-
-//     const renderItem = ({item}) => 
-//     { console.log(item)        
-//       return <View style={styles.textBox}>
-//         <Image 
-//             style={styles.icon}
-//             source={require("../../assets/favicon.png")}/>
-//         <View>
-//           <Text style={styles.locationTextStyle}>
-//             Visited: {item.name}
-//           </Text>
-//           <Text style={styles.locationTextStyle}>Time Of Visit: {item.timeOfVisit}</Text>
-//         </View>
-//       </View>
-//     }
-    
-//     const checkHistory = (variable) => {
-      
-//       if(variable.length === 0){
-//         return<View style={styles.textContainer}>
-//           <Text style={styles.textStyle}>
-//             You have not visited any place yet.
-//           </Text>
-//           <Text style={styles.textStyle}>
-//             Start Visiting!
-//           </Text>
-//         </View> 
-//       }
-//       return <FlatList
-//           nestedScrollEnabled = {true}
-//           scrollEnabled = {true}
-//           data={variable}
-//           renderItem={renderItem}
-//           // keyExtractor={(item, index) => index.toString()}
-//       />
-      
-//     }
-
-//     return (
-//       <SafeAreaView style={styles.container}>
-//         <View style={styles.border}>
-//           <Text style={styles.HeadStyle}>
-//             {userDetails.userDetails.userName}'s User History
-//           </Text>
-//           <View style={styles.insideBorder}>
-//             {fetchHistory()}
-//           </View>
-          
-//         </View>
-//         <Image
-//             style={styles.banner}
-//             source={require('../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png')}
-//         />
-//       </SafeAreaView>
-//     );
-// };
-
-const HistoryScreen = (userDetails) => {
-  var DataTable = userDetails.userDetails.history
-  
+const HistoryScreen = ({ navigation, userDetails }) => {
+  var DataTable = userDetails.history
 
   //test example
   let table = []
@@ -134,7 +28,7 @@ const HistoryScreen = (userDetails) => {
     }
     while(i<array.length){
       if(i==0){
-        newDict["name"] = array[i]
+        newDict["name"] = array[i].name
       }
       else if(i%2!=0){
         newDict["timeOfVisit"] = array[i]
@@ -169,7 +63,6 @@ const HistoryScreen = (userDetails) => {
         if(count == 1){
           console.log("Async", count)
           var newHistory = convertArrayToDict(history)
-          console.log(newHistory)
           setNewTable(newHistory)
           setIsFetched(true)}
       }
@@ -216,9 +109,11 @@ const HistoryScreen = (userDetails) => {
                 style={styles.icon}
                 source={require("../../assets/favicon.png")}/>
             <View>
-              <Text style={styles.locationTextStyle}>
-                Location: {item.name}
-              </Text>
+              <TouchableOpacity onPress={()=>{navigation.navigate("LocationDetails", { location: findLocation(item.name, DataTable)})}}>
+                <Text style={styles.locationTextStyle}>
+                  Location: {item.name}
+                </Text>
+              </TouchableOpacity>
               {/* <Text style={styles.locationTextStyle}>Visited Time:</Text> */}
               <Text style={styles.timeText}>{item.timeOfVisit}</Text>
             </View>
@@ -228,25 +123,43 @@ const HistoryScreen = (userDetails) => {
     />
     
   }
+  function findLocation(locationName, table) {
+    let i = 0;
+    while(i<table.length){
+      if(table[i].name == locationName){
+        return table[i]
+      }
+      i += 1
+    }
+  }
   fetchHistory()
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.border}>
         <Text style={styles.HeadStyle}>
-          {userDetails.userDetails.userName}'s User History
+          {userDetails.userName}'s User History
         </Text>
         <View style={styles.insideBorder}>
           {checkHistory(oldTable)}
         </View> 
       </View>
       <View style={styles.buttonView}>
-          <TouchableOpacity
-            onPress={() =>deleteHistory()}
-            style={styles.buttonVisit}
-          >
-            <Text style={styles.buttonText}>Clear All History</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() =>deleteHistory()}
+          style={styles.buttonVisit}
+        >
+          <Text style={styles.buttonText}>Clear All History</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.buttonView}>
+        <TouchableOpacity
+          onPress={() =>fetchHistory()}
+          style={styles.buttonVisit}
+        >
+          <Text style={styles.buttonText}>Refresh History
+        </Text>
+        </TouchableOpacity>
+      </View>
       <Image
           style={styles.banner}
           source={require('../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png')}
