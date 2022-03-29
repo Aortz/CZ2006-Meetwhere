@@ -1,10 +1,21 @@
-import { Image, StyleSheet, Text, View, Dimensions, ActivityIndicator, ScrollView, SafeAreaView, TouchableOpacity, Alert, Linking } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  ActivityIndicator,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+  Alert,
+  Linking,
+} from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
-import { Card,Divider, CheckBox } from "react-native-elements";
-import { useEffect } from 'react';
+import { Card, Divider, CheckBox } from "react-native-elements";
+import { useEffect } from "react";
 import { Firebase, db } from "../database/firebase";
 import ComplementaryLocations from "../LocationDetailsScreen/ComplementaryLocations";
-
 
 import React, { useState } from "react";
 
@@ -12,10 +23,10 @@ const { width, height } = Dimensions.get("screen");
 
 const LocationListScreen = (props) => {
   const { setUserDetails, userDetails, navigation } = props;
-  let locationList = props.route.params.locationList
-  const overallFilter = props.route.params.overallFilter
-  const [locationDetails, setLocationDetails] = useState(0)
-  
+  let locationList = props.route.params.locationList;
+  const overallFilter = props.route.params.overallFilter;
+  const [locationDetails, setLocationDetails] = useState(0);
+
   const midPoint = overallFilter.midPoint;
 
   // const [showComplementary, setShowComplementary] = useState(false);
@@ -31,126 +42,137 @@ const LocationListScreen = (props) => {
   //   // Code to add location to user history in firebase
   //   setShowComplementary(true);
   // };
-  
-  
+
   //remove duplicates from list
   const removeDuplicate = (array) => {
-    array = array.filter((value, index, self) =>
-    index === self.findIndex((t) => (
-      t.place === value.place && t.name === value.name
-    )))
-    return array
-  }
+    array = array.filter(
+      (value, index, self) =>
+        index ===
+        self.findIndex((t) => t.place === value.place && t.name === value.name)
+    );
+    return array;
+  };
 
-  locationList  = removeDuplicate(locationList)
+  locationList = removeDuplicate(locationList);
   // console.log(locationList.length)
 
-  const displayArray = (locationlist) =>{
-    let locationCount = 0
-    let topFive = []
-    
-    while(locationCount < locationlist.length){
-        let locationCountString = locationCount.toString()
-        // console.log(locationList[locationCount].name);
-        topFive.push(
+  const displayArray = (locationlist) => {
+    let locationCount = 0;
+    let topFive = [];
+
+    while (locationCount < locationlist.length) {
+      let locationCountString = locationCount.toString();
+      // console.log(locationList[locationCount].name);
+      topFive.push(
         <Marker
           identifier={locationCountString}
           coordinate={{
             latitude: locationlist[locationCount].location.latitude,
             longitude: locationlist[locationCount].location.longitude,
           }}
-          onPress={(event) => (setLocationDetails(parseInt(event.nativeEvent.id)), console.log("I pressed", event.nativeEvent.id))}
-        />,
-        )
-        locationCount += 1
-      }
-      
-      let topFiveSet = new Set(topFive)
-      topFive = Array.from(topFiveSet)
-      // const map1 = topFive.map((marker,index) => (index % 2 == 0)?{marker.onPress={}}) 
+          onPress={(event) => (
+            setLocationDetails(parseInt(event.nativeEvent.id)),
+            console.log("I pressed", event.nativeEvent.id)
+          )}
+        />
+      );
+      locationCount += 1;
+    }
+
+    let topFiveSet = new Set(topFive);
+    topFive = Array.from(topFiveSet);
+    // const map1 = topFive.map((marker,index) => (index % 2 == 0)?{marker.onPress={}})
     return topFive;
-  }
+  };
 
   const reviewHandler = (array) => {
     const random = Math.floor(Math.random() * array.length);
-    if(array.length > 0){
+    if (array.length > 0) {
       return (
-      <View>
-        <Text style={styles.firstDiv}>
-          Reviews
-        </Text>
-        <Text style={styles.locationTextStyle}>
-          {array[random].text}
-        </Text>
-        <Text style={styles.locationTextStyle}>
-          Author: {array[random].authorName}
-        </Text>
-      </View>
-      )  
+        <View>
+          <Text style={styles.firstDiv}>Reviews</Text>
+          <Text style={styles.locationTextStyle}>{array[random].text}</Text>
+          <Text style={styles.locationTextStyle}>
+            Author: {array[random].authorName}
+          </Text>
+        </View>
+      );
     }
-  }
+  };
 
   const pickRandomImage = (array) => {
-    if(array.length == 0){
-      return "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
-    }
-    else{
+    if (array.length == 0) {
+      return "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg";
+    } else {
       const random = Math.floor(Math.random() * array.length);
-      return array[random]
+      return array[random];
     }
-  }
+  };
 
-  if(midPoint == null){
-    midPoint = {latitude: locationList[0].location.latitude, longitude: locationList[0].location.latitude}
+  if (midPoint == null) {
+    midPoint = {
+      latitude: locationList[0].location.latitude,
+      longitude: locationList[0].location.latitude,
+    };
   }
-
 
   const buttonHandler = (isBack, array, number) => {
-    if(number > 0 && isBack){
-      return setLocationDetails(number-1)
+    if (number > 0 && isBack) {
+      return setLocationDetails(number - 1);
+    } else if (number == 0 && isBack) {
+      return setLocationDetails(array.length - 1);
+    } else if (number < array.length - 1 && !isBack) {
+      return setLocationDetails(number + 1);
+    } else if (number == array.length - 1 && !isBack) {
+      return setLocationDetails(0);
+    } else {
+      Alert.alert("No such location");
     }
-    else if(number == 0 && isBack){
-      return setLocationDetails(array.length - 1)
-    }
-    else if(number < array.length-1 && !isBack){
-      return setLocationDetails(number+1)
-    }
-    else if(number == array.length-1 && !isBack){
-      return setLocationDetails(0)
-    }
-    else {
-      Alert.alert("No such location")
-    }
-  }
-  
+  };
+
   function historyHandler() {
-    var userProfile = db.collection("Users").doc(Firebase.auth().currentUser.uid);
+    var userProfile = db
+      .collection("Users")
+      .doc(Firebase.auth().currentUser.uid);
     // setLocationDetails(locationDetails)
-    let userHistory = []
-    userProfile.get().then((doc) => {
-      if (doc.exists) {
-          var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-          userHistory = doc.data().history
-          console.log(userHistory)
-          let currentDateTime = new Date().toLocaleString("en-US", options)
-          let historyData = new Set([locationList[locationDetails], currentDateTime])
-          userHistory.push(...historyData)
-          userProfile.update({
-            history: userHistory
-          }).then(() => {
-            console.log("Document successfully updated!");
-            setSelection(true)
-            console.log(userHistory)
-          })
-      } else {
+    let userHistory = [];
+    userProfile
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          var options = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          userHistory = doc.data().history;
+          console.log(userHistory);
+          let currentDateTime = new Date().toLocaleString("en-US", options);
+          let historyData = new Set([
+            locationList[locationDetails],
+            currentDateTime,
+          ]);
+          userHistory.push(...historyData);
+          // setUserDetails((prev) => ({ ...prev, history: userHistory }));
+          userProfile
+            .update({
+              history: userHistory,
+            })
+            .then(() => {
+              console.log("Document successfully updated!");
+              setSelection(true);
+              // console.log(userHistory);
+            });
+        } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
         }
-      }).catch((error) => {
-          console.log("Error getting document:", error);
+      })
+      .catch((error) => {
+        console.log("Error getting document:", error);
       });
   }
-
 
   return (
     <View style={styles.container}>
@@ -173,72 +195,107 @@ const LocationListScreen = (props) => {
           pinColor={"gold"}
         />
         <Circle
-            key={midPoint.latitude + midPoint.longitude}
-            center={{
-              latitude: midPoint.latitude,
-              longitude: midPoint.longitude,
-            }}
-            radius={overallFilter.radius}
-            strokeWidth={1}
-            strokeColor={"#1a66ff"}
-            fillColor={"rgba(230,238,255,0.5)"}
-          />
-        
+          key={midPoint.latitude + midPoint.longitude}
+          center={{
+            latitude: midPoint.latitude,
+            longitude: midPoint.longitude,
+          }}
+          radius={overallFilter.radius}
+          strokeWidth={1}
+          strokeColor={"#1a66ff"}
+          fillColor={"rgba(230,238,255,0.5)"}
+        />
+
         {!isSelected && displayArray(locationList)}
         {isSelected && displayArray(locationList)[locationDetails]}
       </MapView>
 
-      {locationDetails >= 0 && !isSelected &&
-      <View style={[styles.filterContainer]}>
-        <SafeAreaView style={styles.viewContainer}>
-          <TouchableOpacity style={styles.buttonStyle} title="Previous" onPress={() => buttonHandler(true, locationList, locationDetails)}>
-            <Image style={styles.arrowicon} source={require("../../assets/back.png")}/>
-          </TouchableOpacity>
-          <Card style={{alignSelf: "center"}}>
-            <ScrollView nestedScrollEnabled={true}>
-            <View>
-                <ScrollView nestedScrollEnabled={true} contentContainerStyle={{flex:1}}>
-                  <Card.Image 
+      {locationDetails >= 0 && !isSelected && (
+        <View style={[styles.filterContainer]}>
+          <SafeAreaView style={styles.viewContainer}>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              title="Previous"
+              onPress={() => buttonHandler(true, locationList, locationDetails)}
+            >
+              <Image
+                style={styles.arrowicon}
+                source={require("../../assets/back.png")}
+              />
+            </TouchableOpacity>
+            <Card style={{ alignSelf: "center" }}>
+              <ScrollView nestedScrollEnabled={true}>
+                <View>
+                  <ScrollView
+                    nestedScrollEnabled={true}
+                    contentContainerStyle={{ flex: 1 }}
+                  >
+                    <Card.Image
                       style={styles.imageStyle}
-                      source={{uri:pickRandomImage(locationList[locationDetails].images)}}
-                      PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
-                  />
-                </ScrollView>
-              </View>
-              <Card.Divider style={styles.divider}/>              
-              <View>        
-                <Text style={styles.firstDiv}>
-                  <Image style={styles.icon} source={require("../../assets/place.png")}/>
-                  Name: {locationList[locationDetails].name}
-                </Text>          
-                <Text style={styles.firstDiv}>
-                <Image style={styles.icon} source={require("../../assets/ratings.png")}/>
-                  Ratings: {locationList[locationDetails].rating}
-                </Text>
-                <Text style={styles.firstDiv}>
-                <Image style={styles.icon} source={require("../../assets/tags.png")}/>
-                  Tags: {[locationList[locationDetails].type.concat(", ", locationList[locationDetails].categoryDescription)]}
-                </Text>
-              </View>
-              <Card.Divider style={styles.divider}/>
-              <Text style={styles.secondDiv}>
-                Official Website
-              </Text>
-              <Text style={styles.websiteText} 
-                    onPress={() => Linking.openURL('https://'.concat(locationList[locationDetails].officialWebsite))}>
+                      source={{
+                        uri: pickRandomImage(
+                          locationList[locationDetails].images
+                        ),
+                      }}
+                      PlaceholderContent={
+                        <ActivityIndicator color={"#000000"} />
+                      }
+                    />
+                  </ScrollView>
+                </View>
+                <Card.Divider style={styles.divider} />
+                <View>
+                  <Text style={styles.firstDiv}>
+                    <Image
+                      style={styles.icon}
+                      source={require("../../assets/place.png")}
+                    />
+                    Name: {locationList[locationDetails].name}
+                  </Text>
+                  <Text style={styles.firstDiv}>
+                    <Image
+                      style={styles.icon}
+                      source={require("../../assets/ratings.png")}
+                    />
+                    Ratings: {locationList[locationDetails].rating}
+                  </Text>
+                  <Text style={styles.firstDiv}>
+                    <Image
+                      style={styles.icon}
+                      source={require("../../assets/tags.png")}
+                    />
+                    Tags:{" "}
+                    {[
+                      locationList[locationDetails].type.concat(
+                        ", ",
+                        locationList[locationDetails].categoryDescription
+                      ),
+                    ]}
+                  </Text>
+                </View>
+                <Card.Divider style={styles.divider} />
+                <Text style={styles.secondDiv}>Official Website</Text>
+                <Text
+                  style={styles.websiteText}
+                  onPress={() =>
+                    Linking.openURL(
+                      "https://".concat(
+                        locationList[locationDetails].officialWebsite
+                      )
+                    )
+                  }
+                >
                   {locationList[locationDetails].officialWebsite}
-              </Text>
-              <Card.Divider style={styles.divider}/>
-              <Text style={styles.firstDiv}>
-                Description
-              </Text>
-              <Text style={styles.locationTextStyle}>
-                {[locationList[locationDetails].description]}
-              </Text>
-              <Card.Divider style={styles.divider}/>
-              {reviewHandler(locationList[locationDetails].reviews)}
-              <Card.Divider style={styles.divider}/>
-              {/* <View style={styles.checkboxContainer}>
+                </Text>
+                <Card.Divider style={styles.divider} />
+                <Text style={styles.firstDiv}>Description</Text>
+                <Text style={styles.locationTextStyle}>
+                  {[locationList[locationDetails].description]}
+                </Text>
+                <Card.Divider style={styles.divider} />
+                {reviewHandler(locationList[locationDetails].reviews)}
+                <Card.Divider style={styles.divider} />
+                {/* <View style={styles.checkboxContainer}>
                 <CheckBox
                   title="Are you visiting?"
                   style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
@@ -247,32 +304,41 @@ const LocationListScreen = (props) => {
                   checkedTitle="Added to your History"
                 />
               </View> */}
-              <View style={styles.buttonView}>
-                <TouchableOpacity
-                  onPress={() => historyHandler()}
-                  style={styles.buttonVisit}
-                >
-                  <Image
-                    source={require("../../assets/Visit.png")}
-                    style={styles.buttonIcon}
-                  />
-                  <Text style={styles.buttonText}>I Am Visiting</Text>
-                </TouchableOpacity>
-            </View>
-            </ScrollView>
-          </Card>
-          <TouchableOpacity style={styles.buttonStyle} title="Next" onPress={() => buttonHandler(false, locationList, locationDetails)}>
-            <Image style={styles.arrowicon} source={require("../../assets/next.png")}/>
-          </TouchableOpacity>
-        </SafeAreaView>
-      </View>
-      }
-      {isSelected &&
+                <View style={styles.buttonView}>
+                  <TouchableOpacity
+                    onPress={() => historyHandler()}
+                    style={styles.buttonVisit}
+                  >
+                    <Image
+                      source={require("../../assets/Visit.png")}
+                      style={styles.buttonIcon}
+                    />
+                    <Text style={styles.buttonText}>I Am Visiting</Text>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            </Card>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              title="Next"
+              onPress={() =>
+                buttonHandler(false, locationList, locationDetails)
+              }
+            >
+              <Image
+                style={styles.arrowicon}
+                source={require("../../assets/next.png")}
+              />
+            </TouchableOpacity>
+          </SafeAreaView>
+        </View>
+      )}
+      {isSelected && (
         <ComplementaryLocations
           locationDetail={locationList[locationDetails]}
           navigation={navigation}
-        />  
-      }
+        />
+      )}
     </View>
   );
 };
@@ -290,7 +356,7 @@ const styles = StyleSheet.create({
   },
   viewContainer: {
     flex: 1,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   radiusText: {
     fontWeight: "bold",
@@ -315,9 +381,9 @@ const styles = StyleSheet.create({
     // flex: 0.25,
     backgroundColor: "white",
     width: width / 1.5,
-    height: height/4,
-    alignItems: 'center',
-    justifyContent: 'center', 
+    height: height / 4,
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 30,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -331,26 +397,26 @@ const styles = StyleSheet.create({
   },
   firstDiv: {
     fontSize: 15,
-    textAlign: "center", 
+    textAlign: "center",
     alignSelf: "stretch",
     paddingVertical: 2,
     color: "#000000",
     fontWeight: "bold",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   secondDiv: {
     fontSize: 14,
-    textAlign: "center", 
+    textAlign: "center",
     alignSelf: "stretch",
     paddingVertical: 2,
     color: "#000000",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
-  imageStyle:{
+  imageStyle: {
     borderRadius: 5,
     paddingHorizontal: 10,
     margin: 10,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   buttonStyle: {
     alignSelf: "center",
@@ -395,35 +461,35 @@ const styles = StyleSheet.create({
 
   locationTextStyle: {
     fontSize: 14,
-    textAlign: "center", 
+    textAlign: "center",
     alignSelf: "stretch",
     paddingVertical: 2,
-    color: "#000000"
+    color: "#000000",
   },
   urlText: {
     fontSize: 18,
-    textAlign: "center", 
+    textAlign: "center",
     alignSelf: "stretch",
-    color: "red"
+    color: "red",
   },
   divider: {
-    paddingVertical: 5
+    paddingVertical: 5,
   },
-  
-  imageSize:{
+
+  imageSize: {
     borderRadius: 5,
-    resizeMode: 'stretch',
-    alignSelf: 'center',
-    width: '100%', 
+    resizeMode: "stretch",
+    alignSelf: "center",
+    width: "100%",
     height: "85%",
-    aspectRatio: 1
+    aspectRatio: 1,
   },
   icon: {
     // justifyContent: "flex-start",
     height: 20,
     width: 20,
     marginHorizontal: 10,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   arrowicon: {
     alignSelf: "center",
@@ -433,11 +499,10 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: "row",
     alignSelf: "center",
-    color:"red"
+    color: "red",
     // marginBottom: 20,
   },
   checkbox: {
     alignSelf: "center",
   },
-
 });
