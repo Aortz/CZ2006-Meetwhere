@@ -122,7 +122,11 @@ export default function App() {
             headerShown: false,
           }}
         >
-          {(props) => <LocationListScreen {...props} />}
+          {(props) => <LocationListScreen           
+            setUserDetails={setUserDetails}
+            userDetails={userDetails} 
+            {...props} 
+          />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
