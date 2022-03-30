@@ -4,7 +4,7 @@ import {
   View,
   TouchableOpacity,
   Linking,
-  Image
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import SplashScreen from "../SplashScreen/SplashScreen";
@@ -57,13 +57,16 @@ const ComplementaryLocations = (props) => {
         style={styles.buttonDirections}
         onPress={handleGetDirections}
       >
-        <Image style={styles.locationIcon} source={require("../../assets/gMaps.png")}/>
-        <Text style={styles.locationTextStyle}>
-          Get Directions
-          </Text>
+        <Image
+          style={styles.locationIcon}
+          source={require("../../assets/gMaps.png")}
+        />
+        <Text style={styles.locationTextStyle}>Get Directions</Text>
       </TouchableOpacity>
       <View style={styles.bottomSheet}>
-        <Text style={styles.compLocationTextStyle}>You might also want to visit</Text>
+        <Text style={styles.compLocationTextStyle}>
+          You might also want to visit
+        </Text>
         <View style={styles.box}>
           {compLocations.map((loc, index) => (
             <TouchableOpacity key={index} onPress={() => handlePress(loc)}>
@@ -72,6 +75,20 @@ const ComplementaryLocations = (props) => {
               </View>
             </TouchableOpacity>
           ))}
+        </View>
+        <View style={styles.buttonView}>
+          <TouchableOpacity
+            style={styles.backButton}
+            title="Login"
+            onPress={() =>
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "Home" }],
+              })
+            }
+          >
+            <Text style={styles.backButtonText}>No thanks!</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -129,27 +146,39 @@ const styles = StyleSheet.create({
     //justifyContent: "flex-start",
     height: 30,
     width: 30,
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
 
   locationTextStyle: {
     fontSize: 17,
     color: "white",
-    textAlign: "center", 
+    textAlign: "center",
     alignSelf: "stretch",
     paddingVertical: 5,
     fontWeight: "bold",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
 
   compLocationTextStyle: {
     fontSize: 17,
-    textAlign: "left", 
+    textAlign: "left",
     alignSelf: "stretch",
     paddingVertical: 5,
     color: "#000000",
     // fontWeight: "bold",
     paddingHorizontal: 10,
     bottom: 10,
+  },
+
+  buttonView: {
+    alignItems: "center",
+    marginTop: 10,
+  },
+
+  backButton: {},
+  backButtonText: {
+    color: "red",
+    fontSize: 17,
+    textDecorationLine: "underline",
   },
 });

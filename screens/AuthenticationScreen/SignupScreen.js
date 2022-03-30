@@ -31,8 +31,6 @@ export default Signup = ({ navigation }) => {
     let nameValid = false;
     usersRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
-        // doc.data() is never undefined for query doc snapshots
-        // console.log(doc.id, " => Username: ", doc.data().userName, "displayName: ", displayName);
         if (displayName == doc.data().userName) {
           setNameError("Username already exists");
         }
