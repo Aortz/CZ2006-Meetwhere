@@ -75,7 +75,6 @@ const getGeohashRange = (latitude, longitude, distance) => {
   const lat = 0.000009009; // degrees latitude per m
   const lon = 0.00001129766; // degrees longitude per m
 
-
   const lowerLat = latitude - lat * distance;
   const lowerLon = longitude - lon * distance;
 
@@ -181,9 +180,13 @@ export const getLocations = async (filters, current_user) => {
     const second_user = await db.collection("Users").doc(second_user_id).get();
     const second_history = second_user.data().history;
 
-    for (const loc in second_history) {
-      if (allLocations.includes(loc)) {
-        const index = allLocations.indexOf(loc);
+    for (const i in second_history) {
+      const loc = second_history[i];
+      if (allLocations.some((item) => item.name === loc.name)) {
+        const index = allLocations.findIndex((object) => {
+          return object.name === loc.name;
+        });
+
         allLocations.splice(index, 1);
       }
     }
@@ -192,9 +195,13 @@ export const getLocations = async (filters, current_user) => {
   // Check current user history
   const cur_history = current_user.history;
 
-  for (const loc in cur_history) {
-    if (allLocations.includes(loc)) {
-      const index = allLocations.indexOf(loc);
+  for (const i in cur_history) {
+    const loc1 = cur_history[i];
+    if (allLocations.some((item) => item.name === loc1.name)) {
+      const index = allLocations.findIndex((object) => {
+        return object.name === loc1.name;
+      });
+
       allLocations.splice(index, 1);
     }
   }

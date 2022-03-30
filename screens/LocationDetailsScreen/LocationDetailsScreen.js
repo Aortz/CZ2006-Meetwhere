@@ -8,12 +8,13 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  Linking
+  Linking,
 } from "react-native";
-import {Card} from "react-native-elements";
+import { Card } from "react-native-elements";
 import React, { useEffect, useState } from "react";
 import ComplementaryLocations from "./ComplementaryLocations";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Firebase, db } from "../database/firebase";
 
 const LocationDetailsScreen = (props) => {
   const { totalLocationList, setTotalLocationList, navigation } = props;
@@ -23,7 +24,6 @@ const LocationDetailsScreen = (props) => {
 
   useEffect(() => {
     setShowComplementary(false);
-    
   }, [locationDetail]);
 
   const [showComplementary, setShowComplementary] = useState(false);
@@ -32,7 +32,7 @@ const LocationDetailsScreen = (props) => {
     const tempList = totalLocationList;
     if (tempList.length < 1) {
       navigation.navigate("NoResults");
-      return
+      return;
     }
     const randomIndex = Math.floor(Math.random() * tempList.length);
     const randomLocation = tempList[randomIndex];
@@ -48,28 +48,65 @@ const LocationDetailsScreen = (props) => {
 
   const reviewHandler = (array) => {
     const random = Math.floor(Math.random() * array.length);
-    if(array.length > 0){
+    if (array.length > 0) {
       return (
-      <View>
-        <Text style={styles.locationTextStyle}>
-          {array[random].text}
-        </Text>
-        <Text style={styles.locationTextStyle}>
-          Author: {array[random].authorName}
-        </Text>
-      </View>
-      )  
+        <View>
+          <Text style={styles.locationTextStyle}>{array[random].text}</Text>
+          <Text style={styles.locationTextStyle}>
+            Author: {array[random].authorName}
+          </Text>
+        </View>
+      );
     }
-  }
+  };
 
   const pickRandomImage = (array) => {
-    if(array.length == 0){
-      return "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
-    }
-    else{
+    if (array.length == 0) {
+      return "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg";
+    } else {
       const random = Math.floor(Math.random() * array.length);
-      return array[random]
+      return array[random];
     }
+  };
+
+  const historyHandler = () => {
+    var userProfile = db
+      .collection("Users")
+      .doc(Firebase.auth().currentUser.uid);
+    // setLocationDetails(locationDetails)
+    let userHistory = [];
+    userProfile
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          var options = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          userHistory = doc.data().history;
+
+          let currentDateTime = new Date().toLocaleString("en-US", options);
+          let historyData = new Set([locationDetail, currentDateTime]);
+          userHistory.push(...historyData);
+          // setUserDetails((prev) => ({ ...prev, history: userHistory }));
+          userProfile
+            .update({
+              history: userHistory,
+            })
+            .then(() => {
+              console.log("Document successfully updated!");
+              setShowComplementary(true);
+            });
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting document:", error);
+      });
   };
 
   if (locationDetail === null) {
@@ -95,81 +132,93 @@ const LocationDetailsScreen = (props) => {
         />
       </MapView>
       {!showComplementary && (
-          <View style={styles.bottomSheet}>
-            <SafeAreaView style={styles.detailsScroll}>
+        <View style={styles.bottomSheet}>
+          <SafeAreaView style={styles.detailsScroll}>
             <ScrollView nestedScrollEnabled={true}>
-              <Card style={{alignSelf:"center"}}>
-                  <View>
-                    <Card.Image 
-                        style={styles.imageStyle}
-                        source={{uri:pickRandomImage(locationDetail.images)}}
-                        PlaceholderContent={<ActivityIndicator color={'#000000'}/>}
-                          />
-                    </View>
-                  <Card.Divider style={styles.divider}/>
-                  <Text style={styles.locationTextStyle}>
-                    <Image style={styles.locationIcon} source={require("../../assets/place.png")}/>
-                      Name: {locationDetail.name}
-                  </Text>
-                  <Text style={styles.locationTextStyle}>
-                    <Image style={styles.locationIcon} source={require("../../assets/ratings.png")}/>
-                      Ratings: {locationDetail.rating}
-                  </Text>
-                  <Text style={styles.locationTextStyle}>
-                    <Image style={styles.locationIcon} source={require("../../assets/tags.png")}/>
-                      Tags: {locationDetail.type}
-                  </Text>
-                  <Card.Divider style={styles.divider}/>
-                  {/* <Text style={styles.infoText}>
+              <Card style={{ alignSelf: "center" }}>
+                <View>
+                  <Card.Image
+                    style={styles.imageStyle}
+                    source={{ uri: pickRandomImage(locationDetail.images) }}
+                    PlaceholderContent={<ActivityIndicator color={"#000000"} />}
+                  />
+                </View>
+                <Card.Divider style={styles.divider} />
+                <Text style={styles.locationTextStyle}>
+                  <Image
+                    style={styles.locationIcon}
+                    source={require("../../assets/place.png")}
+                  />
+                  Name: {locationDetail.name}
+                </Text>
+                <Text style={styles.locationTextStyle}>
+                  <Image
+                    style={styles.locationIcon}
+                    source={require("../../assets/ratings.png")}
+                  />
+                  Ratings: {locationDetail.rating}
+                </Text>
+                <Text style={styles.locationTextStyle}>
+                  <Image
+                    style={styles.locationIcon}
+                    source={require("../../assets/tags.png")}
+                  />
+                  Tags: {locationDetail.type}
+                </Text>
+                <Card.Divider style={styles.divider} />
+                {/* <Text style={styles.infoText}>
                     Postal Code : {locationDetail.address.postalCode}
                   </Text> */}
-                  <Text style={styles.infoText}>
-                    Official Website
-                  </Text>
-                  <Text style={styles.websiteText} 
-                    onPress={() => Linking.openURL('https://'.concat(locationDetail.officialWebsite))}>
+                <Text style={styles.infoText}>Official Website</Text>
+                <Text
+                  style={styles.websiteText}
+                  onPress={() =>
+                    Linking.openURL(
+                      "https://".concat(locationDetail.officialWebsite)
+                    )
+                  }
+                >
                   {locationDetail.officialWebsite}
                 </Text>
-                <Card.Divider style={styles.divider}/>
-                <Text style={styles.infoText}>
-                  Reviews
-                </Text>
+                <Card.Divider style={styles.divider} />
+                <Text style={styles.infoText}>Reviews</Text>
                 {reviewHandler(locationDetail.reviews)}
-                <Card.Divider style={styles.divider}/>
-                  <Text style={styles.gap} />
+                <Card.Divider style={styles.divider} />
+                <Text style={styles.gap} />
+                <View style={styles.buttonView}>
+                  <TouchableOpacity
+                    onPress={historyHandler}
+                    style={styles.buttonVisit}
+                  >
+                    <Image
+                      source={require("../../assets/Visit.png")}
+                      style={styles.icon}
+                    />
+                    <Text style={styles.buttonText}>I Am Visiting</Text>
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.gap} />
+                {!prevLocation && (
                   <View style={styles.buttonView}>
                     <TouchableOpacity
-                      onPress={handleVisiting}
-                      style={styles.buttonVisit}
+                      style={styles.buttonRandom}
+                      onPress={handleRegenerateLocation}
                     >
                       <Image
-                        source={require("../../assets/Visit.png")}
-                        style={styles.icon}
+                        source={require("../../assets/Random.png")}
+                        style={styles.icon2}
                       />
-                      <Text style={styles.buttonText}>I Am Visiting</Text>
+                      <Text style={styles.buttonText}>
+                        Find Another Location
+                      </Text>
                     </TouchableOpacity>
                   </View>
-                  <Text style={styles.gap} />
-                  {!prevLocation && (
-                    <View style={styles.buttonView}>
-                      <TouchableOpacity
-                        style={styles.buttonRandom}
-                        onPress={handleRegenerateLocation}
-                      >
-                        <Image
-                          source={require("../../assets/Random.png")}
-                          style={styles.icon2}
-                        />
-                        <Text style={styles.buttonText}>Find Another Location</Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                  <Text style={styles.gap} />
-                </Card>
-              </ScrollView>
-              </SafeAreaView>
-            </View>
-          
+                )}
+                <Text style={styles.gap} />
+              </Card>
+            </ScrollView>
+          </SafeAreaView>
+        </View>
       )}
 
       {showComplementary && (
@@ -202,42 +251,42 @@ const styles = StyleSheet.create({
   },
 
   divider: {
-    paddingVertical: 5
+    paddingVertical: 5,
   },
 
-  imageSize:{
+  imageSize: {
     borderRadius: 5,
-    resizeMode: 'stretch',
-    alignSelf: 'center',
-    width: '100%', 
+    resizeMode: "stretch",
+    alignSelf: "center",
+    width: "100%",
     height: "100%",
-    aspectRatio: 1
+    aspectRatio: 1,
   },
 
   locationTextStyle: {
     fontSize: 16,
-    textAlign: "center", 
+    textAlign: "center",
     alignSelf: "stretch",
     paddingVertical: 2,
     color: "#000000",
     fontWeight: "bold",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
 
   locationIcon: {
     //justifyContent: "flex-start",
     height: 20,
     width: 20,
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
 
   infoText: {
     fontSize: 15,
-    textAlign: "center", 
+    textAlign: "center",
     alignSelf: "stretch",
     paddingVertical: 2,
     color: "#000000",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
 
   websiteText: {
