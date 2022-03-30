@@ -23,7 +23,7 @@ const LocationDetailsScreen = (props) => {
   const { totalLocationList, setTotalLocationList, navigation } = props;
   const locationDetail = props.route.params.location;
   const prevLocation = props.route.params.prevLocation;
-  
+  const fromHistory = props.route.params.fromHistory;
 
   useEffect(() => {
     setShowComplementary(false);
@@ -42,11 +42,6 @@ const LocationDetailsScreen = (props) => {
     tempList.splice(randomIndex, 1);
     setTotalLocationList(tempList);
     navigation.navigate("LocationDetails", { location: randomLocation });
-  };
-
-  const handleVisiting = () => {
-    // Code to add location to user history in firebase
-    setShowComplementary(true);
   };
 
   const reviewHandler = (array) => {
@@ -134,13 +129,12 @@ const LocationDetailsScreen = (props) => {
           }}
           pinColor={"red"}
         />
-
       </MapView>
       {!showComplementary && (
         <View style={styles.bottomSheet}>
           <SafeAreaView style={styles.detailsScroll}>
-          <Card style={{ alignSelf: "center" }}>
-              <ScrollView nestedScrollEnabled={true} >
+            <Card style={{ alignSelf: "center" }}>
+              <ScrollView nestedScrollEnabled={true}>
                 <View>
                   <Card.Image
                     style={styles.imageStyle}
@@ -190,18 +184,20 @@ const LocationDetailsScreen = (props) => {
                 {reviewHandler(locationDetail.reviews)}
                 <Card.Divider style={styles.divider} />
                 <Text style={styles.gap} />
-                <View style={styles.buttonView}>
-                  <TouchableOpacity
-                    onPress={historyHandler}
-                    style={styles.buttonVisit}
-                  >
-                    <Image
-                      source={require("../../assets/Visit.png")}
-                      style={styles.visitIcon}
-                    />
-                    <Text style={styles.buttonText}>I Am Visiting</Text>
-                  </TouchableOpacity>
-                </View>
+                {!fromHistory && (
+                  <View style={styles.buttonView}>
+                    <TouchableOpacity
+                      onPress={historyHandler}
+                      style={styles.buttonVisit}
+                    >
+                      <Image
+                        source={require("../../assets/Visit.png")}
+                        style={styles.visitIcon}
+                      />
+                      <Text style={styles.buttonText}>I Am Visiting</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
                 <Text style={styles.gap} />
                 {!prevLocation && (
                   <View style={styles.buttonView}>
@@ -221,7 +217,7 @@ const LocationDetailsScreen = (props) => {
                 )}
                 <Text style={styles.gap} />
               </ScrollView>
-              </Card>
+            </Card>
           </SafeAreaView>
         </View>
       )}
@@ -393,8 +389,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
   },
-
-
 });
 
 export default LocationDetailsScreen;

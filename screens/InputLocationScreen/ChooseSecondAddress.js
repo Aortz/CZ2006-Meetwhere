@@ -54,7 +54,7 @@ const ChooseSecondAddress = (props) => {
       </View>
 
       <View style={styles.inputView}>
-        <Text style={styles.inputTitle}>{`Postal Code 2`}</Text>
+        <Text style={styles.inputTitle}>{`Address 2`}</Text>
         {error && <Text style={styles.error}>{error}</Text>}
         <View style={{ height: "100%" }}>
           <GooglePlacesAutocomplete

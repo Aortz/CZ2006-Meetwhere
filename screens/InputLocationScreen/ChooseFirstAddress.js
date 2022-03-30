@@ -36,7 +36,7 @@ const ChooseFirstAddress = (props) => {
       </View>
 
       <View style={styles.inputView}>
-        <Text style={styles.inputTitle}>{`Postal Code 1`}</Text>
+        <Text style={styles.inputTitle}>{`Address 1`}</Text>
         <View style={{ height: "100%" }}>
           <GooglePlacesAutocomplete
             ref={ref}

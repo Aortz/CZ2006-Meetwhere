@@ -107,27 +107,34 @@ const HistoryScreen = ({ navigation, userDetails }) => {
         data={variable}
         renderItem={({ item }) => (
           <View style={styles.textBox}>
-            {item.nameCategory[1] == "Food & Beverages" && <Image
-              style={styles.icon}
-              source={require("../../assets/food.png")}
-            />}
-            {item.nameCategory[1] == "Bars & Clubs" && <Image
-              style={styles.icon}
-              source={require("../../assets/bars.png")}
-            />}
-            {item.nameCategory[1] == "Attractions" && <Image
-              style={styles.icon}
-              source={require("../../assets/attractions.png")}
-            />}
+            {item.nameCategory[1] == "Food & Beverages" && (
+              <Image
+                style={styles.icon}
+                source={require("../../assets/food.png")}
+              />
+            )}
+            {item.nameCategory[1] == "Bars & Clubs" && (
+              <Image
+                style={styles.icon}
+                source={require("../../assets/bars.png")}
+              />
+            )}
+            {item.nameCategory[1] == "Attractions" && (
+              <Image
+                style={styles.icon}
+                source={require("../../assets/attractions.png")}
+              />
+            )}
             <View>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("LocationDetails", {
                     location: findLocation(item.nameCategory[0], hist),
+                    prevLocation: { key: "value" },
+                    fromHistory: true,
                   });
                 }}
               >
-
                 <Text style={styles.locationTextStyle}>
                   {item.nameCategory[0]}
                 </Text>
@@ -262,7 +269,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: "center",
     fontSize: 20,
-    color: "#ff0021"
+    color: "#ff0021",
   },
   textStyle: {
     flex: 1,
@@ -273,13 +280,13 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 25,
-    borderRadius: 100/ 2,
+    borderRadius: 100 / 2,
     height: 52,
     width: 52,
     overflow: "hidden",
     borderWidth: 0.8,
     borderColor: "black",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   locationTextStyle: {
     fontSize: 21,

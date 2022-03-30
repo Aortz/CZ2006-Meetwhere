@@ -65,6 +65,7 @@ const LocationListScreen = (props) => {
       // console.log(locationList[locationCount].name);
       topFive.push(
         <Marker
+          key={locationCount}
           identifier={locationCountString}
           coordinate={{
             latitude: locationlist[locationCount].location.latitude,
@@ -147,7 +148,7 @@ const LocationListScreen = (props) => {
             day: "numeric",
           };
           userHistory = doc.data().history;
-          console.log(userHistory);
+
           let currentDateTime = new Date().toLocaleString("en-US", options);
           let historyData = new Set([
             locationList[locationDetails],
@@ -180,7 +181,7 @@ const LocationListScreen = (props) => {
         style={StyleSheet.absoluteFillObject}
         provider={PROVIDER_GOOGLE}
         region={{
-          latitude: locationList[locationDetails].location.latitude - 0.015,
+          latitude: locationList[locationDetails].location.latitude - 0.01,
           longitude: locationList[locationDetails].location.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
