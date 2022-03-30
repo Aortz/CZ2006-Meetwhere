@@ -1,10 +1,11 @@
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
 import {
   ActivityIndicator,
   StyleSheet,
   Text,
   View,
   Button,
+  Dimensions,
   TouchableOpacity,
   Image,
   ScrollView,
@@ -16,11 +17,13 @@ import ComplementaryLocations from "./ComplementaryLocations";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Firebase, db } from "../database/firebase";
 
+const { width, height } = Dimensions.get("screen");
+
 const LocationDetailsScreen = (props) => {
   const { totalLocationList, setTotalLocationList, navigation } = props;
-
   const locationDetail = props.route.params.location;
   const prevLocation = props.route.params.prevLocation;
+  
 
   useEffect(() => {
     setShowComplementary(false);
@@ -129,13 +132,15 @@ const LocationDetailsScreen = (props) => {
             latitude: locationDetail.location.latitude,
             longitude: locationDetail.location.longitude,
           }}
+          pinColor={"red"}
         />
+
       </MapView>
       {!showComplementary && (
         <View style={styles.bottomSheet}>
           <SafeAreaView style={styles.detailsScroll}>
-            <ScrollView nestedScrollEnabled={true}>
-              <Card style={{ alignSelf: "center" }}>
+          <Card style={{ alignSelf: "center" }}>
+              <ScrollView nestedScrollEnabled={true} >
                 <View>
                   <Card.Image
                     style={styles.imageStyle}
@@ -144,21 +149,21 @@ const LocationDetailsScreen = (props) => {
                   />
                 </View>
                 <Card.Divider style={styles.divider} />
-                <Text style={styles.locationTextStyle}>
+                <Text style={styles.firstDiv}>
                   <Image
                     style={styles.locationIcon}
                     source={require("../../assets/place.png")}
                   />
                   Name: {locationDetail.name}
                 </Text>
-                <Text style={styles.locationTextStyle}>
+                <Text style={styles.firstDiv}>
                   <Image
                     style={styles.locationIcon}
                     source={require("../../assets/ratings.png")}
                   />
                   Ratings: {locationDetail.rating}
                 </Text>
-                <Text style={styles.locationTextStyle}>
+                <Text style={styles.firstDiv}>
                   <Image
                     style={styles.locationIcon}
                     source={require("../../assets/tags.png")}
@@ -169,7 +174,7 @@ const LocationDetailsScreen = (props) => {
                 {/* <Text style={styles.infoText}>
                     Postal Code : {locationDetail.address.postalCode}
                   </Text> */}
-                <Text style={styles.infoText}>Official Website</Text>
+                <Text style={styles.firstDiv}>Official Website</Text>
                 <Text
                   style={styles.websiteText}
                   onPress={() =>
@@ -181,7 +186,7 @@ const LocationDetailsScreen = (props) => {
                   {locationDetail.officialWebsite}
                 </Text>
                 <Card.Divider style={styles.divider} />
-                <Text style={styles.infoText}>Reviews</Text>
+                <Text style={styles.firstDiv}>Reviews</Text>
                 {reviewHandler(locationDetail.reviews)}
                 <Card.Divider style={styles.divider} />
                 <Text style={styles.gap} />
@@ -192,7 +197,7 @@ const LocationDetailsScreen = (props) => {
                   >
                     <Image
                       source={require("../../assets/Visit.png")}
-                      style={styles.icon}
+                      style={styles.visitIcon}
                     />
                     <Text style={styles.buttonText}>I Am Visiting</Text>
                   </TouchableOpacity>
@@ -206,7 +211,7 @@ const LocationDetailsScreen = (props) => {
                     >
                       <Image
                         source={require("../../assets/Random.png")}
-                        style={styles.icon2}
+                        style={styles.regenerateIcon}
                       />
                       <Text style={styles.buttonText}>
                         Find Another Location
@@ -215,8 +220,8 @@ const LocationDetailsScreen = (props) => {
                   </View>
                 )}
                 <Text style={styles.gap} />
+              </ScrollView>
               </Card>
-            </ScrollView>
           </SafeAreaView>
         </View>
       )}
@@ -234,20 +239,24 @@ const LocationDetailsScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    justifyContent: "flex-end",
   },
 
   bottomSheet: {
+    flex: 0.5,
     backgroundColor: "white",
-    height: "50%",
+    height: height / 2.2,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    padding: 25,
-    top: "47%",
-    width: "100%",
-    flex: 0.5,
+    borderWidth: 0.7,
+    // borderColor: "#707070",
+  },
+  detailsScroll: {
+    flex: 1,
+    flexDirection: "row",
   },
 
   divider: {
@@ -264,13 +273,17 @@ const styles = StyleSheet.create({
   },
 
   locationTextStyle: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: "center",
     alignSelf: "stretch",
     paddingVertical: 2,
     color: "#000000",
-    fontWeight: "bold",
+  },
+  imageStyle: {
+    borderRadius: 5,
     paddingHorizontal: 10,
+    margin: 10,
+    alignSelf: "center",
   },
 
   locationIcon: {
@@ -278,6 +291,15 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     marginHorizontal: 10,
+  },
+  firstDiv: {
+    fontSize: 15,
+    textAlign: "center",
+    alignSelf: "stretch",
+    paddingVertical: 2,
+    color: "#000000",
+    fontWeight: "bold",
+    paddingHorizontal: 10,
   },
 
   infoText: {
@@ -307,7 +329,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#95FF9F",
     borderRadius: 10,
     // position:"absolute",
-    // height: "100%",
+    height: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -316,6 +338,7 @@ const styles = StyleSheet.create({
   buttonView: {
     flexDirection: "row",
     flex: 1,
+    height: 40,
     justifyContent: "space-between",
   },
 
@@ -351,34 +374,27 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
 
-  icon2: {
+  visitIcon: {
     flexDirection: "row",
-    height: 40,
-    borderWidth: 2,
-    width: 40,
-    left: -30,
+    height: 30,
+    borderWidth: 1,
+    width: 15,
+    marginRight: 30,
     justifyContent: "flex-start",
     alignItems: "flex-start",
   },
 
-  detailsScroll: {
-    backgroundColor: "#f0f0f0",
-    flex: 1,
-    // height: "100%",
-    // width: "90%",
-    // // alignItems: "center",
-    // borderTopLeftRadius: 10,
-    // borderTopRightRadius: 10,
-    // borderBottomLeftRadius: 10,
-    // borderBottomRightRadius: 10,
-    // position: "absolute",
-    // left: "8%",
-    // top: "10%",
-    // paddingHorizontal: 30,
-    // borderWidth: 1,
-    // borderColor: "#707070",
-    // marginHorizontal: 10,
+  regenerateIcon: {
+    flexDirection: "row",
+    height: 30,
+    borderWidth: 1,
+    width: 30,
+    marginRight: 30,
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
+
+
 });
 
 export default LocationDetailsScreen;

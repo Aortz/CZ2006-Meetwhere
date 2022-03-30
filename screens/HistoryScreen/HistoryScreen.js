@@ -25,12 +25,12 @@ const HistoryScreen = ({ navigation, userDetails }) => {
     while (i < array.length) {
       if (i % 2 == 0) {
         newDict = {};
-        newDict["name"] = array[i].name;
+        newDict["nameCategory"] = [array[i].name, array[i].categoryDescription];
       } else if (i % 2 != 0) {
         newDict["timeOfVisit"] = array[i];
         newArray.push(newDict);
       }
-
+      // console.log(array[i].categoryDescription)
       i += 1;
     }
     return newArray.reverse();
@@ -107,20 +107,29 @@ const HistoryScreen = ({ navigation, userDetails }) => {
         data={variable}
         renderItem={({ item }) => (
           <View style={styles.textBox}>
-            <Image
+            {item.nameCategory[1] == "Food & Beverages" && <Image
               style={styles.icon}
-              source={require("../../assets/favicon.png")}
-            />
+              source={require("../../assets/food.png")}
+            />}
+            {item.nameCategory[1] == "Bars & Clubs" && <Image
+              style={styles.icon}
+              source={require("../../assets/bars.png")}
+            />}
+            {item.nameCategory[1] == "Attractions" && <Image
+              style={styles.icon}
+              source={require("../../assets/attractions.png")}
+            />}
             <View>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("LocationDetails", {
-                    location: findLocation(item.name, hist),
+                    location: findLocation(item.nameCategory[0], hist),
                   });
                 }}
               >
+
                 <Text style={styles.locationTextStyle}>
-                  Location: {item.name}
+                  {item.nameCategory[0]}
                 </Text>
               </TouchableOpacity>
               {/* <Text style={styles.locationTextStyle}>Visited Time:</Text> */}
@@ -153,17 +162,9 @@ const HistoryScreen = ({ navigation, userDetails }) => {
       <View style={styles.buttonView}>
         <TouchableOpacity
           onPress={() => deleteHistory()}
-          style={styles.buttonVisit}
+          style={styles.deleteHistory}
         >
-          <Text style={styles.buttonText}>Clear All History</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.buttonView}>
-        <TouchableOpacity
-          onPress={() => fetchHistory()}
-          style={styles.buttonVisit}
-        >
-          <Text style={styles.buttonText}>Refresh History</Text>
+          <Text style={styles.buttonText}>Clear History</Text>
         </TouchableOpacity>
       </View>
       <Image
@@ -223,23 +224,23 @@ const styles = StyleSheet.create({
   },
   textBox: {
     // flex: 1,
-    paddingHorizontal: 45,
+    paddingHorizontal: 18,
     paddingVertical: 5,
     borderBottomWidth: 1,
     flexDirection: "row",
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-around",
   },
   buttonView: {
-    height: 45,
+    height: 50,
     justifyContent: "space-between",
-    paddingVertical: 10,
+    // paddingVertical: 10,
   },
   buttonVisit: {
     width: "100%",
     // top: "10%",
-    backgroundColor: "#FF7F7F",
+    backgroundColor: "#FF4500",
     borderRadius: 10,
     // position:"absolute",
     // height: "100%",
@@ -247,10 +248,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  deleteHistory: {
+    width: "100%",
+    // top: "10%",
+    backgroundColor: "#EDEDED",
+    borderRadius: 10,
+    // position:"absolute",
+    height: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   buttonText: {
     textAlign: "center",
-    color: "black",
-    fontSize: 18,
+    fontSize: 20,
+    color: "#ff0021"
   },
   textStyle: {
     flex: 1,
@@ -260,23 +272,26 @@ const styles = StyleSheet.create({
     color: "#7B7B7B",
   },
   icon: {
-    marginRight: 5,
-    borderRadius: 100 / 2,
+    marginRight: 25,
+    borderRadius: 100/ 2,
+    height: 52,
+    width: 52,
     overflow: "hidden",
-    borderWidth: 1,
+    borderWidth: 0.8,
     borderColor: "black",
+    justifyContent: "flex-start"
   },
   locationTextStyle: {
     fontSize: 21,
     textAlign: "center",
-    alignSelf: "stretch",
+    alignSelf: "center",
     fontFamily: "serif",
     color: "#000000",
   },
   timeText: {
     fontSize: 16,
     textAlign: "center",
-    alignSelf: "stretch",
+    alignSelf: "center",
     fontStyle: "italic",
     color: "#000000",
   },

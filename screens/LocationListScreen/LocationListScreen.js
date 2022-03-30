@@ -176,7 +176,6 @@ const LocationListScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text>Location List screen</Text>
       <MapView
         style={StyleSheet.absoluteFillObject}
         provider={PROVIDER_GOOGLE}
