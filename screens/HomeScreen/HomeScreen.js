@@ -12,7 +12,7 @@ import {
 import { Firebase } from "../database/firebase";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Card, Divider } from "react-native-elements";
-import SplashScreen from "../SplashScreen/SplashScreen";
+
 
 const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
   const randomAttraction = () => {
@@ -35,7 +35,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
   const [toprated, setTopRated] = useState(null);
   const [topscreen, setTopScreen] = useState(null);
 
-  const fetchData = () => {
+  const fetchData = async () => {
     let array_index = [];
     let array_photos = [];
     let array_names = [];
@@ -182,13 +182,11 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     };
     run();
   }, []);
+
   if (!randomized) {
     return null;
   }
 
-  if (loading) {
-    return <SplashScreen />;
-  }
   //const popular = ['https://pbs.twimgi.com/profile_images/486929358120964097/gNLINY67_400x400.png','https://pbs.twimg.com/profile_images/486929358120964097/gNLINY67_400x400.png']
   return (
     <View style={styles.container}>
@@ -247,7 +245,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
 
           <ScrollView horizontal={true}>
             {!loading &&
-              randomized[0][0] !== "undefined" &&
+              randomized[0][0] != "undefined" &&
               randomized[0][0].length > 90 && (
                 <Card style={styles.cardStyle}>
                   <Card.Title>{randomized[1][0]}</Card.Title>
@@ -269,7 +267,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              randomized[0][1] !== "undefined" &&
+              randomized[0][1] != "undefined" &&
               randomized[0][1].length > 90 && (
                 <Card>
                   <Card.Title>{randomized[1][1]}</Card.Title>
@@ -292,7 +290,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              randomized[0][2] !== "undefined" &&
+              randomized[0][2] != "undefined" &&
               randomized[0][2].length > 90 && (
                 <Card>
                   <Card.Title>{randomized[1][2]}</Card.Title>
@@ -315,7 +313,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              randomized[0][3] !== "undefined" &&
+              randomized[0][3] != "undefined" &&
               randomized[0][3].length > 90 && (
                 <Card>
                   <Card.Title>{randomized[1][3]}</Card.Title>
@@ -338,7 +336,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              randomized[0][4] !== "undefined" &&
+              randomized[0][4] != "undefined" &&
               randomized[0][4].length > 90 && (
                 <Card>
                   <Card.Title>{randomized[1][4]}</Card.Title>
@@ -361,7 +359,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              randomized[0][5] !== "undefined" &&
+              randomized[0][5] != "undefined" &&
               randomized[0][5].length > 90 && (
                 <Card>
                   <Card.Title>{randomized[1][5]}</Card.Title>
