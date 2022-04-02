@@ -3,6 +3,7 @@ import React from "react";
 
 const NoResultsScreen = (props) => {
   const { navigation } = props;
+
   return (
     <View style={styles.container}>
       <Image

@@ -23,8 +23,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    // padding: 35,
-    // minHeight: 700,
     backgroundColor: "#fff",
     alignItems: "center",
   },

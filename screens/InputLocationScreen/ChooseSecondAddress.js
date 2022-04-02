@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
@@ -22,6 +15,7 @@ const ChooseSecondAddress = (props) => {
 
   const [error, setError] = useState(null);
 
+  // Restore second address upon going back from filters screen
   useEffect(() => {
     if (secondLocation !== null) {
       const add = secondLocation.description;
@@ -29,10 +23,12 @@ const ChooseSecondAddress = (props) => {
     }
   }, []);
 
+  // Function to handle going back to input first address
   const handleGoBackFirst = () => {
     setStepNumber(1);
   };
 
+  // Function to handle submitting both addresses
   const handleNext = () => {
     if (secondLocation === null) {
       return null;
@@ -116,7 +112,6 @@ const styles = StyleSheet.create({
   inputView: {
     marginBottom: 20,
     marginTop: 5,
-    // borderWidth: 10,
     height: "55%",
   },
   inputTitle: {

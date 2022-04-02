@@ -1,6 +1,7 @@
 import { db } from "../database/firebase";
 import firebase from "firebase/compat/app";
 
+// Function to get complementary locations from the database
 export const fetchComplementary = async (locationDetail) => {
   const category = locationDetail.categoryDescription;
   let collection = "Attractions";

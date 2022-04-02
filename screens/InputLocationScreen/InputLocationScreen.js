@@ -1,15 +1,6 @@
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  TextInput,
-  View,
-  Platform,
-  Alert
-} from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ChooseFirstAddress from "./ChooseFirstAddress";
 import ChooseSecondAddress from "./ChooseSecondAddress";
 
@@ -26,6 +17,7 @@ const InputLocationScreen = ({ navigation }) => {
   const [firstLocation, setFirstLocation] = useState(null);
   const [secondLocation, setSecondLocation] = useState(null);
 
+  // Function to get the current location of the user
   useEffect(() => {
     Location.installWebGeolocationPolyfill();
     navigator.geolocation.getCurrentPosition(
@@ -51,6 +43,7 @@ const InputLocationScreen = ({ navigation }) => {
     );
   }, []);
 
+  // Function to calculate midpoint of the two addresses and navigate to midpoint screen
   const handleSubmitBothLocations = () => {
     const mid_lat = (firstLocation.latitude + secondLocation.latitude) / 2;
     const mid_long = (firstLocation.longitude + secondLocation.longitude) / 2;
@@ -98,7 +91,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    // justifyContent: "flex-end",
   },
 });
 

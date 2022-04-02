@@ -1,10 +1,9 @@
-import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import {
   ActivityIndicator,
   StyleSheet,
   Text,
   View,
-  Button,
   Dimensions,
   TouchableOpacity,
   Image,
@@ -31,6 +30,7 @@ const LocationDetailsScreen = (props) => {
 
   const [showComplementary, setShowComplementary] = useState(false);
 
+  // Function to find another location
   const handleRegenerateLocation = () => {
     const tempList = totalLocationList;
     if (tempList.length < 1) {
