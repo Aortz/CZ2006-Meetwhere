@@ -55,7 +55,7 @@ export default Login = ({ navigation, setUserDetails }) => {
     }
     return false;
   };
-
+  //function to handle user login with Firebase
   const userLogin = () => {
     setLoading(true);
     let validInput = checkEmailPasswordInput(email, password);
@@ -85,7 +85,6 @@ export default Login = ({ navigation, setUserDetails }) => {
           setTimeout(() => {
             setLoading(false);
           }, 2000)
-          // setLoading(false)
         );
     } else {
       setLoading(false);
@@ -150,7 +149,8 @@ export default Login = ({ navigation, setUserDetails }) => {
     </KeyboardAwareScrollView>
   );
 };
-// }
+
+//Styling for Login Screen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
