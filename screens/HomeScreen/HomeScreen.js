@@ -173,7 +173,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
       setRandomScreen(array_random);
       setTopScreen(top_rated_object_array);
       setLoading(false);
-    }, 2000);
+    }, 5000);
   };
 
   useEffect(() => {
