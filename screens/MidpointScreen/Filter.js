@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Image,
   Dimensions,
 } from "react-native";
 import React from "react";
@@ -105,19 +106,27 @@ const Filter = (props) => {
   return (
     <View style={[styles.filterContainer]}>
       <View style={styles.topLayer}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.button}>
+        {/* <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
           <Text>Back</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Filter</Text>
-        <TouchableOpacity style={styles.button} onPress={handleFinishFilters}>
-          <Text>Finish</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <Text style={styles.title}>Filters</Text>
       </View>
+      <View
+        style={{
+          borderBottomColor: 'grey',
+          borderBottomWidth: 1,
+        }}
+      />
 
       <ScrollView style={styles.filterScroll}>
-        <Text style={styles.titleFilter}>Destination Type</Text>
+        <Text style={styles.filterHeader}>Destination Type</Text>
         <View style={styles.checkboxView}>
-          <Text>Attractions</Text>
+          <Text>
+          {/* <Image
+                    style={styles.locationIcon}
+                    source={require("../../assets/natureIcon.png")}
+                  /> */}
+            Attractions</Text> 
           <CheckBox
             checked={checkBoxes["Attractions"]}
             onPress={() => {
@@ -166,7 +175,7 @@ const Filter = (props) => {
 
         {checkBoxes["Attractions"] && (
           <>
-            <Text style={styles.titleFilter}>Attraction Type</Text>
+            <Text style={styles.filterHeader}>Attraction Type</Text>
             <View style={styles.checkboxView}>
               <Text>Adventure</Text>
               <CheckBox
@@ -227,12 +236,12 @@ const Filter = (props) => {
                 }}
               />
             </View>
-          </>
+          </> 
         )}
 
         {checkBoxes["Food"] && (
           <>
-            <Text style={styles.titleFilter}>Food Type</Text>
+            <Text style={styles.filterHeader}>Food Type</Text>
             <View style={styles.checkboxView}>
               <Text>Cafe</Text>
               <CheckBox
@@ -274,7 +283,7 @@ const Filter = (props) => {
 
         {checkBoxes["Bars & Clubs"] && (
           <>
-            <Text style={styles.titleFilter}>Bars and Clubs Type</Text>
+            <Text style={styles.filterHeader}>Bars and Clubs Type</Text>
             <View style={styles.checkboxView}>
               <Text>Bars</Text>
               <CheckBox
@@ -302,6 +311,11 @@ const Filter = (props) => {
           </>
         )}
       </ScrollView>
+
+      <TouchableOpacity style={styles.goButton} onPress={handleFinishFilters}>
+          <Text style ={styles.goText}>Let's Go!</Text>
+        </TouchableOpacity>
+        
     </View>
   );
 };
@@ -311,26 +325,30 @@ export default Filter;
 const styles = StyleSheet.create({
   filterContainer: {
     backgroundColor: "white",
-    height: height / 2.2,
+    height: height / 2,
     paddingHorizontal: 30,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     borderWidth: 1,
     borderColor: "#707070",
   },
   topLayer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    //flexDirection: "row",
+    // justifyContent: "space-between",
+    // alignItems: "center",
   },
   title: {
+    paddingTop: 10,
+    fontStyle: 'normal',
+    //fontWeight: 'bold',
     fontSize: 25,
+    textAlign: 'center'
   },
   filterScroll: {
     flex: 1,
-    backgroundColor: "#FFF8DC",
+    backgroundColor: "white",
     borderRadius: 20,
-    paddingLeft: 15,
+    paddingLeft: 10,
     paddingTop: 10,
     marginHorizontal: 10,
   },
@@ -340,11 +358,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
-  titleFilter: {
+  filterHeader: {
     color: "black",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
-    textDecorationLine: "underline",
     textAlign: "center",
   },
   priceSlider: {
@@ -357,4 +374,38 @@ const styles = StyleSheet.create({
     borderTopWidth: 5,
     borderTopColor: "#aaa",
   },
+
+  locationIcon: {
+    //justifyContent: "flex-start",
+    height: 30,
+    width: 30,
+    marginHorizontal: 10,
+  },
+
+  goButton: {
+    width: "5%",
+    length: "5%",
+    alignSelf: "center",
+    backgroundColor: "white",
+    borderRadius: 10,
+    height: "12%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  goButton: {
+    width: "95%",
+    alignSelf: "center",
+    backgroundColor: "#026B00",
+    borderRadius: 10,
+    height: "12%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  goText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white"
+  }
 });
