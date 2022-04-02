@@ -125,7 +125,7 @@ const HistoryScreen = ({ navigation, userDetails }) => {
                 source={require("../../assets/attractions.png")}
               />
             )}
-            <View>
+            <View style={styles.textWrapper}>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("LocationDetails", {
@@ -206,9 +206,6 @@ const styles = StyleSheet.create({
   insideBorder: {
     flex: 1,
     display: "flex",
-    alignItems: "flex-start",
-    flexDirection: "column",
-    justifyContent: "flex-start",
     borderColor: "black",
   },
   HeadStyle: {
@@ -237,7 +234,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
   },
   buttonView: {
     height: 50,
@@ -286,7 +283,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 0.8,
     borderColor: "black",
-    justifyContent: "flex-start",
   },
   locationTextStyle: {
     fontSize: 21,
@@ -312,5 +308,8 @@ const styles = StyleSheet.create({
     // marginTop:170,
     // position: 'absolute',
     // bottom:0
+  },
+  textWrapper: {
+    flexShrink: 1,
   },
 });

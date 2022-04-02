@@ -72,9 +72,6 @@ const MidpointScreen = (props) => {
         style={StyleSheet.absoluteFillObject}
         provider={PROVIDER_GOOGLE}
         region={{
-          // latitude: midPoint.latitude,
-          // longitude: midPoint.longitude,
-          //-0.02
           latitude: midPoint.latitude - 0.02,
           longitude: midPoint.longitude + 0.003,
           latitudeDelta: 0.0922,
@@ -180,7 +177,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-end",
-    // alignItems: "center",
   },
   slider: {
     alignItems: "center",

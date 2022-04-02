@@ -27,6 +27,7 @@ const Filter = (props) => {
     setCheckBoxes,
   } = props;
 
+  // Function to get locations available based on filters and redirects to different screens based on the option chosen
   const handleFinishFilters = async () => {
     setLoading(true);
     const temp_filters = overallFilter;
@@ -73,7 +74,6 @@ const Filter = (props) => {
       setTotalLocationList(locationsList);
       var i = 0;
       while (i < locations.length) {
-        // console.log(locations[i].name);
         i += 1;
       }
 
@@ -92,6 +92,7 @@ const Filter = (props) => {
     }
   };
 
+  // Function to handle going back to previous step
   const handleGoBack = () => {
     if (userOption === "Get Random") {
       setShowFilter(false);
@@ -311,7 +312,6 @@ const styles = StyleSheet.create({
   filterContainer: {
     backgroundColor: "white",
     height: height / 2.2,
-    // alignItems: "center",
     paddingHorizontal: 30,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

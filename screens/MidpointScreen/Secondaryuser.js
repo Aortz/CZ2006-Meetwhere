@@ -28,6 +28,7 @@ const Secondaryuser = (props) => {
     }
   }, [overallFilter]);
 
+  // Function to ensure secondary user is a valid one and in the database
   const validateUser = async () => {
     const trimmedUserName = username.trim();
     if (trimmedUserName.length === 0) {
@@ -87,8 +88,8 @@ const Secondaryuser = (props) => {
           onPress={() => {
             setShowFilter(true);
             setShowSecUserInput(false);
-            
-          }}style={styles.buttonSkip}
+          }}
+          style={styles.buttonSkip}
         >
           <Text style={styles.buttonSkip}>Skip</Text>
         </TouchableOpacity>
@@ -96,8 +97,8 @@ const Secondaryuser = (props) => {
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();
-          }
-        }style={styles.buttonBack}
+          }}
+          style={styles.buttonBack}
         >
           <Text style={styles.buttonBack}>Back</Text>
         </TouchableOpacity>
@@ -162,7 +163,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
 
-
   buttonRow: {
     width: "90%",
     flexDirection: "row",
@@ -178,4 +178,3 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 });
-
