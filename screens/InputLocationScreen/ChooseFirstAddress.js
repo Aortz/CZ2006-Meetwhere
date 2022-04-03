@@ -1,19 +1,14 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-} from "react-native";
-import React, { useRef, useState, useEffect } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useRef, useEffect } from "react";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
+// Component to input first address
 const ChooseFirstAddress = (props) => {
   const { setStepNumber, firstLocation, setFirstLocation, navigation } = props;
 
   const ref = useRef();
 
+  // Restore first address upon going back from second address
   useEffect(() => {
     if (firstLocation !== null) {
       const add = firstLocation.description;
@@ -22,6 +17,7 @@ const ChooseFirstAddress = (props) => {
     }
   }, []);
 
+  // Function to transit to input second address
   const handleNext = () => {
     if (firstLocation === null) {
       return null;

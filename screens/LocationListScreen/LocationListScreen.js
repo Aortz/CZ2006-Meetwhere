@@ -12,10 +12,11 @@ import {
   Linking,
 } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
-import { Card, Divider, CheckBox } from "react-native-elements";
+import { Card, Divider } from "react-native-elements";
 import { useEffect } from "react";
 import { Firebase, db } from "../database/firebase";
 import ComplementaryLocations from "../LocationDetailsScreen/ComplementaryLocations";
+import { removeDuplicate, displayArray, pickRandomImage } from "./helperFunctions";
 
 import React, { useState } from "react";
 
@@ -26,66 +27,17 @@ const LocationListScreen = (props) => {
   let locationList = props.route.params.locationList;
   const overallFilter = props.route.params.overallFilter;
   const [locationDetails, setLocationDetails] = useState(0);
-
+  const [isSelected, setSelection] = useState(false);
   const midPoint = overallFilter.midPoint;
-
-  // const [showComplementary, setShowComplementary] = useState(false);
   const locationID = props.route.params.location;
-  // const prevLocation = props.route.params.prevLocation;
 
   useEffect(() => {
     setSelection(false);
   }, [locationID]);
 
-  const [isSelected, setSelection] = useState(false);
-  // const handleVisiting = () => {
-  //   // Code to add location to user history in firebase
-  //   setShowComplementary(true);
-  // };
-
-  //remove duplicates from list
-  const removeDuplicate = (array) => {
-    array = array.filter(
-      (value, index, self) =>
-        index ===
-        self.findIndex((t) => t.place === value.place && t.name === value.name)
-    );
-    return array;
-  };
-
   locationList = removeDuplicate(locationList);
-  // console.log(locationList.length)
 
-  const displayArray = (locationlist) => {
-    let locationCount = 0;
-    let topFive = [];
-
-    while (locationCount < locationlist.length) {
-      let locationCountString = locationCount.toString();
-      // console.log(locationList[locationCount].name);
-      topFive.push(
-        <Marker
-          key={locationCount}
-          identifier={locationCountString}
-          coordinate={{
-            latitude: locationlist[locationCount].location.latitude,
-            longitude: locationlist[locationCount].location.longitude,
-          }}
-          onPress={(event) => (
-            setLocationDetails(parseInt(event.nativeEvent.id)),
-            console.log("I pressed", event.nativeEvent.id)
-          )}
-        />
-      );
-      locationCount += 1;
-    }
-
-    let topFiveSet = new Set(topFive);
-    topFive = Array.from(topFiveSet);
-    // const map1 = topFive.map((marker,index) => (index % 2 == 0)?{marker.onPress={}})
-    return topFive;
-  };
-
+  //event handler to display reviews from random customer from an array of reviews
   const reviewHandler = (array) => {
     const random = Math.floor(Math.random() * array.length);
     if (array.length > 0) {
@@ -101,15 +53,6 @@ const LocationListScreen = (props) => {
     }
   };
 
-  const pickRandomImage = (array) => {
-    if (array.length == 0) {
-      return "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg";
-    } else {
-      const random = Math.floor(Math.random() * array.length);
-      return array[random];
-    }
-  };
-
   if (midPoint == null) {
     midPoint = {
       latitude: locationList[0].location.latitude,
@@ -117,6 +60,7 @@ const LocationListScreen = (props) => {
     };
   }
 
+  //event handler to handle the different button events
   const buttonHandler = (isBack, array, number) => {
     if (number > 0 && isBack) {
       return setLocationDetails(number - 1);
@@ -131,11 +75,11 @@ const LocationListScreen = (props) => {
     }
   };
 
+  //event handler to update the location user have chosen to his/her history
   function historyHandler() {
     var userProfile = db
       .collection("Users")
       .doc(Firebase.auth().currentUser.uid);
-    // setLocationDetails(locationDetails)
     let userHistory = [];
     userProfile
       .get()
@@ -155,7 +99,6 @@ const LocationListScreen = (props) => {
             currentDateTime,
           ]);
           userHistory.push(...historyData);
-          // setUserDetails((prev) => ({ ...prev, history: userHistory }));
           userProfile
             .update({
               history: userHistory,
@@ -163,7 +106,6 @@ const LocationListScreen = (props) => {
             .then(() => {
               console.log("Document successfully updated!");
               setSelection(true);
-              // console.log(userHistory);
             });
         } else {
           // doc.data() will be undefined in this case
@@ -295,15 +237,6 @@ const LocationListScreen = (props) => {
                 <Card.Divider style={styles.divider} />
                 {reviewHandler(locationList[locationDetails].reviews)}
                 <Card.Divider style={styles.divider} />
-                {/* <View style={styles.checkboxContainer}>
-                <CheckBox
-                  title="Are you visiting?"
-                  style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
-                  checked={isSelected}
-                  onPress={() => historyHandler()}
-                  checkedTitle="Added to your History"
-                />
-              </View> */}
                 <View style={styles.buttonView}>
                   <TouchableOpacity
                     onPress={() => historyHandler()}
@@ -345,6 +278,7 @@ const LocationListScreen = (props) => {
 
 export default LocationListScreen;
 
+//Styling for Location List Screen
 const styles = StyleSheet.create({
   container: {
     flex: 1,

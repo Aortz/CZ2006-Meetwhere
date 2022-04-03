@@ -14,6 +14,7 @@ import { Firebase, db } from "../database/firebase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const HistoryScreen = ({ navigation, userDetails }) => {
+  //function to handle User Object to a parsable dictionary
   const convertArrayToDict = (array) => {
     let i = 0;
     let newArray = [];
@@ -30,7 +31,6 @@ const HistoryScreen = ({ navigation, userDetails }) => {
         newDict["timeOfVisit"] = array[i];
         newArray.push(newDict);
       }
-      // console.log(array[i].categoryDescription)
       i += 1;
     }
     return newArray.reverse();
@@ -39,7 +39,7 @@ const HistoryScreen = ({ navigation, userDetails }) => {
   const [isFetched, setIsFetched] = useState(false);
   const [oldTable, setNewTable] = useState([]);
   const [hist, setHist] = useState(null);
-
+  //useEffect to rerender when data is fetched
   useEffect(() => {
     const fetch = async () => {
       await fetchHistory();
@@ -48,6 +48,7 @@ const HistoryScreen = ({ navigation, userDetails }) => {
     fetch();
   }, []);
 
+  //asynchronous function to fetch history data from firebase
   const fetchHistory = async () => {
     let snapshot = await db
       .collection("Users")
@@ -62,12 +63,11 @@ const HistoryScreen = ({ navigation, userDetails }) => {
     setIsFetched(true);
   };
 
+  //function to delete all history data from firebase
   function deleteHistory() {
     const userProfile = db
       .collection("Users")
       .doc(Firebase.auth().currentUser.uid);
-    // setLocationDetails(locationDetails)
-    let userHistory = [];
     userProfile
       .get()
       .then((doc) => {
@@ -89,6 +89,8 @@ const HistoryScreen = ({ navigation, userDetails }) => {
         console.log("Error getting document:", error);
       });
   }
+
+  //function to format array into JSX elements to be rendered on the History Screen
   const checkHistory = (variable) => {
     if (variable.length === 0) {
       return (
@@ -102,7 +104,6 @@ const HistoryScreen = ({ navigation, userDetails }) => {
     }
     return (
       <FlatList
-        // nestedScrollEnabled = {true}
         scrollEnabled={true}
         data={variable}
         renderItem={({ item }) => (
@@ -125,7 +126,7 @@ const HistoryScreen = ({ navigation, userDetails }) => {
                 source={require("../../assets/attractions.png")}
               />
             )}
-            <View>
+            <View style={styles.textWrapper}>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("LocationDetails", {
@@ -139,7 +140,6 @@ const HistoryScreen = ({ navigation, userDetails }) => {
                   {item.nameCategory[0]}
                 </Text>
               </TouchableOpacity>
-              {/* <Text style={styles.locationTextStyle}>Visited Time:</Text> */}
               <Text style={styles.timeText}>{item.timeOfVisit}</Text>
             </View>
           </View>
@@ -148,6 +148,8 @@ const HistoryScreen = ({ navigation, userDetails }) => {
       />
     );
   };
+
+  //function to find location from the history array
   function findLocation(locationName, table) {
     let i = 0;
     while (i < table.length) {
@@ -157,7 +159,7 @@ const HistoryScreen = ({ navigation, userDetails }) => {
       i += 1;
     }
   }
-  // fetchHistory();
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.border}>
@@ -184,6 +186,7 @@ const HistoryScreen = ({ navigation, userDetails }) => {
 
 export default HistoryScreen;
 
+//Styling for History Screen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -206,9 +209,6 @@ const styles = StyleSheet.create({
   insideBorder: {
     flex: 1,
     display: "flex",
-    alignItems: "flex-start",
-    flexDirection: "column",
-    justifyContent: "flex-start",
     borderColor: "black",
   },
   HeadStyle: {
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
   },
   buttonView: {
     height: 50,
@@ -286,7 +286,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 0.8,
     borderColor: "black",
-    justifyContent: "flex-start",
   },
   locationTextStyle: {
     fontSize: 21,
@@ -312,5 +311,8 @@ const styles = StyleSheet.create({
     // marginTop:170,
     // position: 'absolute',
     // bottom:0
+  },
+  textWrapper: {
+    flexShrink: 1,
   },
 });

@@ -26,6 +26,7 @@ const ComplementaryLocations = (props) => {
     getComplementary();
   }, []);
 
+  // Code to handle redirection to google maps for directions
   const handleGetDirections = () => {
     const address = locationDetail.address;
     let string_address;
@@ -40,6 +41,7 @@ const ComplementaryLocations = (props) => {
     Linking.openURL(url);
   };
 
+  // Function to view complementary location details
   const handlePress = (loc) => {
     navigation.navigate("LocationDetails", {
       location: loc,

@@ -1,8 +1,7 @@
 import { db } from "../database/firebase";
-import geohash from "ngeohash";
 const geofire = require("geofire-common");
 
-// check if key already inside
+// Helper function to convert data to an appropriate form
 export const convertFilters = (temp_filters, checkBoxes) => {
   temp_filters["foodType"] = [];
   temp_filters["attractionType"] = [];
@@ -71,25 +70,7 @@ export const convertFilters = (temp_filters, checkBoxes) => {
   return temp_filters;
 };
 
-const getGeohashRange = (latitude, longitude, distance) => {
-  const lat = 0.000009009; // degrees latitude per m
-  const lon = 0.00001129766; // degrees longitude per m
-
-  const lowerLat = latitude - lat * distance;
-  const lowerLon = longitude - lon * distance;
-
-  const upperLat = latitude + lat * distance;
-  const upperLon = longitude + lon * distance;
-
-  const lower = geohash.encode(lowerLat, lowerLon);
-  const upper = geohash.encode(upperLat, upperLon);
-
-  return {
-    lower,
-    upper,
-  };
-};
-
+// Function to retrieve locations based on filters from the database
 export const getLocations = async (filters, current_user) => {
   const center = [filters.midPoint.latitude, filters.midPoint.longitude];
   const radiusInM = filters["radius"];
