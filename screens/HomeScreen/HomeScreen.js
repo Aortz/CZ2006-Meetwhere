@@ -35,7 +35,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
   const [toprated, setTopRated] = useState(null);
   const [topscreen, setTopScreen] = useState(null);
 
-  const fetchData = async () => {
+  const fetchData = () => {
     let array_index = [];
     let array_photos = [];
     let array_names = [];
@@ -173,14 +173,11 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
       setRandomScreen(array_random);
       setTopScreen(top_rated_object_array);
       setLoading(false);
-    }, 5000);
+    }, 2500);
   };
 
   useEffect(() => {
-    const run = async () => {
-      await fetchData();
-    };
-    run();
+       fetchData();
   }, []);
 
   if (!randomized) {
@@ -236,16 +233,16 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>
           <View>
-            <Divider width={5} color={"black"} />
+            <Divider width={2} color={"grey"} />
             {randomized && (
               <Text style={styles.header2}>Our suggestions of the day!</Text>
             )}
-            <Divider width={5} color={"black"} />
+            <Divider width={2} color={"grey"} />
           </View>
 
           <ScrollView horizontal={true}>
             {!loading &&
-              randomized[0][0] != "undefined" &&
+              randomized[0][0] != "undefined" && 
               randomized[0][0].length > 90 && (
                 <Card style={styles.cardStyle}>
                   <Card.Title>{randomized[1][0]}</Card.Title>
@@ -290,7 +287,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              randomized[0][2] != "undefined" &&
+              randomized[0][2] != "undefined" && 
               randomized[0][2].length > 90 && (
                 <Card>
                   <Card.Title>{randomized[1][2]}</Card.Title>
@@ -313,7 +310,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              randomized[0][3] != "undefined" &&
+              randomized[0][3] != "undefined" && 
               randomized[0][3].length > 90 && (
                 <Card>
                   <Card.Title>{randomized[1][3]}</Card.Title>
@@ -359,7 +356,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              randomized[0][5] != "undefined" &&
+              randomized[0][5] != "undefined" && 
               randomized[0][5].length > 90 && (
                 <Card>
                   <Card.Title>{randomized[1][5]}</Card.Title>
@@ -385,18 +382,18 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
           {/* POPULAR  */}
 
           <View>
-            <Divider width={5} color={"black"} />
+            <Divider width={2} color={"grey"} />
             {toprated && (
               <Text style={styles.header2}>
                 Top rated locations of the day!
               </Text>
             )}
-            <Divider width={5} color={"black"} />
+            <Divider width={2} color={"grey"} />
           </View>
 
           <ScrollView horizontal={true}>
             {!loading &&
-              toprated[0][0] != "undefined" &&
+              toprated[0][0] != "undefined" && 
               toprated[0][0].length > 90 && (
                 <Card style={styles.cardStyle}>
                   <Card.Title>{toprated[0][1]}</Card.Title>
@@ -474,7 +471,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              toprated[3][0] != "undefined" &&
+              toprated[3][0] != "undefined" && 
               toprated[3][0].length > 90 && (
                 <Card>
                   <Card.Title>{toprated[3][1]}</Card.Title>
@@ -500,7 +497,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              toprated[4][0] != "undefined" &&
+              toprated[4][0] != "undefined" && 
               toprated[4][0].length > 90 && (
                 <Card>
                   <Card.Title>{toprated[4][1]}</Card.Title>
@@ -526,7 +523,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               )}
 
             {!loading &&
-              toprated[5][0] != "undefined" &&
+              toprated[5][0] != "undefined" && 
               toprated[5][0].length > 90 && (
                 <Card>
                   <Card.Title>{toprated[5][1]}</Card.Title>
