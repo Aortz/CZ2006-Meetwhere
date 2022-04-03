@@ -4,6 +4,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { db } from "../database/firebase";
@@ -64,7 +65,7 @@ const Secondaryuser = (props) => {
   return (
     <View style={styles.secondaryUser}>
       <Text style={styles.userText}>
-        Would you like to take into account another user's location history
+        Would you like to avoid visiting places visited by another user? If yes, input username! 
       </Text>
       <View style={styles.inputView}>
         {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
@@ -72,7 +73,7 @@ const Secondaryuser = (props) => {
           style={styles.input}
           onChangeText={(text) => setUserName(text)}
           value={username}
-          placeholder="Enter username"
+          placeholder="Enter username of the other user!"
         />
         {successMessage && (
           <Text>
@@ -83,6 +84,15 @@ const Secondaryuser = (props) => {
       </View>
 
       <View style={styles.buttonRow}>
+
+      <TouchableOpacity onPress={validateUser} style={styles.buttonAdd}>
+      <Image
+            style={styles.icon}
+            source={require("../../assets/Visit.png")}
+          />
+          <Text style={styles.buttonAdd}>Add user</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => {
             setShowFilter(true);
@@ -90,21 +100,22 @@ const Secondaryuser = (props) => {
             
           }}style={styles.buttonSkip}
         >
-          <Text style={styles.buttonSkip}>Skip</Text>
+          <Image
+            style={styles.icon}
+            source={require("../../assets/redcross1.png")}
+          />
+          <Text style={styles.buttonSkip}>No thanks!</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             navigation.goBack();
           }
         }style={styles.buttonBack}
         >
           <Text style={styles.buttonBack}>Back</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity onPress={validateUser} style={styles.buttonAdd}>
-          <Text style={styles.buttonAdd}>Add user</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -115,7 +126,7 @@ export default Secondaryuser;
 const styles = StyleSheet.create({
   secondaryUser: {
     backgroundColor: "white",
-    height: "30%",
+    height: "28%",
     alignItems: "center",
     padding: 10,
     paddingHorizontal: 30,
@@ -125,41 +136,45 @@ const styles = StyleSheet.create({
     borderColor: "#707070",
   },
   userText: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: "center",
   },
   input: {
     height: 40,
     marginTop: 13,
-    marginBottom: 5,
+    marginBottom: 10,
     paddingLeft: 8,
     borderWidth: 1,
-
     borderRadius: 15,
-    backgroundColor: "#DCDCDC",
+    backgroundColor: "#ebebeb",
   },
 
   buttonSkip: {
     textDecorationLine: "underline",
+    borderColor: "grey",
     borderRadius: 10,
     paddingVertical: 7,
     paddingHorizontal: 10,
     backgroundColor: "#dcdcdc",
+    flexDirection : "row", 
+    justifyContent : "center",
   },
 
   buttonAdd: {
     textDecorationLine: "underline",
-    backgroundColor: "#8fbc8f",
+    backgroundColor: "#65db60",
     borderRadius: 10,
     paddingVertical: 7,
     paddingHorizontal: 10,
+    flexDirection : "row", 
+    justifyContent : "center",
   },
   buttonBack: {
     textDecorationLine: "underline",
     backgroundColor: "#e9967a",
     borderRadius: 10,
     paddingVertical: 7,
-    paddingHorizontal: 12,
+    paddingHorizontal: 15,
   },
 
 
@@ -175,7 +190,14 @@ const styles = StyleSheet.create({
   },
   inputView: {
     width: "90%",
-    marginBottom: 15,
+    marginBottom: 10,
   },
+  icon: {
+    padding: 16,
+    resizeMode: "contain",
+    height: 20,
+    width: 20,
+  },
+  
 });
 
