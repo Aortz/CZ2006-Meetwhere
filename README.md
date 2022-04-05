@@ -2,12 +2,12 @@
 
 Aim of our project is to find the midpoint between two locations and display the list of attractions/food around the midpoint
 
-Categories considered:
+## Categories considered ##
 1. Attractions
 2. Food and Beverages
 3. Bars and Clubs
 
-Subcategories considered:
+## Subcategories considered ##
 
 **Attraction Type**
 1. Adventure
