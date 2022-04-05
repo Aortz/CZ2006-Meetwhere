@@ -13,7 +13,6 @@ import { Firebase } from "../database/firebase";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Card, Divider } from "react-native-elements";
 
-
 const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
   const randomAttraction = () => {
     return Math.floor(Math.random() * 367) + 1; //gives the string for some attraction spot, to be used in retrieving from db
@@ -254,6 +253,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                     onPress={() => {
                       navigation.navigate("LocationDetails", {
                         location: randomscreen[0],
+                        prevLocation: {
+                          key: "value",
+                        },
                       });
                     }}
                   >
