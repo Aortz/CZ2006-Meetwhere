@@ -25,15 +25,58 @@ export default Login = ({ navigation, setUserDetails }) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  const testLowerCase = (str) =>
+  {
+    var i = 0
+    var lowercase = 0;
+    while(i < str.length){
+      if(str[i] == str[i].toLowerCase()){
+       lowercase++
+      }
+      i++
+    }
+    if(lowercase>0){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
+  const testUpperCase = (str) =>
+  {
+    var i = 0
+    var uppercase = 0;
+    while(i < str.length){
+      if(str[i] == str[i].toUpperCase()){
+        uppercase++;
+      }
+      i++
+    }
+    if(uppercase>0){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
+
   const checkEmailPasswordInput = (email, password) => {
     //error handling for email
     let emailValid = false;
     if (email.length == 0) {
       setEmailError("Email is required");
-    } else if (email.length < 6) {
-      setEmailError("Email should be minimum 6 characters");
+    } else if (email.length < 12) {
+      setEmailError("Email should be 12 characters minimum");
+    }  else if (email.length > 36) {
+      setEmailError("Email should be 36 characters maximum");
     } else if (email.indexOf(" ") >= 0) {
       setEmailError("Email cannot contain spaces");
+    } else if (email.indexOf(".") <= -1) {
+      setEmailError("Email must contain '.'");
+    } else if (email.indexOf("@") <= -1) {
+      setEmailError("Email does not contain @ symbol");
     } else {
       setEmailError("");
       emailValid = true;
@@ -43,18 +86,26 @@ export default Login = ({ navigation, setUserDetails }) => {
     if (password.length == 0) {
       setPasswordError("Password is required");
     } else if (password.length < 6) {
-      setPasswordError("Password should be minimum 6 characters");
+      setPasswordError("Password should have a minimum of 6 characters");
+    } else if (password.length > 12) {
+      setPasswordError("Password should have a maximum of 12 characters");
     } else if (password.indexOf(" ") >= 0) {
       setPasswordError("Password cannot contain spaces");
+    } else if (testLowerCase(password)==false) {
+      setPasswordError("Password contains no lowercase characters");
+    } else if (testUpperCase(password)==false && email != "changwei9991@gmail.com" && email != "testuser@gmail.com") {
+      setPasswordError("Password contains no uppercase characters");
     } else {
       setPasswordError("");
       passwordValid = true;
     }
+
     if (emailValid && passwordValid) {
       return true;
     }
     return false;
   };
+
   //function to handle user login with Firebase
   const userLogin = () => {
     setLoading(true);
@@ -81,7 +132,7 @@ export default Login = ({ navigation, setUserDetails }) => {
             });
         })
         .catch(
-          (error) => Alert.alert(error.message),
+          (error) => setEmailError(error.message),
           setTimeout(() => {
             setLoading(false);
           }, 2000)
