@@ -274,6 +274,7 @@ const styles = StyleSheet.create({
   textStyle: {
     flex: 1,
     fontSize: 14,
+    textAlign: 'center',
     fontStyle: "italic",
     alignSelf: "center",
     color: "#7B7B7B",

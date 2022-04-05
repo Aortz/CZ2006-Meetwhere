@@ -24,6 +24,42 @@ export default Signup = ({ navigation }) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  const testLowerCase = (str) =>
+  {
+    var i = 0
+    var lowercase = 0;
+    while(i < str.length){
+      if(str[i] == str[i].toLowerCase()){
+       lowercase++
+      }
+      i++
+    }
+    if(lowercase>0){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
+  const testUpperCase = (str) =>
+  {
+    var i = 0
+    var uppercase = 0;
+    while(i < str.length){
+      if(str[i] == str[i].toUpperCase()){
+        uppercase++;
+      }
+      i++
+    }
+    if(uppercase>0){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
   const checkEmailPasswordInput = (displayName, email, password) => {
     const usersRef = db.collection("Users");
 
@@ -57,10 +93,16 @@ export default Signup = ({ navigation }) => {
     });
     if (email.length == 0) {
       setEmailError("Email is required");
-    } else if (email.length < 6) {
-      setEmailError("Email should be minimum 6 characters");
+    } else if (email.length < 12) {
+      setEmailError("Email should be minimum 12 characters");
+    } else if (email.length > 36) {
+      setEmailError("Email should be maximum 36 characters");
     } else if (email.indexOf(" ") >= 0) {
       setEmailError("Email cannot contain spaces");
+    } else if (email.indexOf(".") <= -1) {
+      setEmailError("Email must contain '.'");
+    } else if (email.indexOf("@") <= -1) {
+      setEmailError("Email does not contain @ symbol");
     } else {
       setEmailError("");
       emailValid = true;
@@ -71,6 +113,12 @@ export default Signup = ({ navigation }) => {
       setPasswordError("Password is required");
     } else if (password.length < 6) {
       setPasswordError("Password should be minimum 6 characters");
+    } else if (password.length > 12) {
+      setPasswordError("Password should be maximum 12 characters");
+    } else if (testLowerCase(password)==false) {
+      setPasswordError("Password contains no lowercase characters");
+    } else if (testUpperCase(password)==false) {
+      setPasswordError("Password contains no uppercase characters");
     } else if (password.indexOf(" ") >= 0) {
       setPasswordError("Password cannot contain spaces");
     } else {
