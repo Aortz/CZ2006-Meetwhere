@@ -8,6 +8,7 @@ Categories considered:
 3. Bars and Clubs
 
 Subcategories considered:
+
 **Attraction Type**
 1. Adventure
 2. Arts
