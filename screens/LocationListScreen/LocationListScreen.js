@@ -16,7 +16,11 @@ import { Card, Divider } from "react-native-elements";
 import { useEffect } from "react";
 import { Firebase, db } from "../database/firebase";
 import ComplementaryLocations from "../LocationDetailsScreen/ComplementaryLocations";
-import { removeDuplicate, displayArray, pickRandomImage } from "./helperFunctions";
+import {
+  removeDuplicate,
+  displayArray,
+  pickRandomImage,
+} from "./helperFunctions";
 
 import React, { useState } from "react";
 
@@ -123,8 +127,8 @@ const LocationListScreen = (props) => {
         style={StyleSheet.absoluteFillObject}
         provider={PROVIDER_GOOGLE}
         region={{
-          latitude: locationList[locationDetails].location.latitude - 0.01,
-          longitude: locationList[locationDetails].location.longitude,
+          latitude: locationList[locationDetails].location.latitude - 0.02,
+          longitude: locationList[locationDetails].location.longitude + 0.01,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}

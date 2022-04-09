@@ -63,7 +63,9 @@ const ComplementaryLocations = (props) => {
           style={styles.locationIcon}
           source={require("../../assets/gMaps.png")}
         />
-        <Text style={styles.locationTextStyle}>Get Directions</Text>
+        <View>
+          <Text style={styles.locationTextStyle}>Get Directions</Text>
+        </View>
       </TouchableOpacity>
       <View style={styles.bottomSheet}>
         <Text style={styles.compLocationTextStyle}>
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
   },
   buttonDirections: {
     width: "70%",
-    height: "15%",
+    height: 38,
     backgroundColor: "#3846C2",
     borderRadius: 10,
     flexDirection: "row",
@@ -156,7 +158,6 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     alignSelf: "stretch",
-    paddingVertical: 5,
     fontWeight: "bold",
     paddingHorizontal: 10,
   },
