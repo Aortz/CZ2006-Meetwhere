@@ -392,7 +392,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
               <Divider width={1} color={"black"} />
               {toprated && (
                 <Text style={styles.header2}>
-                  Top Rated Locations
+                  Top-Rated Locations
                 </Text>
               )}
               <Divider width={3} color={"black"} />
