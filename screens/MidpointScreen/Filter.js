@@ -109,6 +109,7 @@ const Filter = (props) => {
         {/* <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
           <Text>Back</Text>
         </TouchableOpacity> */}
+        <Image style={styles.filterIcon} source={require("../../assets/filter.png")} />
         <Text style={styles.title}>Filters</Text>
       </View>
       <View
@@ -119,14 +120,12 @@ const Filter = (props) => {
       />
 
       <ScrollView style={styles.filterScroll}>
-        <Text style={styles.filterHeader}>Destination Type</Text>
+        <View>
+          <Text style={styles.filterHeader}>Destination Type</Text>
+        </View>
         <View style={styles.checkboxView}>
-          <Text>
-          {/* <Image
-                    style={styles.locationIcon}
-                    source={require("../../assets/natureIcon.png")}
-                  /> */}
-            Attractions</Text> 
+          <Image style={styles.locationIcon} source={require("../../assets/attractions.png")} />
+          <Text>Attractions</Text>
           <CheckBox
             checked={checkBoxes["Attractions"]}
             onPress={() => {
@@ -143,6 +142,7 @@ const Filter = (props) => {
           />
         </View>
         <View style={styles.checkboxView}>
+          <Image style={styles.locationIcon} source={require("../../assets/food.png")} />
           <Text>Food</Text>
           <CheckBox
             checked={checkBoxes["Food"]}
@@ -159,6 +159,7 @@ const Filter = (props) => {
         </View>
 
         <View style={styles.checkboxView}>
+          <Image style={styles.locationIcon} source={require("../../assets/bars.png")} />
           <Text>Bars and Clubs</Text>
           <CheckBox
             checked={checkBoxes["Bars & Clubs"]}
@@ -177,6 +178,7 @@ const Filter = (props) => {
           <>
             <Text style={styles.filterHeader}>Attraction Type</Text>
             <View style={styles.checkboxView}>
+              <Image style={styles.locationIcon} source={require("../../assets/adventure.png")} />
               <Text>Adventure</Text>
               <CheckBox
                 checked={checkBoxes["Adventure"]}
@@ -189,6 +191,7 @@ const Filter = (props) => {
               />
             </View>
             <View style={styles.checkboxView}>
+              <Image style={styles.locationIcon} source={require("../../assets/arts.png")} />
               <Text>Arts</Text>
               <CheckBox
                 checked={checkBoxes["Arts"]}
@@ -201,6 +204,7 @@ const Filter = (props) => {
               />
             </View>
             <View style={styles.checkboxView}>
+              <Image style={styles.locationIcon} source={require("../../assets/natureIcon.png")} />
               <Text>Nature and Wildlife</Text>
               <CheckBox
                 checked={checkBoxes["Nature & Wildlife"]}
@@ -213,6 +217,7 @@ const Filter = (props) => {
               />
             </View>
             <View style={styles.checkboxView}>
+              <Image style={styles.locationIcon} source={require("../../assets/leisure.png")} />
               <Text>Leisure and Recreation</Text>
               <CheckBox
                 checked={checkBoxes["Leisure & Recreation"]}
@@ -225,6 +230,7 @@ const Filter = (props) => {
               />
             </View>
             <View style={styles.checkboxView}>
+              <Image style={styles.locationIcon} source={require("../../assets/historyIcon.png")} />
               <Text>History and Culture</Text>
               <CheckBox
                 checked={checkBoxes["History & Culture"]}
@@ -243,6 +249,7 @@ const Filter = (props) => {
           <>
             <Text style={styles.filterHeader}>Food Type</Text>
             <View style={styles.checkboxView}>
+              <Image style={styles.locationIcon} source={require("../../assets/cafe.png")} />
               <Text>Cafe</Text>
               <CheckBox
                 checked={checkBoxes["Cafe"]}
@@ -255,6 +262,7 @@ const Filter = (props) => {
               />
             </View>
             <View style={styles.checkboxView}>
+              <Image style={styles.locationIcon} source={require("../../assets/restaurant.png")} />
               <Text>Restaurants</Text>
               <CheckBox
                 checked={checkBoxes["Restaurants"]}
@@ -267,6 +275,7 @@ const Filter = (props) => {
               />
             </View>
             <View style={styles.checkboxView}>
+              <Image style={styles.locationIcon} source={require("../../assets/hawker.png")} />
               <Text>Hawker Centres</Text>
               <CheckBox
                 checked={checkBoxes["Hawker Centres"]}
@@ -285,6 +294,7 @@ const Filter = (props) => {
           <>
             <Text style={styles.filterHeader}>Bars and Clubs Type</Text>
             <View style={styles.checkboxView}>
+              <Image style={styles.locationIcon} source={require("../../assets/cocktail.png")} />
               <Text>Bars</Text>
               <CheckBox
                 checked={checkBoxes["Bars"]}
@@ -297,6 +307,7 @@ const Filter = (props) => {
               />
             </View>
             <View style={styles.checkboxView}>
+              <Image style={styles.locationIcon} source={require("../../assets/club.png")} />
               <Text>Clubs</Text>
               <CheckBox
                 checked={checkBoxes["Clubs"]}
@@ -326,16 +337,16 @@ const styles = StyleSheet.create({
   filterContainer: {
     backgroundColor: "white",
     height: height / 2,
-    paddingHorizontal: 30,
+    paddingHorizontal: 25,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderWidth: 1,
     borderColor: "#707070",
   },
   topLayer: {
-    //flexDirection: "row",
-    // justifyContent: "space-between",
-    // alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     paddingTop: 10,
@@ -363,6 +374,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
+    borderBottomWidth:0.5,
   },
   priceSlider: {
     alignItems: "center",
@@ -377,10 +389,27 @@ const styles = StyleSheet.create({
 
   locationIcon: {
     //justifyContent: "flex-start",
-    height: 30,
-    width: 30,
+    height: 25,
+    width: 25,
     marginHorizontal: 10,
   },
+
+  filterIcon: {
+    //justifyContent: "flex-start",
+    marginTop: 10,
+    height: 25,
+    width: 25,
+    marginHorizontal: 10,
+  },
+
+  categoryIcon: {
+    margin: 10,
+    marginTop: 10,
+    height: 25,
+    width: 25,
+    marginHorizontal: 10,
+  },
+
 
   goButton: {
     width: "5%",

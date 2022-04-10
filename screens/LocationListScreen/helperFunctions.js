@@ -45,6 +45,7 @@ export const displayArray = (locationlist) => {
             setLocationDetails(parseInt(event.nativeEvent.id)),
             console.log("I pressed", event.nativeEvent.id)
           )}
+          image={require('../../assets/club.png')}
         />
       );
       locationCount += 1;

@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   buttonNext: {
     width: "30%",
-    backgroundColor: "#009900",
+    backgroundColor: "#026B00",
     borderRadius: 10,
     height: 45,
     flexDirection: "row",
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   buttonBack: {
     width: "30%",
-    backgroundColor: "#ff1a1a",
+    backgroundColor: "#cc2114",
     borderRadius: 10,
     height: 45,
     flexDirection: "row",

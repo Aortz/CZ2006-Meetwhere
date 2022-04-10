@@ -187,6 +187,10 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
   //const popular = ['https://pbs.twimgi.com/profile_images/486929358120964097/gNLINY67_400x400.png','https://pbs.twimg.com/profile_images/486929358120964097/gNLINY67_400x400.png']
   return (
     <View style={styles.container}>
+      <Image 
+          style={styles.banner}
+          source={require('../../assets/meetwhere-icon.png')}
+      />
       <Text style={styles.header}>Welcome {userDetails.userName}!</Text>
       <View style={styles.iconsview}>
         <TouchableOpacity
@@ -578,7 +582,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 30,
-    padding: 20,
+    paddingBottom: 20,
     fontWeight: "bold",
     color: "black",
   },
@@ -639,5 +643,16 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: "black",
     textAlign: "center",
+  },
+  banner: {
+    marginTop: 30,
+    // flex: ,
+    height: 40,
+    width: 120,
+    // marginLeft: 75,
+    alignSelf: "center",
+    // marginTop:170,
+    // position: 'absolute',
+    // bottom:0
   },
 });
