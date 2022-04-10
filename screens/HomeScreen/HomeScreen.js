@@ -6,7 +6,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Pressable,
   ScrollView,
   ActivityIndicator,
 } from "react-native";
@@ -29,6 +28,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     return Math.floor(Math.random() * 49) + 1;
   };
 
+  //states to be used in random generation 
   const [randomized, setRandomized] = useState(null);
   const [randomscreen, setRandomScreen] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,13 +43,10 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     let array_random = [];
 
     for (let i = 0; i < 2; i++) {
-      //generate 6 indexes
+      //generate 6 locations' index in DB, 2 of each type of location, save in array_index
       array_index.push(String(randomAttraction()));
-      //console.log(randomAttraction());
       array_index.push(String(randomBar()));
-      //console.log(randomBar());
       array_index.push(String(randomFood()));
-      //console.log(randomFood());
     }
 
     for (var i = 0; i < 6; i++) {
@@ -60,10 +57,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
           .doc(array_index[i])
           .get()
           .then((document) => {
-            // console.log(document.data().images[0]);
             array_photos.push(String(document.data().images[0]));
-            // console.log(array_photos);
-            // console.log(document.data().name);
             array_names.push(String(document.data().name));
             array_random.push(document.data());
           });
@@ -73,9 +67,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
           .doc(array_index[i])
           .get()
           .then((document) => {
-            //console.log(document.data().images[0]);
             array_photos.push(String(document.data().images[0]));
-            //console.log(document.data().name);
             array_names.push(String(document.data().name));
             array_random.push(document.data());
           });
@@ -85,12 +77,8 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
           .doc(array_index[i])
           .get()
           .then((document) => {
-            //console.log(document.data().images[0]);
             array_photos.push(String(document.data().images[0]));
-            // console.log(document.data().name);
             array_names.push(String(document.data().name));
-            // console.log(array_photos);
-            // console.log(array_names);
             array_random.push(document.data());
           });
       }
@@ -107,7 +95,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
       .collection("Attractions")
       .where("rating", ">", 4.5)
       .orderBy("rating", "desc")
-      .limit(20)
+      .limit(20) //get top 20 attractions
       .get()
       .then((QuerySnapshot) => {
         QuerySnapshot.forEach((DocumentSnapshot) => {
@@ -121,7 +109,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
       .collection("Bars & Clubs")
       .where("rating", ">", 4.5)
       .orderBy("rating", "desc")
-      .limit(10)
+      .limit(10) //get top 10 bars and clubs 
       .get()
       .then((QuerySnapshot) => {
         QuerySnapshot.forEach((DocumentSnapshot) => {
@@ -136,7 +124,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
       .collection("Food & Beverages")
       .where("rating", ">", 4.5)
       .orderBy("rating", "desc")
-      .limit(20)
+      .limit(20)  //get top 20 food spots 
       .get()
       .then((QuerySnapshot) => {
         QuerySnapshot.forEach((DocumentSnapshot) => {
@@ -148,7 +136,6 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
       });
 
     setTimeout(() => {
-      //console.log('Initial timeout!');
       array_of_array.push(array_photos);
       array_of_array.push(array_names);
 
@@ -159,15 +146,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
           top_rated_names[num],
           top_rated_rating[num],
         ]);
-        top_rated_object_array.push(top_rated_object[num]);
+        top_rated_object_array.push(top_rated_object[num]); //top rated objects that is to be displayed
       }
-      // console.log(array_index);
-      // console.log(array_names);
-      // console.log(array_photos);
-      // console.log(top_rated_photos);
-      // console.log(top_rated_names);
-      // console.log(top_rated_rating);
-      // console.log(top_rated_array);
+
       setRandomized(array_of_array);
       setTopRated(top_rated_array);
       setRandomScreen(array_random);
@@ -184,7 +165,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     return null;
   }
 
-  //const popular = ['https://pbs.twimgi.com/profile_images/486929358120964097/gNLINY67_400x400.png','https://pbs.twimg.com/profile_images/486929358120964097/gNLINY67_400x400.png']
+  
   return (
     <View style={styles.container}>
       <ImageBackground source={require("../../assets/homepage.jpg")} resizeMode="cover" style={styles.background}>
