@@ -107,6 +107,20 @@ const LocationDetailsScreen = (props) => {
       });
   };
 
+  const handleGetDirections = () => {
+    const address = locationDetail.address;
+    let string_address;
+    if (address.postalCode.length != 0) {
+      string_address = escape(`Singapore ${address.postalCode}`);
+    } else {
+      string_adress = escape(`${address.block} ${address.streetName}`);
+    }
+
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${string_address}&travelmode=transit`;
+
+    Linking.openURL(url);
+  };
+
   if (locationDetail === null) {
     return null;
   }
@@ -130,6 +144,22 @@ const LocationDetailsScreen = (props) => {
           pinColor={"red"}
         />
       </MapView>
+      {!showComplementary && fromHistory && (
+        <View style={styles.buttonView}>
+          <TouchableOpacity
+            style={styles.buttonDirections}
+            onPress={handleGetDirections}
+          >
+            <Image
+              style={styles.locationIcon}
+              source={require("../../assets/gMaps.png")}
+            />
+            <View>
+              <Text style={styles.locationTextStyle}>Get Directions</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
       {!showComplementary && (
         <View style={styles.bottomSheet}>
           <SafeAreaView style={styles.detailsScroll}>
@@ -325,7 +355,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#95FF9F",
     borderRadius: 10,
     // position:"absolute",
-    height: "100%",
+    height: 40,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -354,7 +384,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffd68c",
     borderRadius: 10,
     // position:"absolute",
-    height: "100%",
+    height: 40,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -388,6 +418,35 @@ const styles = StyleSheet.create({
     marginRight: 30,
     justifyContent: "flex-start",
     alignItems: "flex-start",
+  },
+  locationIcon: {
+    //justifyContent: "flex-start",
+    height: 30,
+    width: 30,
+    marginHorizontal: 10,
+  },
+
+  locationTextStyle: {
+    fontSize: 17,
+    color: "white",
+    textAlign: "center",
+    alignSelf: "stretch",
+    fontWeight: "bold",
+    paddingHorizontal: 10,
+  },
+  buttonDirections: {
+    width: "70%",
+    height: 38,
+    backgroundColor: "#3846C2",
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 1,
+  },
+
+  buttonView: {
+    alignItems: "center",
   },
 });
 

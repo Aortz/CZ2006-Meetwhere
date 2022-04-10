@@ -66,7 +66,8 @@ const Secondaryuser = (props) => {
   return (
     <View style={styles.secondaryUser}>
       <Text style={styles.userText}>
-        Would you like to avoid visiting places visited by another user? If yes, input username! 
+        Would you like to avoid visiting places visited by another user? If yes,
+        input username!
       </Text>
       <View style={styles.inputView}>
         {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
@@ -85,9 +86,8 @@ const Secondaryuser = (props) => {
       </View>
 
       <View style={styles.buttonRow}>
-
-      <TouchableOpacity onPress={validateUser} style={styles.buttonAdd}>
-      <Image
+        <TouchableOpacity onPress={validateUser} style={styles.buttonAdd}>
+          <Image
             style={styles.icon}
             source={require("../../assets/Visit.png")}
           />
@@ -116,7 +116,6 @@ const Secondaryuser = (props) => {
         >
           <Text style={styles.buttonBack}>Back</Text>
         </TouchableOpacity> */}
-
       </View>
     </View>
   );
@@ -127,7 +126,7 @@ export default Secondaryuser;
 const styles = StyleSheet.create({
   secondaryUser: {
     backgroundColor: "white",
-    height: "28%",
+    height: 200,
     alignItems: "center",
     padding: 10,
     paddingHorizontal: 30,
@@ -157,9 +156,8 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 10,
     backgroundColor: "#dcdcdc",
-    flexDirection : "row", 
-    justifyContent : "center",
-    alignItems: "center"
+    flexDirection: "row",
+    justifyContent: "center",
   },
 
   buttonAdd: {
@@ -168,9 +166,9 @@ const styles = StyleSheet.create({
     color: "white",
     borderRadius: 10,
     paddingVertical: 7,
-    paddingHorizontal: 7,
-    flexDirection : "row", 
-    justifyContent : "space-between",
+    paddingHorizontal: 10,
+    flexDirection: "row",
+    justifyContent: "center",
   },
   buttonBack: {
     textDecorationLine: "underline",
@@ -200,11 +198,4 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
   },
-  crossIcon: {
-    paddingTop: 20,
-    resizeMode: "contain",
-    height: 20,
-    width: 20,
-  },
-  
 });
