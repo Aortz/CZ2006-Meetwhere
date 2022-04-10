@@ -166,9 +166,9 @@ const styles = StyleSheet.create({
     color: "white",
     borderRadius: 10,
     paddingVertical: 7,
-    paddingHorizontal: 10,
-    flexDirection: "row",
-    justifyContent: "center",
+    paddingHorizontal: 7,
+    flexDirection : "row", 
+    justifyContent : "space-between",
   },
   buttonBack: {
     textDecorationLine: "underline",
@@ -198,4 +198,11 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
   },
+  crossIcon: {
+    paddingTop: 20,
+    resizeMode: "contain",
+    height: 20,
+    width: 20,
+  },
+  
 });
