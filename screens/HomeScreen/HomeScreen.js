@@ -41,6 +41,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     let array_names = [];
     let array_of_array = [];
     let array_random = [];
+    let promises = []; 
 
     for (let i = 0; i < 2; i++) {
       //generate 6 locations' index in DB, 2 of each type of location, save in array_index
@@ -61,6 +62,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
             array_names.push(String(document.data().name));
             array_random.push(document.data());
           });
+          promises.push(attractRef); 
       } else if (i % 3 == 1) {
         let barRef = Firebase.firestore()
           .collection("Bars & Clubs")
@@ -71,6 +73,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
             array_names.push(String(document.data().name));
             array_random.push(document.data());
           });
+          promises.push(barRef); 
       } else {
         let foodRef = Firebase.firestore()
           .collection("Food & Beverages")
@@ -81,6 +84,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
             array_names.push(String(document.data().name));
             array_random.push(document.data());
           });
+          promises.push(foodRef); 
       }
     }
 
@@ -105,6 +109,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
           top_rated_rating.push(String(DocumentSnapshot.data().rating));
         });
       });
+      promises.push(top_rated_attract); 
     let top_rated_bar = Firebase.firestore()
       .collection("Bars & Clubs")
       .where("rating", ">", 4.5)
@@ -119,6 +124,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
           top_rated_rating.push(String(DocumentSnapshot.data().rating));
         });
       });
+      promises.push(top_rated_bar); 
 
     let top_rated_food = Firebase.firestore()
       .collection("Food & Beverages")
@@ -135,26 +141,29 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
         });
       });
 
-    setTimeout(() => {
-      array_of_array.push(array_photos);
-      array_of_array.push(array_names);
+      promises.push(top_rated_food); 
 
-      for (let i = 0; i < 6; i++) {
-        let num = randomTop();
-        top_rated_array.push([
-          top_rated_photos[num],
-          top_rated_names[num],
-          top_rated_rating[num],
-        ]);
-        top_rated_object_array.push(top_rated_object[num]); //top rated objects that is to be displayed
-      }
+      Promise.all(promises).then(() => {
+        array_of_array.push(array_photos);
+        array_of_array.push(array_names);
 
-      setRandomized(array_of_array);
-      setTopRated(top_rated_array);
-      setRandomScreen(array_random);
-      setTopScreen(top_rated_object_array);
-      setLoading(false);
-    }, 2500);
+        for (let i = 0; i < 6; i++) {
+          let num = randomTop();
+          top_rated_array.push([
+            top_rated_photos[num],
+            top_rated_names[num],
+            top_rated_rating[num],
+          ]);
+          top_rated_object_array.push(top_rated_object[num]); //top rated objects that is to be displayed
+        }
+  
+        setRandomized(array_of_array);
+        setTopRated(top_rated_array);
+        setRandomScreen(array_random);
+        setTopScreen(top_rated_object_array);
+        setLoading(false);
+    });
+    
   };
 
   useEffect(() => {
