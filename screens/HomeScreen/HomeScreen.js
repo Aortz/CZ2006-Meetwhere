@@ -647,4 +647,15 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
   },
+  banner: {
+    marginTop: 30,
+    // flex: ,
+    height: 40,
+    width: 120,
+    // marginLeft: 75,
+    alignSelf: "center",
+    // marginTop:170,
+    // position: 'absolute',
+    // bottom:0
+  },
 });

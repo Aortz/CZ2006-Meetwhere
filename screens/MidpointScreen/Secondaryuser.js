@@ -91,7 +91,7 @@ const Secondaryuser = (props) => {
             style={styles.icon}
             source={require("../../assets/Visit.png")}
           />
-          <Text style={styles.buttonAdd}>Add user</Text>
+          <Text style={styles.buttonAdd}>Add User</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -102,10 +102,10 @@ const Secondaryuser = (props) => {
           style={styles.buttonSkip}
         >
           <Image
-            style={styles.icon}
+            style={styles.crossIcon}
             source={require("../../assets/redcross1.png")}
           />
-          <Text style={styles.buttonSkip}>No thanks!</Text>
+          <Text style={styles.buttonSkip}>No Thanks!</Text>
         </TouchableOpacity>
 
         {/* <TouchableOpacity
@@ -162,19 +162,20 @@ const styles = StyleSheet.create({
 
   buttonAdd: {
     textDecorationLine: "underline",
-    backgroundColor: "#65db60",
+    backgroundColor: "#026B00",
+    color: "white",
     borderRadius: 10,
     paddingVertical: 7,
-    paddingHorizontal: 10,
-    flexDirection: "row",
-    justifyContent: "center",
+    paddingHorizontal: 7,
+    flexDirection : "row", 
+    justifyContent : "space-between",
   },
   buttonBack: {
     textDecorationLine: "underline",
     backgroundColor: "#e9967a",
     borderRadius: 10,
     paddingVertical: 7,
-    paddingHorizontal: 15,
+    paddingHorizontal: 7,
   },
 
   buttonRow: {
@@ -197,4 +198,11 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
   },
+  crossIcon: {
+    paddingTop: 20,
+    resizeMode: "contain",
+    height: 20,
+    width: 20,
+  },
+  
 });
