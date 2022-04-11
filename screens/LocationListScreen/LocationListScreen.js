@@ -127,8 +127,8 @@ const LocationListScreen = (props) => {
         style={StyleSheet.absoluteFillObject}
         provider={PROVIDER_GOOGLE}
         region={{
-          latitude: locationList[locationDetails].location.latitude - 0.02,
-          longitude: locationList[locationDetails].location.longitude + 0.01,
+          latitude: locationList[locationDetails].location.latitude,
+          longitude: locationList[locationDetails].location.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
