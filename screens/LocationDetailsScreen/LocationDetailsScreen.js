@@ -49,6 +49,7 @@ const LocationDetailsScreen = (props) => {
     if (array.length > 0) {
       return (
         <View>
+          <Text style={styles.firstDiv}>Reviews</Text>
           <Text style={styles.locationTextStyle}>{array[random].text}</Text>
           <Text style={styles.locationTextStyle}>
             Author: {array[random].authorName}
@@ -210,7 +211,6 @@ const LocationDetailsScreen = (props) => {
                   {locationDetail.officialWebsite}
                 </Text>
                 <Card.Divider style={styles.divider} />
-                <Text style={styles.firstDiv}>Reviews</Text>
                 {reviewHandler(locationDetail.reviews)}
                 <Card.Divider style={styles.divider} />
                 <Text style={styles.gap} />
@@ -427,12 +427,11 @@ const styles = StyleSheet.create({
   },
 
   locationTextStyle: {
-    fontSize: 17,
-    color: "white",
+    fontSize: 14,
     textAlign: "center",
     alignSelf: "stretch",
-    fontWeight: "bold",
-    paddingHorizontal: 10,
+    paddingVertical: 2,
+    color: "#000000",
   },
   buttonDirections: {
     width: "70%",

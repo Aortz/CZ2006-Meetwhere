@@ -28,7 +28,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     return Math.floor(Math.random() * 49) + 1;
   };
 
-  //states to be used in random generation 
+  //states to be used in random generation
   const [randomized, setRandomized] = useState(null);
   const [randomscreen, setRandomScreen] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -41,7 +41,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
     let array_names = [];
     let array_of_array = [];
     let array_random = [];
-    let promises = []; 
+    let promises = [];
 
     for (let i = 0; i < 2; i++) {
       //generate 6 locations' index in DB, 2 of each type of location, save in array_index
@@ -62,7 +62,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
             array_names.push(String(document.data().name));
             array_random.push(document.data());
           });
-          promises.push(attractRef); 
+        promises.push(attractRef);
       } else if (i % 3 == 1) {
         let barRef = Firebase.firestore()
           .collection("Bars & Clubs")
@@ -73,7 +73,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
             array_names.push(String(document.data().name));
             array_random.push(document.data());
           });
-          promises.push(barRef); 
+        promises.push(barRef);
       } else {
         let foodRef = Firebase.firestore()
           .collection("Food & Beverages")
@@ -84,7 +84,7 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
             array_names.push(String(document.data().name));
             array_random.push(document.data());
           });
-          promises.push(foodRef); 
+        promises.push(foodRef);
       }
     }
 
@@ -109,12 +109,12 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
           top_rated_rating.push(String(DocumentSnapshot.data().rating));
         });
       });
-      promises.push(top_rated_attract); 
+    promises.push(top_rated_attract);
     let top_rated_bar = Firebase.firestore()
       .collection("Bars & Clubs")
       .where("rating", ">", 4.5)
       .orderBy("rating", "desc")
-      .limit(10) //get top 10 bars and clubs 
+      .limit(10) //get top 10 bars and clubs
       .get()
       .then((QuerySnapshot) => {
         QuerySnapshot.forEach((DocumentSnapshot) => {
@@ -124,13 +124,13 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
           top_rated_rating.push(String(DocumentSnapshot.data().rating));
         });
       });
-      promises.push(top_rated_bar); 
+    promises.push(top_rated_bar);
 
     let top_rated_food = Firebase.firestore()
       .collection("Food & Beverages")
       .where("rating", ">", 4.5)
       .orderBy("rating", "desc")
-      .limit(20)  //get top 20 food spots 
+      .limit(20) //get top 20 food spots
       .get()
       .then((QuerySnapshot) => {
         QuerySnapshot.forEach((DocumentSnapshot) => {
@@ -141,50 +141,52 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
         });
       });
 
-      promises.push(top_rated_food); 
+    promises.push(top_rated_food);
 
-      Promise.all(promises).then(() => {
-        array_of_array.push(array_photos);
-        array_of_array.push(array_names);
+    Promise.all(promises).then(() => {
+      array_of_array.push(array_photos);
+      array_of_array.push(array_names);
 
-        for (let i = 0; i < 6; i++) {
-          let num = randomTop();
-          top_rated_array.push([
-            top_rated_photos[num],
-            top_rated_names[num],
-            top_rated_rating[num],
-          ]);
-          top_rated_object_array.push(top_rated_object[num]); //top rated objects that is to be displayed
-        }
-  
-        setRandomized(array_of_array);
-        setTopRated(top_rated_array);
-        setRandomScreen(array_random);
-        setTopScreen(top_rated_object_array);
-        setLoading(false);
+      for (let i = 0; i < 6; i++) {
+        let num = randomTop();
+        top_rated_array.push([
+          top_rated_photos[num],
+          top_rated_names[num],
+          top_rated_rating[num],
+        ]);
+        top_rated_object_array.push(top_rated_object[num]); //top rated objects that is to be displayed
+      }
+
+      setRandomized(array_of_array);
+      setTopRated(top_rated_array);
+      setRandomScreen(array_random);
+      setTopScreen(top_rated_object_array);
+      setLoading(false);
     });
-    
   };
 
   useEffect(() => {
-       fetchData();
+    fetchData();
   }, []);
 
   if (!randomized) {
     return null;
   }
 
-  
   return (
     <View style={styles.container}>
-      <ImageBackground source={require("../../assets/homepage.jpg")} resizeMode="cover" style={styles.background}>
-      <View style={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
-        <Image
-          style={styles.banner}
-          source={require("../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png")}
-        />
-        <Text style={styles.header}>Welcome, {userDetails.userName}!</Text>
-        <View style={styles.iconsview}>
+      <ImageBackground
+        source={require("../../assets/homepage.jpg")}
+        resizeMode="cover"
+        style={styles.background}
+      >
+        <View style={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}>
+          <Image
+            style={styles.banner}
+            source={require("../AuthenticationScreen/AuthenticationAssets/meetwhere-icon.png")}
+          />
+          <Text style={styles.header}>Welcome, {userDetails.userName}!</Text>
+          <View style={styles.iconsview}>
             <TouchableOpacity
               style={styles.touchableStyle}
               onPress={() => {
@@ -226,8 +228,10 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
             {/* history icon button  */}
           </View>
         </View>
-      
-        <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
+
+        <SafeAreaView
+          style={{ flex: 1, backgroundColor: "rgba(255, 255, 255, 0.8)" }}
+        >
           <ScrollView>
             <View>
               <Divider width={1} color={"black"} />
@@ -248,13 +252,16 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       onPress={() => {
                         navigation.navigate("LocationDetails", {
                           location: randomscreen[0],
+                          prevLocation: { key: "value" },
                         });
                       }}
                     >
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: randomized[0][0] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                   </Card>
@@ -277,7 +284,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: randomized[0][1] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                   </Card>
@@ -300,7 +309,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: randomized[0][2] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                   </Card>
@@ -323,7 +334,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: randomized[0][3] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                   </Card>
@@ -346,7 +359,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: randomized[0][4] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                   </Card>
@@ -369,7 +384,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: randomized[0][5] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                   </Card>
@@ -378,12 +395,10 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
 
             {/* POPULAR  */}
 
-            <View style={{paddingTop: 15}}>
+            <View style={{ paddingTop: 15 }}>
               <Divider width={1} color={"black"} />
               {toprated && (
-                <Text style={styles.header2}>
-                  Top-Rated Locations
-                </Text>
+                <Text style={styles.header2}>Top-Rated Locations</Text>
               )}
               <Divider width={3} color={"black"} />
             </View>
@@ -406,7 +421,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: toprated[0][0] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                     <Text style={styles.cardText}>
@@ -432,7 +449,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: toprated[1][0] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                     <Text style={styles.cardText}>
@@ -458,7 +477,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: toprated[2][0] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                     <Text style={styles.cardText}>
@@ -484,7 +505,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: toprated[3][0] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                     <Text style={styles.cardText}>
@@ -510,7 +533,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: toprated[4][0] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                     <Text style={styles.cardText}>
@@ -536,7 +561,9 @@ const HomeScreen = ({ navigation, setUserOption, userDetails }) => {
                       <Card.Image
                         style={styles.imageSize}
                         source={{ uri: toprated[5][0] }}
-                        PlaceholderContent={<ActivityIndicator color={"black"} />}
+                        PlaceholderContent={
+                          <ActivityIndicator color={"black"} />
+                        }
                       />
                     </TouchableOpacity>
                     <Text style={styles.cardText}>
@@ -576,7 +603,7 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   banner: {
     marginTop: 30,
@@ -589,7 +616,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     fontWeight: "bold",
     color: "black",
-    textAlign: "center"
+    textAlign: "center",
   },
   iconsview: {
     flexDirection: "row",
@@ -602,7 +629,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   cardview: {
-    backgroundColor: 'rgba(255, 255, 255, 0.7)'
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
   },
   touchableStyle: {
     paddingTop: 50,

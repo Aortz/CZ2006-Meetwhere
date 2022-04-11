@@ -1,5 +1,5 @@
 // components/login.js
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Firebase, db } from "../database/firebase";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const HistoryScreen = ({ navigation, userDetails }) => {
   //function to handle User Object to a parsable dictionary
@@ -39,6 +38,7 @@ const HistoryScreen = ({ navigation, userDetails }) => {
   const [isFetched, setIsFetched] = useState(false);
   const [oldTable, setNewTable] = useState([]);
   const [hist, setHist] = useState(null);
+
   //useEffect to rerender when data is fetched
   useEffect(() => {
     const fetch = async () => {
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   textStyle: {
     flex: 1,
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
     fontStyle: "italic",
     alignSelf: "center",
     color: "#7B7B7B",
