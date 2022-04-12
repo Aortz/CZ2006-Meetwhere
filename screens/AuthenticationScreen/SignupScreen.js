@@ -24,41 +24,37 @@ export default Signup = ({ navigation }) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  const testLowerCase = (str) =>
-  {
-    var i = 0
+  const testLowerCase = (str) => {
+    var i = 0;
     var lowercase = 0;
-    while(i < str.length){
-      if(str[i] == str[i].toLowerCase()){
-       lowercase++
+    while (i < str.length) {
+      if (str[i] == str[i].toLowerCase()) {
+        lowercase++;
       }
-      i++
+      i++;
     }
-    if(lowercase>0){
-      return true
+    if (lowercase > 0) {
+      return true;
+    } else {
+      return false;
     }
-    else{
-      return false
-    }
-  }
+  };
 
-  const testUpperCase = (str) =>
-  {
-    var i = 0
+  const testUpperCase = (str) => {
+    var i = 0;
     var uppercase = 0;
-    while(i < str.length){
-      if(str[i] == str[i].toUpperCase()){
+    while (i < str.length) {
+      if (str[i] == str[i].toUpperCase()) {
         uppercase++;
       }
-      i++
+      i++;
     }
-    if(uppercase>0){
-      return true
+    if (uppercase > 0) {
+      return true;
+    } else {
+      return false;
     }
-    else{
-      return false
-    }
-  }
+  };
 
   const checkEmailPasswordInput = (displayName, email, password) => {
     const usersRef = db.collection("Users");
@@ -115,9 +111,9 @@ export default Signup = ({ navigation }) => {
       setPasswordError("Password should be minimum 6 characters");
     } else if (password.length > 12) {
       setPasswordError("Password should be maximum 12 characters");
-    } else if (testLowerCase(password)==false) {
+    } else if (testLowerCase(password) == false) {
       setPasswordError("Password contains no lowercase characters");
-    } else if (testUpperCase(password)==false) {
+    } else if (testUpperCase(password) == false) {
       setPasswordError("Password contains no uppercase characters");
     } else if (password.indexOf(" ") >= 0) {
       setPasswordError("Password cannot contain spaces");
@@ -151,7 +147,11 @@ export default Signup = ({ navigation }) => {
             .doc(uid)
             .set(data)
             .then(() => {
+              setNameError("");
+              setPasswordError("");
+              setEmailError("");
               navigation.navigate("Login");
+              setLoading(false);
             })
             .catch((error) => {
               alert(error);
